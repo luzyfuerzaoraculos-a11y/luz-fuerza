@@ -1,0 +1,30 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#0a0a12"/>
+  
+  <!-- Estrella central -->
+  <g transform="translate(400, 120)">
+    <path d="M0,-50 L9,-9 50,0 9,9 0,50 -9,9 -50,0 -9,-9Z" fill="url(#g1)" opacity="0.9"/>
+    <path d="M0,-28 L5,-5 28,0 5,5 0,28 -5,5 -28,0 -5,-5Z" fill="#e8e6f0" opacity="0.5"/>
+    <circle cx="0" cy="0" r="3.5" fill="#fff"/>
+  </g>
+  
+  <!-- Nombre -->
+  <text x="400" y="235" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="56" fill="#e8e6f0" letter-spacing="10" font-weight="400">LUY Y FUERZA</text>
+  
+  <!-- Líneas decorativas -->
+  <line x1="160" y1="262" x2="335" y2="262" stroke="#7c3aed" stroke-width="0.5" opacity="0.6"/>
+  <line x1="465" y1="262" x2="640" y2="262" stroke="#7c3aed" stroke-width="0.5" opacity="0.6"/>
+  <circle cx="400" cy="262" r="2.5" fill="#c084fc" opacity="0.8"/>
+  
+  <!-- Subtítulo -->
+  <text x="400" y="295" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="15" fill="#7c6f9f" letter-spacing="7">ORÁCULOS  ·  TAROT  ·  RUNAS</text>
+  
+  <!-- Tagline -->
+  <text x="400" y="350" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#9590a8" font-style="italic" opacity="0.7">encontrá las cartas que te estaban esperando</text>
+</svg>

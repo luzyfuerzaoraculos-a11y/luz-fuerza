@@ -1,0 +1,28 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="400" height="400" rx="40" fill="#0a0a12"/>
+  
+  <circle cx="200" cy="185" r="120" fill="none" stroke="url(#g2)" stroke-width="2" opacity="0.4"/>
+  <circle cx="200" cy="185" r="105" fill="#1a1030"/>
+  
+  <g transform="translate(200, 180)">
+    <path d="M0,-55 L10,-10 55,0 10,10 0,55 -10,10 -55,0 -10,-10Z" fill="url(#g1)" opacity="0.9"/>
+    <path d="M0,-30 L5.5,-5.5 30,0 5.5,5.5 0,30 -5.5,5.5 -30,0 -5.5,-5.5Z" fill="#e8e6f0" opacity="0.45"/>
+    <circle cx="0" cy="0" r="4" fill="#fff"/>
+  </g>
+  
+  <text x="200" y="335" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#c084fc" letter-spacing="8">L  Y  F</text>
+  
+  <circle cx="148" cy="328" r="1.5" fill="#7c3aed" opacity="0.5"/>
+  <circle cx="252" cy="328" r="1.5" fill="#7c3aed" opacity="0.5"/>
+</svg>

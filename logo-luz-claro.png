@@ -1,0 +1,12 @@
+<svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="200" fill="#f8f7f4"/>
+  
+  <g transform="translate(295, 90)">
+    <path d="M0,-24 L4.5,-4.5 24,0 4.5,4.5 0,24 -4.5,4.5 -24,0 -4.5,-4.5Z" fill="#7c3aed" opacity="0.9"/>
+    <circle cx="0" cy="0" r="2" fill="#4a1a6b"/>
+  </g>
+  
+  <text x="325" y="98" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#1a1025" letter-spacing="6" font-weight="400">LUZ Y FUERZA</text>
+  
+  <text x="400" y="135" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#7c6f9f" letter-spacing="5">ORÁCULOS  ·  TAROT  ·  RUNAS</text>
+</svg>

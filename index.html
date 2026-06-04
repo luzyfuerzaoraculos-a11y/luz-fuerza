@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Luz & Fuerza · Oráculo de Tarot</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0e1a; color: #c8d8f0; font-family: Georgia, serif; min-height: 100vh; }
+
+    header { text-align: center; padding: 3rem 1rem 2rem; border-bottom: 0.5px solid #1e2a45; }
+    .logo-circle { width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid #8ba7d4; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; background: #0f1628; }
+    .logo-inner { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #c8d8f0, #4a6fa5); }
+    h1 { font-size: 28px; font-weight: 400; color: #c8d8f0; letter-spacing: 3px; }
+    .ampersand { color: #8ba7d4; }
+    .tagline { font-size: 13px; color: #5a7aaa; margin-top: 8px; letter-spacing: 0.5px; font-style: italic; }
+
+    nav { display: flex; justify-content: center; gap: 2rem; padding: 1rem; border-bottom: 0.5px solid #1e2a45; }
+    nav button { background: none; border: none; color: #5a7aaa; font-size: 13px; cursor: pointer; padding-bottom: 4px; letter-spacing: 0.5px; }
+    nav button.active { color: #c8d8f0; border-bottom: 1.5px solid #8ba7d4; }
+
+    main { max-width: 620px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+
+    .section-label { font-size: 11px; letter-spacing: 2px; color: #4a6fa5; margin-bottom: 1rem; text-transform: uppercase; }
+
+    textarea { width: 100%; background: #0f1628; border: 0.5px solid #1e2a45; border-radius: 10px; padding: 14px; color: #c8d8f0; font-size: 14px; resize: none; line-height: 1.6; font-family: Georgia, serif; }
+    textarea::placeholder { color: #2e4060; }
+    textarea:focus { outline: none; border-color: #4a6fa5; }
+
+    .btn { margin-top: 12px; width: 100%; padding: 13px; background: #0f1628; border: 0.5px solid #4a6fa5; border-radius: 10px; color: #c8d8f0; font-size: 14px; cursor: pointer; letter-spacing: 1px; font-family: Georgia, serif; }
+    .btn:hover { background: #1a2540; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .cartas { display: flex; gap: 10px; margin: 1.5rem 0 1rem; }
+    .carta { flex: 1; background: #0f1628; border: 0.5px solid #1e2a45; border-radius: 10px; padding: 1rem 0.75rem; text-align: center; }
+    .carta-emoji { font-size: 28px; margin-bottom: 8px; }
+    .carta-nombre { font-size: 11px; color: #8ba7d4; }
+    .carta-pos { font-size: 10px; color: #2e4060; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+    .respuesta { background: #0f1628; border: 0.5px solid #1e2a45; border-left: 2px solid #4a6fa5; border-radius: 10px; padding: 1.25rem; font-size: 14px; line-height: 1.9; color: #8ba7d4; min-height: 80px; font-style: italic; }
+
+    .planes { display: flex; gap: 12px; margin-top: 0.5rem; }
+    .plan { flex: 1; background: #0f1628; border: 0.5px solid #1e2a45; border-radius: 10px; padding: 1.5rem 1rem; text-align: center; }
+    .plan.destacado { border-color: #4a6fa5; }
+    .plan-badge { font-size: 10px; background: #1e2a45; color: #8ba7d4; padding: 3px 10px; border-radius: 6px; display: inline-block; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
+    .plan-precio { font-size: 26px; color: #c8d8f0; }
+    .plan-precio span { font-size: 13px; color: #4a6fa5; }
+    .plan-desc { font-size: 12px; color: #4a6fa5; margin-top: 8px; line-height: 1.6; }
+
+    .sobre-texto { color: #5a7aaa; font-size: 14px; line-height: 1.9; }
+    .sobre-texto p { margin-bottom: 1rem; }
+
+    footer { text-align: center; padding: 1.5rem; border-top: 0.5px solid #1e2a45; font-size: 11px; color: #2e4060; letter-spacing: 1px; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-circle"><div class="logo-inner"></div></div>
+  <h1>LUZ <span class="ampersand">&</span> FUERZA</h1>
+  <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('consulta', this)">Consulta</button>
+  <button onclick="showTab('planes', this)">Planes</button>
+  <button onclick="showTab('sobre', this)">Nosotros</button>
+</nav>
+
+<main>
+
+  <div id="tab-consulta" class="tab active">
+    <div class="section-label">Nueva consulta</div>
+    <textarea id="pregunta" rows="3" placeholder="¿Qué pregunta trae tu corazón hoy?"></textarea>
+    <button class="btn" id="btnConsultar" onclick="consultar()">✦ Revelar las cartas</button>
+
+    <div id="resultado" style="display:none; margin-top:1.5rem;">
+      <div class="section-label">Tu tirada</div>
+      <div class="cartas" id="cartas"></div>
+      <div class="respuesta" id="respuesta"></div>
+    </div>
+  </div>
+
+  <div id="tab-planes" class="tab">
+    <div class="section-label">Elegí tu camino</div>
+    <div class="planes">
+      <div class="plan">
+        <div class="plan-badge">Consulta</div>
+        <div class="plan-precio">$5 <span>USD</span></div>
+        <div class="plan-desc">Una tirada completa · Interpretación personalizada</div>
+      </div>
+      <div class="plan destacado">
+        <div class="plan-badge">Mensual</div>
+        <div class="plan-precio">$12 <span>USD/mes</span></div>
+        <div class="plan-desc">Consultas ilimitadas · Historial · Seguimiento</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-sobre" class="tab">
+    <div class="sobre-texto">
+      <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una sabiduría profunda esperando ser escuchada.</p>
+      <p>El tarot no predice el futuro — lo ilumina. Cada carta que aparece es un espejo de tu momento presente, la fuerza que impulsa tus próximos pasos.</p>
+      <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>LUZ & FUERZA · Tu consulta es confidencial</footer>
+
+<script>
+
+
+  const mazo = [
+    { nombre: "El Loco", emoji: "🌟", energia: "nuevos comienzos" },
+    { nombre: "La Emperatriz", emoji: "🌸", energia: "abundancia" },
+    { nombre: "El Ermitaño", emoji: "🕯️", energia: "reflexión interior" },
+    { nombre: "La Luna", emoji: "🌙", energia: "intuición y misterio" },
+    { nombre: "El Sol", emoji: "☀️", energia: "claridad y éxito" },
+    { nombre: "La Justicia", emoji: "⚖️", energia: "equilibrio y verdad" },
+    { nombre: "La Torre", emoji: "⚡", energia: "cambios profundos" },
+    { nombre: "La Estrella", emoji: "✨", energia: "esperanza y guía" },
+    { nombre: "El Mundo", emoji: "🌍", energia: "completud y logro" },
+    { nombre: "La Fuerza", emoji: "🦁", energia: "coraje interior" },
+    { nombre: "El Carro", emoji: "🏆", energia: "determinación" },
+    { nombre: "Los Enamorados", emoji: "💫", energia: "elecciones del corazón" }
+  ];
+  const posiciones = ["Pasado", "Presente", "Futuro"];
+
+  function showTab(tab, el) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+    document.getElementById("tab-" + tab).classList.add("active");
+    el.classList.add("active");
+  }
+
+  async function consultar() {
+    const pregunta = document.getElementById("pregunta").value.trim();
+    if (!pregunta) return;
+
+    const btn = document.getElementById("btnConsultar");
+    btn.disabled = true;
+    btn.textContent = "El oráculo despierta...";
+
+    const tres = [...mazo].sort(() => Math.random() - 0.5).slice(0, 3);
+
+    document.getElementById("cartas").innerHTML = tres.map((c, i) => `
+      <div class="carta">
+        <div class="carta-emoji">${c.emoji}</div>
+        <div class="carta-nombre">${c.nombre}</div>
+        <div class="carta-pos">${posiciones[i]}</div>
+      </div>
+    `).join("");
+
+    document.getElementById("resultado").style.display = "block";
+    const respDiv = document.getElementById("respuesta");
+    respDiv.textContent = "Interpretando tu tirada...";
+
+    try {
+      const cartasTexto = tres.map((c,i) => `${posiciones[i]}: ${c.nombre} (energía de ${c.energia})`).join(", ");
+      const response = await fetch("/consultar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta, cartas: cartasTexto })
+      });
+      const data = await response.json();
+      respDiv.textContent = data.respuesta || "El oráculo necesita un momento. Intentá de nuevo.";
+    } catch(e) {
+      respDiv.textContent = "El oráculo necesita un momento. Intentá de nuevo.";
+    }
+
+    btn.disabled = false;
+    btn.textContent = "✦ Nueva consulta";
+    document.getElementById("pregunta").value = "";
+  }
+</script>
+
+</body>
+</html>

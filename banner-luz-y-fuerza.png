@@ -1,0 +1,73 @@
+<svg viewBox="0 0 1580 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f0c29"/>
+      <stop offset="50%" stop-color="#1a1040"/>
+      <stop offset="100%" stop-color="#0a0a18"/>
+    </linearGradient>
+    <linearGradient id="star" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="80%" cy="70%" r="40%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="1580" height="600" fill="url(#bg)"/>
+  <rect width="1580" height="600" fill="url(#glow1)"/>
+  <rect width="1580" height="600" fill="url(#glow2)"/>
+  
+  <circle cx="120" cy="80" r="1" fill="#fff" opacity="0.4"/>
+  <circle cx="280" cy="150" r="0.8" fill="#fff" opacity="0.3"/>
+  <circle cx="450" cy="60" r="1.2" fill="#fff" opacity="0.5"/>
+  <circle cx="600" cy="180" r="0.7" fill="#fff" opacity="0.25"/>
+  <circle cx="780" cy="45" r="1" fill="#fff" opacity="0.35"/>
+  <circle cx="950" cy="120" r="0.9" fill="#fff" opacity="0.4"/>
+  <circle cx="1100" cy="70" r="1.1" fill="#fff" opacity="0.3"/>
+  <circle cx="1250" cy="160" r="0.8" fill="#fff" opacity="0.45"/>
+  <circle cx="1400" cy="90" r="1" fill="#fff" opacity="0.3"/>
+  <circle cx="200" cy="350" r="0.7" fill="#fff" opacity="0.2"/>
+  <circle cx="380" cy="480" r="1" fill="#fff" opacity="0.3"/>
+  <circle cx="550" cy="520" r="0.8" fill="#fff" opacity="0.25"/>
+  <circle cx="1050" cy="450" r="0.9" fill="#fff" opacity="0.35"/>
+  <circle cx="1200" cy="380" r="1.1" fill="#fff" opacity="0.28"/>
+  <circle cx="1350" cy="500" r="0.7" fill="#fff" opacity="0.3"/>
+  <circle cx="1450" cy="350" r="1" fill="#fff" opacity="0.22"/>
+  <circle cx="70" cy="250" r="0.8" fill="#fff" opacity="0.3"/>
+  <circle cx="700" cy="520" r="0.9" fill="#fff" opacity="0.2"/>
+  <circle cx="900" cy="380" r="1.2" fill="#fff" opacity="0.15"/>
+  <circle cx="1500" cy="200" r="0.8" fill="#fff" opacity="0.35"/>
+  <circle cx="330" cy="290" r="0.6" fill="#c084fc" opacity="0.15"/>
+  <circle cx="1180" cy="280" r="0.7" fill="#818cf8" opacity="0.12"/>
+  
+  <g transform="translate(250, 300)" opacity="0.08">
+    <path d="M0,-120 L20,-20 120,0 20,20 0,120 -20,20 -120,0 -20,-20Z" fill="#c084fc"/>
+  </g>
+  <g transform="translate(1330, 300)" opacity="0.06">
+    <path d="M0,-100 L17,-17 100,0 17,17 0,100 -17,17 -100,0 -17,-17Z" fill="#818cf8"/>
+  </g>
+
+  <g transform="translate(790, 175)">
+    <path d="M0,-55 L10,-10 55,0 10,10 0,55 -10,10 -55,0 -10,-10Z" fill="url(#star)" opacity="0.85"/>
+    <path d="M0,-30 L5.5,-5.5 30,0 5.5,5.5 0,30 -5.5,5.5 -30,0 -5.5,-5.5Z" fill="#e8e6f0" opacity="0.4"/>
+    <circle cx="0" cy="0" r="4" fill="#fff" opacity="0.9"/>
+  </g>
+  
+  <text x="790" y="305" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#e8e6f0" letter-spacing="4" font-weight="400">Encontrá las cartas</text>
+  <text x="790" y="380" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#c084fc" letter-spacing="4" font-weight="400" font-style="italic">que te estaban esperando</text>
+  
+  <line x1="560" y1="415" x2="750" y2="415" stroke="#7c3aed" stroke-width="0.5" opacity="0.5"/>
+  <circle cx="790" cy="415" r="2.5" fill="#c084fc" opacity="0.7"/>
+  <line x1="830" y1="415" x2="1020" y2="415" stroke="#7c3aed" stroke-width="0.5" opacity="0.5"/>
+  
+  <text x="790" y="460" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" fill="#9590a8" letter-spacing="6">ORÁCULOS  ·  TAROT  ·  RUNAS</text>
+  
+  <rect x="670" y="490" width="240" height="52" rx="26" fill="url(#star)" opacity="0.9"/>
+  <text x="790" y="522" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="16" fill="#ffffff" letter-spacing="2" font-weight="600">VER PRODUCTOS</text>
+</svg>
