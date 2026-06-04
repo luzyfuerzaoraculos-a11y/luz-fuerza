@@ -5,9 +5,21 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: "Method not allowed" };
   }
 
-  const { pregunta, cartas } = JSON.parse(event.body);
+  const { pregunta, cartas, area } = JSON.parse(event.body);
 
-  const prompt = `Sos la voz de Luz & Fuerza, un oráculo de tarot cuyo lema es "Tu luz interior · La fuerza que impulsa tu camino". El consultante pregunta: "${pregunta}". Las cartas que salieron son: ${cartas}. Dá una interpretación breve, cálida y poderosa de máximo 4 oraciones en español. Mencioná la luz interior y la fuerza de manera natural. Sin asteriscos ni markdown. Hablá de vos a vos directamente.`;
+  const prompt = `Sos la voz de Luz & Fuerza, un oráculo de tarot sabio y empático. Tu lema es "Tu luz interior · La fuerza que impulsa tu camino".
+
+El consultante consulta sobre el área de ${area || "vida"}: "${pregunta}"
+
+Las cartas que salieron son:
+${cartas}
+
+Dá una interpretación en 3 párrafos cortos:
+1. Qué revelan las cartas sobre su situación actual
+2. Qué mensaje tiene el oráculo para ellos
+3. Una acción concreta o reflexión para cerrar
+
+Tono: cálido, directo, poderoso. Hablá de vos a vos. Sin asteriscos ni markdown. Máximo 120 palabras total.`;
 
   const body = JSON.stringify({
     model: "claude-haiku-4-5-20251001",
@@ -35,11 +47,7 @@ exports.handler = async (event) => {
         try {
           const parsed = JSON.parse(data);
           const texto = parsed.content ? parsed.content.map(i => i.text || "").join("") : "Sin respuesta";
-          resolve({
-            statusCode: 200,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ respuesta: texto })
-          });
+          resolve({ statusCode: 200, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ respuesta: texto }) });
         } catch (e) {
           resolve({ statusCode: 500, body: JSON.stringify({ error: "Error al procesar" }) });
         }

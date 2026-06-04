@@ -6,176 +6,355 @@
   <title>Luz & Fuerza · Oráculo de Tarot</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0e1a; color: #c8d8f0; font-family: Georgia, serif; min-height: 100vh; }
+    body { background: #060810; color: #c8d8f0; font-family: Georgia, serif; min-height: 100vh; }
 
-    header { text-align: center; padding: 3rem 1rem 2rem; border-bottom: 0.5px solid #1e2a45; }
-    .logo-circle { width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid #8ba7d4; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; background: #0f1628; }
-    .logo-inner { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #c8d8f0, #4a6fa5); }
-    h1 { font-size: 28px; font-weight: 400; color: #c8d8f0; letter-spacing: 3px; }
-    .ampersand { color: #8ba7d4; }
-    .tagline { font-size: 13px; color: #5a7aaa; margin-top: 8px; letter-spacing: 0.5px; font-style: italic; }
+    .lf-hero {
+      background: linear-gradient(160deg, #1a0a2e 0%, #0d1b3e 50%, #0a1628 100%);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      border-bottom: 0.5px solid #2a3a5c;
+      position: relative;
+      overflow: hidden;
+    }
 
-    nav { display: flex; justify-content: center; gap: 2rem; padding: 1rem; border-bottom: 0.5px solid #1e2a45; }
-    nav button { background: none; border: none; color: #5a7aaa; font-size: 13px; cursor: pointer; padding-bottom: 4px; letter-spacing: 0.5px; }
-    nav button.active { color: #c8d8f0; border-bottom: 1.5px solid #8ba7d4; }
+    .lf-stars {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
+      background-size: 120px 120px, 80px 80px, 200px 200px;
+      background-position: 20px 20px, 60px 40px, 10px 80px;
+      pointer-events: none;
+    }
 
-    main { max-width: 620px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .lf-moon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 2px solid rgba(200,216,240,0.4);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative; z-index: 1;
+    }
+
+    .lf-moon-inner {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #d4e8ff, #7bafd4);
+    }
+
+    h1 { font-size: 32px; font-weight: 400; color: #e8f0ff; letter-spacing: 4px; position: relative; z-index: 1; }
+    .amp { color: #8baad4; }
+    .tagline { font-size: 14px; color: #5a7aaa; letter-spacing: 1px; font-style: italic; margin-top: 10px; position: relative; z-index: 1; }
+
+    nav { display: flex; justify-content: center; background: #0a0e1a; border-bottom: 0.5px solid #1e2a45; }
+    nav button { background: none; border: none; border-bottom: 2px solid transparent; color: #4a6fa5; font-size: 13px; font-family: Georgia, serif; cursor: pointer; padding: 14px 24px; letter-spacing: 0.5px; }
+    nav button.active { color: #c8d8f0; border-bottom: 2px solid #7bafd4; }
+
+    main { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem; background: #0a0e1a; min-height: 60vh; }
+
     .tab { display: none; }
     .tab.active { display: block; }
 
-    .section-label { font-size: 11px; letter-spacing: 2px; color: #4a6fa5; margin-bottom: 1rem; text-transform: uppercase; }
+    .step { margin-bottom: 2rem; }
 
-    textarea { width: 100%; background: #0f1628; border: 0.5px solid #1e2a45; border-radius: 10px; padding: 14px; color: #c8d8f0; font-size: 14px; resize: none; line-height: 1.6; font-family: Georgia, serif; }
+    .step-label { font-size: 11px; letter-spacing: 2.5px; color: #4a6fa5; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .step-num { width: 20px; height: 20px; border-radius: 50%; border: 0.5px solid #4a6fa5; font-size: 11px; color: #4a6fa5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .hint { font-size: 14px; color: #8baad4; margin-bottom: 14px; line-height: 1.6; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; }
+    .chip { background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 20px; padding: 10px 18px; font-size: 14px; color: #7bafd4; cursor: pointer; font-family: Georgia, serif; }
+    .chip:hover, .chip.selected { border-color: #7bafd4; color: #c8d8f0; background: #162035; }
+
+    textarea { width: 100%; background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 12px; padding: 16px; color: #c8d8f0; font-size: 15px; resize: none; line-height: 1.7; font-family: Georgia, serif; }
     textarea::placeholder { color: #2e4060; }
     textarea:focus { outline: none; border-color: #4a6fa5; }
 
-    .btn { margin-top: 12px; width: 100%; padding: 13px; background: #0f1628; border: 0.5px solid #4a6fa5; border-radius: 10px; color: #c8d8f0; font-size: 14px; cursor: pointer; letter-spacing: 1px; font-family: Georgia, serif; }
-    .btn:hover { background: #1a2540; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .counter { font-size: 12px; color: #2e4060; text-align: right; margin-top: 6px; }
+    .counter.ok { color: #4a6fa5; }
 
-    .cartas { display: flex; gap: 10px; margin: 1.5rem 0 1rem; }
-    .carta { flex: 1; background: #0f1628; border: 0.5px solid #1e2a45; border-radius: 10px; padding: 1rem 0.75rem; text-align: center; }
-    .carta-emoji { font-size: 28px; margin-bottom: 8px; }
-    .carta-nombre { font-size: 11px; color: #8ba7d4; }
-    .carta-pos { font-size: 10px; color: #2e4060; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+    .bloque-profunda { background: #0f1628; border: 0.5px solid #2a3a5c; border-left: 2px solid #7bafd4; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+    .bloque-profunda p { font-size: 14px; color: #8baad4; font-style: italic; line-height: 1.7; }
 
-    .respuesta { background: #0f1628; border: 0.5px solid #1e2a45; border-left: 2px solid #4a6fa5; border-radius: 10px; padding: 1.25rem; font-size: 14px; line-height: 1.9; color: #8ba7d4; min-height: 80px; font-style: italic; }
+    .btn { width: 100%; padding: 15px; background: #0f1628; border: 0.5px solid #4a6fa5; border-radius: 12px; color: #c8d8f0; font-size: 15px; cursor: pointer; letter-spacing: 1px; font-family: Georgia, serif; margin-top: 1.5rem; }
+    .btn:hover { background: #162035; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-sm { width: auto; padding: 10px 20px; background: none; border: 0.5px solid #4a6fa5; border-radius: 12px; color: #7bafd4; font-size: 13px; cursor: pointer; font-family: Georgia, serif; margin-top: 10px; }
+    .btn-sm:hover { background: #162035; }
 
-    .planes { display: flex; gap: 12px; margin-top: 0.5rem; }
-    .plan { flex: 1; background: #0f1628; border: 0.5px solid #1e2a45; border-radius: 10px; padding: 1.5rem 1rem; text-align: center; }
-    .plan.destacado { border-color: #4a6fa5; }
-    .plan-badge { font-size: 10px; background: #1e2a45; color: #8ba7d4; padding: 3px 10px; border-radius: 6px; display: inline-block; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
-    .plan-precio { font-size: 26px; color: #c8d8f0; }
+    .cartas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 1.5rem 0; }
+    .carta { background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 12px; padding: 1.25rem 0.75rem; text-align: center; }
+    .carta-pos { font-size: 10px; letter-spacing: 2px; color: #2e4060; text-transform: uppercase; margin-bottom: 12px; }
+    .carta-emoji { font-size: 32px; margin-bottom: 10px; }
+    .carta-nombre { font-size: 14px; color: #c8d8f0; margin-bottom: 6px; }
+    .carta-energia { font-size: 12px; color: #4a6fa5; font-style: italic; margin-bottom: 12px; line-height: 1.4; }
+    .carta-desc { font-size: 12px; color: #5a7aaa; line-height: 1.6; border-top: 0.5px solid #1e2a45; padding-top: 10px; }
+
+    .interpretacion { background: #0f1628; border: 0.5px solid #2a3a5c; border-left: 2px solid #7bafd4; border-radius: 12px; padding: 1.5rem; font-size: 15px; line-height: 1.9; color: #8baad4; font-style: italic; }
+
+    .planes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .plan { background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 12px; padding: 1.5rem 1rem; text-align: center; }
+    .plan.popular { border-color: #7bafd4; }
+    .plan-badge { font-size: 10px; background: #162035; color: #7bafd4; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 14px; letter-spacing: 1px; text-transform: uppercase; }
+    .plan.popular .plan-badge { background: #1e3055; color: #c8d8f0; }
+    .plan-precio { font-size: 28px; color: #c8d8f0; margin-bottom: 4px; }
     .plan-precio span { font-size: 13px; color: #4a6fa5; }
-    .plan-desc { font-size: 12px; color: #4a6fa5; margin-top: 8px; line-height: 1.6; }
+    .plan-items { list-style: none; margin-top: 12px; }
+    .plan-items li { font-size: 12px; color: #5a7aaa; padding: 5px 0; border-top: 0.5px solid #1e2a45; }
 
-    .sobre-texto { color: #5a7aaa; font-size: 14px; line-height: 1.9; }
-    .sobre-texto p { margin-bottom: 1rem; }
+    .sobre-texto { color: #5a7aaa; font-size: 15px; line-height: 1.9; }
+    .sobre-texto p { margin-bottom: 1.25rem; }
+    .sobre-texto strong { color: #8baad4; font-weight: 400; }
 
-    footer { text-align: center; padding: 1.5rem; border-top: 0.5px solid #1e2a45; font-size: 11px; color: #2e4060; letter-spacing: 1px; margin-top: 2rem; }
+    footer { text-align: center; padding: 1.5rem; background: #060810; border-top: 0.5px solid #1e2a45; font-size: 11px; color: #1e2a45; letter-spacing: 1px; }
+
+    .loading { animation: pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+    @media (max-width: 500px) {
+      .cartas { grid-template-columns: 1fr; }
+      .planes { grid-template-columns: 1fr; }
+      h1 { font-size: 24px; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-circle"><div class="logo-inner"></div></div>
-  <h1>LUZ <span class="ampersand">&</span> FUERZA</h1>
+<header class="lf-hero">
+  <div class="lf-stars"></div>
+  <div class="lf-moon"><div class="lf-moon-inner"></div></div>
+  <h1>LUZ <span class="amp">&</span> FUERZA</h1>
   <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
 </header>
 
 <nav>
-  <button class="active" onclick="showTab('consulta', this)">Consulta</button>
-  <button onclick="showTab('planes', this)">Planes</button>
-  <button onclick="showTab('sobre', this)">Nosotros</button>
+  <button class="active" onclick="showTab('consulta',this)">Consulta</button>
+  <button onclick="showTab('planes',this)">Planes</button>
+  <button onclick="showTab('sobre',this)">Nosotros</button>
 </nav>
 
 <main>
 
   <div id="tab-consulta" class="tab active">
-    <div class="section-label">Nueva consulta</div>
-    <textarea id="pregunta" rows="3" placeholder="¿Qué pregunta trae tu corazón hoy?"></textarea>
-    <button class="btn" id="btnConsultar" onclick="consultar()">✦ Revelar las cartas</button>
 
-    <div id="resultado" style="display:none; margin-top:1.5rem;">
-      <div class="section-label">Tu tirada</div>
-      <div class="cartas" id="cartas"></div>
-      <div class="respuesta" id="respuesta"></div>
+    <div id="step1" class="step">
+      <div class="step-label"><div class="step-num">1</div> Área de consulta</div>
+      <div class="hint">¿Sobre qué área de tu vida querés consultar hoy?</div>
+      <div class="chips">
+        <div class="chip" onclick="seleccionarArea(this,'amor')">❤️ Amor y vínculos</div>
+        <div class="chip" onclick="seleccionarArea(this,'trabajo')">💼 Trabajo y proyectos</div>
+        <div class="chip" onclick="seleccionarArea(this,'dinero')">✨ Dinero y abundancia</div>
+        <div class="chip" onclick="seleccionarArea(this,'personal')">🌱 Crecimiento personal</div>
+        <div class="chip" onclick="seleccionarArea(this,'decision')">🔮 Una decisión difícil</div>
+        <div class="chip" onclick="seleccionarArea(this,'otro')">🌙 Otro</div>
+      </div>
     </div>
+
+    <div id="step2" class="step" style="display:none;">
+      <div class="step-label"><div class="step-num">2</div> Tu pregunta</div>
+      <div class="hint" id="hint-pregunta">Escribí tu pregunta con detalle. Cuanto más específica, más profunda será la lectura.</div>
+      <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy? Escribí tu pregunta aquí..." oninput="validarPregunta()"></textarea>
+      <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
+      <button class="btn-sm" onclick="profundizar()" id="btn-profundizar" style="display:none;">✦ Quiero profundizar mi pregunta</button>
+      <div id="pregunta-profunda" style="display:none; margin-top:1rem;">
+        <div class="bloque-profunda"><p id="texto-profunda"></p></div>
+        <textarea id="respuesta-profunda" rows="3" placeholder="Respondé aquí para enriquecer tu consulta..."></textarea>
+      </div>
+      <button class="btn" id="btn-revelar" onclick="revelar()" disabled>✦ Revelar las cartas</button>
+    </div>
+
+    <div id="step3" style="display:none;">
+      <div class="step-label"><div class="step-num">3</div> Tu tirada</div>
+      <div class="cartas" id="cartas"></div>
+      <div class="step-label" style="margin-top:1.5rem;"><div class="step-num">4</div> Interpretación</div>
+      <div class="interpretacion loading" id="interpretacion">El oráculo está leyendo las cartas...</div>
+      <button class="btn" onclick="nuevaConsulta()">✦ Nueva consulta</button>
+    </div>
+
   </div>
 
   <div id="tab-planes" class="tab">
-    <div class="section-label">Elegí tu camino</div>
+    <div class="step-label" style="margin-bottom:1.5rem;">Elegí tu camino</div>
     <div class="planes">
       <div class="plan">
         <div class="plan-badge">Consulta</div>
-        <div class="plan-precio">$5 <span>USD</span></div>
-        <div class="plan-desc">Una tirada completa · Interpretación personalizada</div>
+        <div class="plan-precio">$3 <span>USD</span></div>
+        <ul class="plan-items">
+          <li>1 tirada completa</li>
+          <li>Interpretación personalizada</li>
+          <li>Explicación de cada carta</li>
+        </ul>
       </div>
-      <div class="plan destacado">
+      <div class="plan popular">
+        <div class="plan-badge">✦ Más elegido</div>
+        <div class="plan-precio">$9 <span>USD/semana</span></div>
+        <ul class="plan-items">
+          <li>1 consulta por día</li>
+          <li>Historial de lecturas</li>
+          <li>Seguimiento del oráculo</li>
+        </ul>
+      </div>
+      <div class="plan">
         <div class="plan-badge">Mensual</div>
-        <div class="plan-precio">$12 <span>USD/mes</span></div>
-        <div class="plan-desc">Consultas ilimitadas · Historial · Seguimiento</div>
+        <div class="plan-precio">$19 <span>USD/mes</span></div>
+        <ul class="plan-items">
+          <li>Consultas ilimitadas</li>
+          <li>Historial completo</li>
+          <li>Perfil espiritual</li>
+        </ul>
       </div>
     </div>
   </div>
 
   <div id="tab-sobre" class="tab">
     <div class="sobre-texto">
-      <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una sabiduría profunda esperando ser escuchada.</p>
-      <p>El tarot no predice el futuro — lo ilumina. Cada carta que aparece es un espejo de tu momento presente, la fuerza que impulsa tus próximos pasos.</p>
-      <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida.</p>
+      <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una <strong>sabiduría profunda</strong> esperando ser escuchada.</p>
+      <p>El tarot no predice el futuro — lo ilumina. Cada carta es un espejo de tu momento presente, la fuerza que impulsa tus próximos pasos.</p>
+      <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida. Tu <strong>luz interior</strong>, la respuesta.</p>
     </div>
   </div>
 
 </main>
 
-<footer>LUZ & FUERZA · Tu consulta es confidencial</footer>
+<footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
 <script>
+const mazo = [
+  { nombre:"El Loco", emoji:"🌟", energia:"nuevos comienzos y libertad", pasado:"Un salto de fe que tomaste sin saber bien a dónde ibas.", presente:"Estás en un momento de apertura total, sin ataduras.", futuro:"Se acerca una nueva etapa que te pedirá soltar el control." },
+  { nombre:"La Emperatriz", emoji:"🌸", energia:"abundancia y creación", pasado:"Hubo un período de florecimiento y nutrición en tu vida.", presente:"Tenés una fuerza creadora activa que espera ser expresada.", futuro:"La abundancia viene hacia vos cuando confíes en tu propio ritmo." },
+  { nombre:"El Ermitaño", emoji:"🕯️", energia:"reflexión interior y sabiduría", pasado:"Atravesaste un retiro necesario para encontrarte a vos mismo.", presente:"Tu respuesta está adentro — el silencio es tu mejor aliado ahora.", futuro:"La claridad llegará a través de la introspección, no de los demás." },
+  { nombre:"La Luna", emoji:"🌙", energia:"intuición y lo que está oculto", pasado:"Algo no se veía claramente — había ilusiones o miedos que distorsionaban.", presente:"Confiá en tu intuición aunque no tengas pruebas concretas todavía.", futuro:"Lo que está en las sombras saldrá a la luz en el momento justo." },
+  { nombre:"El Sol", emoji:"☀️", energia:"claridad, alegría y éxito", pasado:"Hubo un momento de gran claridad y vitalidad en tu camino.", presente:"Estás irradiando una energía que atrae lo que necesitás.", futuro:"Un período luminoso se abre ante vos — confiá en ese brillo." },
+  { nombre:"La Justicia", emoji:"⚖️", energia:"equilibrio, verdad y karma", pasado:"Una situación pidió que tomaras una decisión importante y justa.", presente:"Es momento de actuar con honestidad — lo que siembres, cosecharás.", futuro:"Lo que se debe equilibrar, se equilibrará. Confiá en ese proceso." },
+  { nombre:"La Torre", emoji:"⚡", energia:"cambios profundos e inevitables", pasado:"Algo se derrumbó para que pudieras construir sobre bases más sólidas.", presente:"Estás en medio de una transformación que no podés detener.", futuro:"Un cambio brusco viene a liberarte de algo que ya no te servía." },
+  { nombre:"La Estrella", emoji:"✨", energia:"esperanza, guía y renovación", pasado:"Después de una tormenta, encontraste tu propia luz de nuevo.", presente:"Hay una guía sutil que te orienta — prestale atención.", futuro:"La esperanza no es ilusión: el camino se ilumina hacia adelante." },
+  { nombre:"El Mundo", emoji:"🌍", energia:"completud y ciclos que cierran", pasado:"Completaste algo importante — un ciclo llegó a su fin natural.", presente:"Estás cerca de alcanzar una meta o cerrar algo pendiente.", futuro:"Un ciclo se completa y te lleva a un nuevo nivel de experiencia." },
+  { nombre:"La Fuerza", emoji:"🦁", energia:"coraje interior y compasión", pasado:"Enfrentaste algo difícil con más valentía de lo que creías tener.", presente:"Tu fuerza más poderosa ahora es la calma, no la imposición.", futuro:"La situación se resuelve con paciencia y amor propio, no con fuerza bruta." },
+  { nombre:"El Carro", emoji:"🏆", energia:"determinación y voluntad", pasado:"Te pusiste en movimiento con una meta clara y nada te detuvo.", presente:"Tenés toda la energía para avanzar — el momento de actuar es ahora.", futuro:"Si mantenés el foco, llegás a donde querés llegar." },
+  { nombre:"Los Enamorados", emoji:"💫", energia:"elecciones del corazón y unión", pasado:"Una elección importante moldeó el camino que tomaste.", presente:"Estás frente a una decisión que involucra el corazón y los valores.", futuro:"Una conexión o elección importante se acerca — escuchá lo que tu corazón sabe." }
+];
 
+const posiciones = [
+  { nombre:"Pasado", clave:"pasado", desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual." },
+  { nombre:"Presente", clave:"presente", desc:"La energía que te rodea ahora mismo — tu momento presente." },
+  { nombre:"Futuro", clave:"futuro", desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren." }
+];
 
-  const mazo = [
-    { nombre: "El Loco", emoji: "🌟", energia: "nuevos comienzos" },
-    { nombre: "La Emperatriz", emoji: "🌸", energia: "abundancia" },
-    { nombre: "El Ermitaño", emoji: "🕯️", energia: "reflexión interior" },
-    { nombre: "La Luna", emoji: "🌙", energia: "intuición y misterio" },
-    { nombre: "El Sol", emoji: "☀️", energia: "claridad y éxito" },
-    { nombre: "La Justicia", emoji: "⚖️", energia: "equilibrio y verdad" },
-    { nombre: "La Torre", emoji: "⚡", energia: "cambios profundos" },
-    { nombre: "La Estrella", emoji: "✨", energia: "esperanza y guía" },
-    { nombre: "El Mundo", emoji: "🌍", energia: "completud y logro" },
-    { nombre: "La Fuerza", emoji: "🦁", energia: "coraje interior" },
-    { nombre: "El Carro", emoji: "🏆", energia: "determinación" },
-    { nombre: "Los Enamorados", emoji: "💫", energia: "elecciones del corazón" }
-  ];
-  const posiciones = ["Pasado", "Presente", "Futuro"];
+const preguntas_profundas = {
+  amor:"¿Hay algo específico en esta relación o vínculo que te genera duda o que querés entender mejor?",
+  trabajo:"¿Qué es lo que más te preocupa o genera incertidumbre en esta situación laboral?",
+  dinero:"¿Estás buscando orientación sobre una decisión económica específica o sobre tu relación general con la abundancia?",
+  personal:"¿Qué aspecto de vos mismo o tu vida querés transformar o entender más profundamente?",
+  decision:"¿Cuáles son las dos opciones o caminos que estás considerando?",
+  otro:"¿Podés contarme un poco más sobre qué está pasando en tu vida que te trajo a consultar hoy?"
+};
 
-  function showTab(tab, el) {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-    document.getElementById("tab-" + tab).classList.add("active");
-    el.classList.add("active");
+let areaSeleccionada = "";
+
+function showTab(tab, el) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + tab).classList.add("active");
+  el.classList.add("active");
+}
+
+function seleccionarArea(el, area) {
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  areaSeleccionada = area;
+  document.getElementById("step2").style.display = "block";
+  const hints = {
+    amor:"Contame sobre tu situación en el amor — ¿hay una persona, una relación o algo que estás procesando?",
+    trabajo:"¿Qué está pasando en tu trabajo o proyecto? ¿Hay una decisión pendiente o algo que te genera incertidumbre?",
+    dinero:"¿Estás atravesando un momento económico difícil, o buscás orientación para una decisión financiera?",
+    personal:"¿Qué querés transformar o entender de vos mismo en este momento?",
+    decision:"Describí la situación — ¿qué decisión estás enfrentando y qué opciones ves?",
+    otro:"Contame libremente qué te trajo aquí hoy."
+  };
+  document.getElementById("hint-pregunta").textContent = hints[area] || hints.otro;
+}
+
+function validarPregunta() {
+  const texto = document.getElementById("pregunta").value.trim();
+  const palabras = texto.split(/\s+/).filter(w => w.length > 0).length;
+  const counter = document.getElementById("counter");
+  const btnRevelar = document.getElementById("btn-revelar");
+  const btnProfundizar = document.getElementById("btn-profundizar");
+  if (palabras >= 8) {
+    counter.textContent = "✦ " + palabras + " palabras — podés revelar las cartas";
+    counter.classList.add("ok");
+    btnRevelar.disabled = false;
+    btnProfundizar.style.display = "inline-block";
+  } else {
+    counter.textContent = palabras + "/8 palabras mínimas para una lectura precisa";
+    counter.classList.remove("ok");
+    btnRevelar.disabled = true;
+    btnProfundizar.style.display = "none";
   }
+}
 
-  async function consultar() {
-    const pregunta = document.getElementById("pregunta").value.trim();
-    if (!pregunta) return;
+function profundizar() {
+  const div = document.getElementById("pregunta-profunda");
+  div.style.display = "block";
+  document.getElementById("texto-profunda").textContent = preguntas_profundas[areaSeleccionada] || preguntas_profundas.otro;
+}
 
-    const btn = document.getElementById("btnConsultar");
-    btn.disabled = true;
-    btn.textContent = "El oráculo despierta...";
+async function revelar() {
+  const pregunta = document.getElementById("pregunta").value.trim();
+  const respuestaProfunda = document.getElementById("respuesta-profunda").value.trim();
+  const contexto = respuestaProfunda ? pregunta + ". Contexto adicional: " + respuestaProfunda : pregunta;
 
-    const tres = [...mazo].sort(() => Math.random() - 0.5).slice(0, 3);
+  document.getElementById("step1").style.display = "none";
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("step3").style.display = "block";
 
-    document.getElementById("cartas").innerHTML = tres.map((c, i) => `
-      <div class="carta">
-        <div class="carta-emoji">${c.emoji}</div>
-        <div class="carta-nombre">${c.nombre}</div>
-        <div class="carta-pos">${posiciones[i]}</div>
-      </div>
-    `).join("");
+  const tres = [...mazo].sort(() => Math.random() - 0.5).slice(0, 3);
 
-    document.getElementById("resultado").style.display = "block";
-    const respDiv = document.getElementById("respuesta");
-    respDiv.textContent = "Interpretando tu tirada...";
+  document.getElementById("cartas").innerHTML = tres.map((c, i) => `
+    <div class="carta">
+      <div class="carta-pos">${posiciones[i].nombre}</div>
+      <div class="carta-emoji">${c.emoji}</div>
+      <div class="carta-nombre">${c.nombre}</div>
+      <div class="carta-energia">${c.energia}</div>
+      <div class="carta-desc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div>
+    </div>
+  `).join("");
 
-    try {
-      const cartasTexto = tres.map((c,i) => `${posiciones[i]}: ${c.nombre} (energía de ${c.energia})`).join(", ");
-      const response = await fetch("/consultar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pregunta, cartas: cartasTexto })
-      });
-      const data = await response.json();
-      respDiv.textContent = data.respuesta || "El oráculo necesita un momento. Intentá de nuevo.";
-    } catch(e) {
-      respDiv.textContent = "El oráculo necesita un momento. Intentá de nuevo.";
-    }
+  const interpDiv = document.getElementById("interpretacion");
+  interpDiv.classList.add("loading");
+  interpDiv.textContent = "El oráculo está leyendo las cartas...";
 
-    btn.disabled = false;
-    btn.textContent = "✦ Nueva consulta";
-    document.getElementById("pregunta").value = "";
+  const cartasTexto = tres.map((c,i) => posiciones[i].nombre + ": " + c.nombre + " (" + c.energia + ")").join(", ");
+
+  try {
+    const response = await fetch("/consultar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pregunta: contexto, cartas: cartasTexto, area: areaSeleccionada })
+    });
+    const data = await response.json();
+    interpDiv.textContent = data.respuesta || "El oráculo necesita un momento. Intentá de nuevo.";
+    interpDiv.classList.remove("loading");
+  } catch(e) {
+    interpDiv.textContent = "El oráculo necesita un momento. Intentá de nuevo.";
+    interpDiv.classList.remove("loading");
   }
+}
+
+function nuevaConsulta() {
+  document.getElementById("step1").style.display = "block";
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("step3").style.display = "none";
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
+  document.getElementById("pregunta").value = "";
+  document.getElementById("respuesta-profunda").value = "";
+  document.getElementById("pregunta-profunda").style.display = "none";
+  document.getElementById("counter").textContent = "Mínimo 8 palabras para una lectura precisa";
+  document.getElementById("counter").classList.remove("ok");
+  document.getElementById("btn-profundizar").style.display = "none";
+  areaSeleccionada = "";
+}
 </script>
 
 </body>
