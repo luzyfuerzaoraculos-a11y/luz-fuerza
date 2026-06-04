@@ -1,360 +1,513 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Luz & Fuerza · Oráculo de Tarot</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #060810; color: #c8d8f0; font-family: Georgia, serif; min-height: 100vh; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luz & Fuerza · Oráculo de Tarot</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060810;color:#c8d8f0;font-family:Georgia,serif;min-height:100vh;}
 
-    .lf-hero {
-      background: linear-gradient(160deg, #1a0a2e 0%, #0d1b3e 50%, #0a1628 100%);
-      padding: 3rem 2rem 2.5rem;
-      text-align: center;
-      border-bottom: 0.5px solid #2a3a5c;
-      position: relative;
-      overflow: hidden;
-    }
+.hero{background:linear-gradient(160deg,#1a0a2e 0%,#0d1b3e 50%,#0a1628 100%);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid #2a3a5c;position:relative;overflow:hidden;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.stars{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,rgba(255,255,255,0.6) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:100px 100px,65px 65px;background-position:15px 15px,45px 35px;pointer-events:none;}
+.sym-bg{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
+.sym{position:absolute;pointer-events:none;z-index:1;animation:subirLento linear infinite;}
+@keyframes subirLento{0%{transform:translateY(100px) rotate(var(--r));opacity:0;}20%{opacity:0.9;}80%{opacity:0.6;}100%{transform:translateY(-180px) rotate(calc(var(--r) + 10deg));opacity:0;}}
+.sym-body{position:absolute;pointer-events:none;animation:derivar linear infinite;}
+@keyframes derivar{0%{transform:translate(0,0) rotate(var(--r));opacity:0;}25%{opacity:0.6;}75%{opacity:0.3;}100%{transform:translate(var(--dx),var(--dy)) rotate(calc(var(--r) + 8deg));opacity:0;}}
+.moon{width:72px;height:72px;border-radius:50%;border:1.5px solid rgba(200,216,240,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;position:relative;z-index:2;}
+.moon-inner{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#d4e8ff,#7bafd4);}
+h1{font-size:32px;font-weight:400;color:#e8f0ff;letter-spacing:4px;position:relative;z-index:2;}
+.amp{color:#8baad4;}
+.tagline{font-size:13px;color:#7a9acd;letter-spacing:1px;font-style:italic;margin-top:8px;position:relative;z-index:2;}
 
-    .lf-stars {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
-      background-size: 120px 120px, 80px 80px, 200px 200px;
-      background-position: 20px 20px, 60px 40px, 10px 80px;
-      pointer-events: none;
-    }
+nav{display:flex;justify-content:center;flex-wrap:wrap;background:#0a0e1a;border-bottom:0.5px solid #1e2a45;}
+nav button{background:none;border:none;border-bottom:2px solid transparent;color:#4a6fa5;font-size:12px;font-family:Georgia,serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
+nav button.active{color:#c8d8f0;border-bottom:2px solid #7bafd4;}
 
-    .lf-moon {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      border: 2px solid rgba(200,216,240,0.4);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.5rem;
-      position: relative; z-index: 1;
-    }
+main{max-width:700px;margin:0 auto;padding:2rem 1.5rem;background:#0a0e1a;min-height:60vh;position:relative;overflow:hidden;}
 
-    .lf-moon-inner {
-      width: 50px; height: 50px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 40%, #d4e8ff, #7bafd4);
-    }
+.tab{display:none;}.tab.active{display:block;}
 
-    h1 { font-size: 32px; font-weight: 400; color: #e8f0ff; letter-spacing: 4px; position: relative; z-index: 1; }
-    .amp { color: #8baad4; }
-    .tagline { font-size: 14px; color: #5a7aaa; letter-spacing: 1px; font-style: italic; margin-top: 10px; position: relative; z-index: 1; }
+.slabel{font-size:11px;letter-spacing:2.5px;color:#4a6fa5;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.snum{width:20px;height:20px;border-radius:50%;border:0.5px solid #4a6fa5;font-size:11px;color:#4a6fa5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hint{font-size:14px;color:#8baad4;margin-bottom:14px;line-height:1.6;}
 
-    nav { display: flex; justify-content: center; background: #0a0e1a; border-bottom: 0.5px solid #1e2a45; }
-    nav button { background: none; border: none; border-bottom: 2px solid transparent; color: #4a6fa5; font-size: 13px; font-family: Georgia, serif; cursor: pointer; padding: 14px 24px; letter-spacing: 0.5px; }
-    nav button.active { color: #c8d8f0; border-bottom: 2px solid #7bafd4; }
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.5rem;}
+.chip{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:20px;padding:10px 18px;font-size:14px;color:#7bafd4;cursor:pointer;font-family:Georgia,serif;}
+.chip:hover,.chip.sel{border-color:#7bafd4;color:#c8d8f0;background:#162035;}
 
-    main { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem; background: #0a0e1a; min-height: 60vh; }
+textarea{width:100%;background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:16px;color:#c8d8f0;font-size:15px;resize:none;line-height:1.7;font-family:Georgia,serif;}
+textarea::placeholder{color:#2e4060;}
+textarea:focus{outline:none;border-color:#4a6fa5;}
+.counter{font-size:12px;color:#2e4060;text-align:right;margin-top:6px;}
+.counter.ok{color:#4a6fa5;}
 
-    .tab { display: none; }
-    .tab.active { display: block; }
+.bprofunda{background:#0f1628;border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+.bprofunda p{font-size:14px;color:#8baad4;font-style:italic;line-height:1.7;}
 
-    .step { margin-bottom: 2rem; }
+.btn{width:100%;padding:15px;background:#0f1628;border:0.5px solid #4a6fa5;border-radius:12px;color:#c8d8f0;font-size:15px;cursor:pointer;letter-spacing:1px;font-family:Georgia,serif;margin-top:1.5rem;}
+.btn:hover{background:#162035;}.btn:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-sm{display:inline-block;padding:10px 20px;background:none;border:0.5px solid #4a6fa5;border-radius:12px;color:#7bafd4;font-size:13px;cursor:pointer;font-family:Georgia,serif;margin-top:10px;}
+.btn-sm:hover{background:#162035;}
 
-    .step-label { font-size: 11px; letter-spacing: 2.5px; color: #4a6fa5; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-    .step-num { width: 20px; height: 20px; border-radius: 50%; border: 0.5px solid #4a6fa5; font-size: 11px; color: #4a6fa5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cartas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
+.carta{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem 0.75rem;text-align:center;}
+.cpos{font-size:10px;letter-spacing:2px;color:#2e4060;text-transform:uppercase;margin-bottom:10px;}
+.cemoji{font-size:30px;margin-bottom:8px;}
+.cnombre{font-size:13px;color:#c8d8f0;margin-bottom:4px;}
+.cpalo{font-size:10px;color:#2e4060;margin-bottom:6px;letter-spacing:1px;}
+.cenergia{font-size:11px;color:#4a6fa5;font-style:italic;margin-bottom:10px;line-height:1.4;}
+.cdesc{font-size:12px;color:#5a7aaa;line-height:1.6;border-top:0.5px solid #1e2a45;padding-top:10px;}
 
-    .hint { font-size: 14px; color: #8baad4; margin-bottom: 14px; line-height: 1.6; }
+.interp{background:#0f1628;border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.5rem;font-size:15px;line-height:1.9;color:#8baad4;font-style:italic;}
 
-    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; }
-    .chip { background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 20px; padding: 10px 18px; font-size: 14px; color: #7bafd4; cursor: pointer; font-family: Georgia, serif; }
-    .chip:hover, .chip.selected { border-color: #7bafd4; color: #c8d8f0; background: #162035; }
+/* Planes */
+.planes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.plan{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:1.5rem 1rem;text-align:center;}
+.plan.pop{border-color:#7bafd4;}
+.pbadge{font-size:10px;background:#162035;color:#7bafd4;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;}
+.plan.pop .pbadge{background:#1e3055;color:#c8d8f0;}
+.pprecio{font-size:26px;color:#c8d8f0;margin-bottom:4px;}
+.pprecio span{font-size:13px;color:#4a6fa5;}
+.pitems{list-style:none;margin-top:12px;}
+.pitems li{font-size:12px;color:#5a7aaa;padding:5px 0;border-top:0.5px solid #1e2a45;}
 
-    textarea { width: 100%; background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 12px; padding: 16px; color: #c8d8f0; font-size: 15px; resize: none; line-height: 1.7; font-family: Georgia, serif; }
-    textarea::placeholder { color: #2e4060; }
-    textarea:focus { outline: none; border-color: #4a6fa5; }
+/* Como funciona */
+.cfrow{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:2rem;}
+.cfcard{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem;}
+.cfcard h3{font-size:14px;color:#c8d8f0;font-weight:400;margin-bottom:8px;}
+.cfcard p{font-size:13px;color:#5a7aaa;line-height:1.7;}
+.cfcard .icon{font-size:24px;margin-bottom:10px;}
 
-    .counter { font-size: 12px; color: #2e4060; text-align: right; margin-top: 6px; }
-    .counter.ok { color: #4a6fa5; }
+/* Historia */
+.hblock{margin-bottom:2rem;}
+.hblock h3{font-size:16px;color:#c8d8f0;font-weight:400;margin-bottom:10px;border-bottom:0.5px solid #1e2a45;padding-bottom:8px;}
+.hblock p{font-size:14px;color:#5a7aaa;line-height:1.8;margin-bottom:10px;}
+.arcanos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1rem;}
+.arcano-card{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:10px;padding:1rem;display:flex;gap:10px;align-items:flex-start;}
+.arcano-emoji{font-size:20px;flex-shrink:0;}
+.arcano-info h4{font-size:12px;color:#8baad4;margin-bottom:4px;}
+.arcano-info p{font-size:11px;color:#4a6fa5;line-height:1.5;}
 
-    .bloque-profunda { background: #0f1628; border: 0.5px solid #2a3a5c; border-left: 2px solid #7bafd4; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
-    .bloque-profunda p { font-size: 14px; color: #8baad4; font-style: italic; line-height: 1.7; }
+/* Sobre */
+.sobre{color:#5a7aaa;font-size:15px;line-height:1.9;}
+.sobre p{margin-bottom:1.25rem;}
+.sobre strong{color:#8baad4;font-weight:400;}
 
-    .btn { width: 100%; padding: 15px; background: #0f1628; border: 0.5px solid #4a6fa5; border-radius: 12px; color: #c8d8f0; font-size: 15px; cursor: pointer; letter-spacing: 1px; font-family: Georgia, serif; margin-top: 1.5rem; }
-    .btn:hover { background: #162035; }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-sm { width: auto; padding: 10px 20px; background: none; border: 0.5px solid #4a6fa5; border-radius: 12px; color: #7bafd4; font-size: 13px; cursor: pointer; font-family: Georgia, serif; margin-top: 10px; }
-    .btn-sm:hover { background: #162035; }
+footer{text-align:center;padding:1.5rem;background:#060810;border-top:0.5px solid #1e2a45;font-size:11px;color:#1e2a45;letter-spacing:1px;}
 
-    .cartas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 1.5rem 0; }
-    .carta { background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 12px; padding: 1.25rem 0.75rem; text-align: center; }
-    .carta-pos { font-size: 10px; letter-spacing: 2px; color: #2e4060; text-transform: uppercase; margin-bottom: 12px; }
-    .carta-emoji { font-size: 32px; margin-bottom: 10px; }
-    .carta-nombre { font-size: 14px; color: #c8d8f0; margin-bottom: 6px; }
-    .carta-energia { font-size: 12px; color: #4a6fa5; font-style: italic; margin-bottom: 12px; line-height: 1.4; }
-    .carta-desc { font-size: 12px; color: #5a7aaa; line-height: 1.6; border-top: 0.5px solid #1e2a45; padding-top: 10px; }
+.loading{animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
 
-    .interpretacion { background: #0f1628; border: 0.5px solid #2a3a5c; border-left: 2px solid #7bafd4; border-radius: 12px; padding: 1.5rem; font-size: 15px; line-height: 1.9; color: #8baad4; font-style: italic; }
-
-    .planes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .plan { background: #0f1628; border: 0.5px solid #2a3a5c; border-radius: 12px; padding: 1.5rem 1rem; text-align: center; }
-    .plan.popular { border-color: #7bafd4; }
-    .plan-badge { font-size: 10px; background: #162035; color: #7bafd4; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 14px; letter-spacing: 1px; text-transform: uppercase; }
-    .plan.popular .plan-badge { background: #1e3055; color: #c8d8f0; }
-    .plan-precio { font-size: 28px; color: #c8d8f0; margin-bottom: 4px; }
-    .plan-precio span { font-size: 13px; color: #4a6fa5; }
-    .plan-items { list-style: none; margin-top: 12px; }
-    .plan-items li { font-size: 12px; color: #5a7aaa; padding: 5px 0; border-top: 0.5px solid #1e2a45; }
-
-    .sobre-texto { color: #5a7aaa; font-size: 15px; line-height: 1.9; }
-    .sobre-texto p { margin-bottom: 1.25rem; }
-    .sobre-texto strong { color: #8baad4; font-weight: 400; }
-
-    footer { text-align: center; padding: 1.5rem; background: #060810; border-top: 0.5px solid #1e2a45; font-size: 11px; color: #1e2a45; letter-spacing: 1px; }
-
-    .loading { animation: pulse 1.5s ease-in-out infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-
-    @media (max-width: 500px) {
-      .cartas { grid-template-columns: 1fr; }
-      .planes { grid-template-columns: 1fr; }
-      h1 { font-size: 24px; }
-    }
-  </style>
+@media(max-width:500px){
+  .cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}
+  h1{font-size:24px;}
+  nav button{padding:10px 10px;font-size:11px;}
+}
+</style>
 </head>
 <body>
 
-<header class="lf-hero">
-  <div class="lf-stars"></div>
-  <div class="lf-moon"><div class="lf-moon-inner"></div></div>
+<header class="hero">
+  <div class="stars"></div>
+  <div class="sym-bg" id="heroBg"></div>
+  <div class="moon"><div class="moon-inner"></div></div>
   <h1>LUZ <span class="amp">&</span> FUERZA</h1>
   <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
 </header>
 
 <nav>
   <button class="active" onclick="showTab('consulta',this)">Consulta</button>
+  <button onclick="showTab('como',this)">¿Cómo funciona?</button>
+  <button onclick="showTab('historia',this)">Historia y poder</button>
   <button onclick="showTab('planes',this)">Planes</button>
   <button onclick="showTab('sobre',this)">Nosotros</button>
 </nav>
 
 <main>
+<div class="sym-bg" id="bodyBg" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;"></div>
 
-  <div id="tab-consulta" class="tab active">
-
-    <div id="step1" class="step">
-      <div class="step-label"><div class="step-num">1</div> Área de consulta</div>
-      <div class="hint">¿Sobre qué área de tu vida querés consultar hoy?</div>
-      <div class="chips">
-        <div class="chip" onclick="seleccionarArea(this,'amor')">❤️ Amor y vínculos</div>
-        <div class="chip" onclick="seleccionarArea(this,'trabajo')">💼 Trabajo y proyectos</div>
-        <div class="chip" onclick="seleccionarArea(this,'dinero')">✨ Dinero y abundancia</div>
-        <div class="chip" onclick="seleccionarArea(this,'personal')">🌱 Crecimiento personal</div>
-        <div class="chip" onclick="seleccionarArea(this,'decision')">🔮 Una decisión difícil</div>
-        <div class="chip" onclick="seleccionarArea(this,'otro')">🌙 Otro</div>
-      </div>
-    </div>
-
-    <div id="step2" class="step" style="display:none;">
-      <div class="step-label"><div class="step-num">2</div> Tu pregunta</div>
-      <div class="hint" id="hint-pregunta">Escribí tu pregunta con detalle. Cuanto más específica, más profunda será la lectura.</div>
-      <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy? Escribí tu pregunta aquí..." oninput="validarPregunta()"></textarea>
-      <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
-      <button class="btn-sm" onclick="profundizar()" id="btn-profundizar" style="display:none;">✦ Quiero profundizar mi pregunta</button>
-      <div id="pregunta-profunda" style="display:none; margin-top:1rem;">
-        <div class="bloque-profunda"><p id="texto-profunda"></p></div>
-        <textarea id="respuesta-profunda" rows="3" placeholder="Respondé aquí para enriquecer tu consulta..."></textarea>
-      </div>
-      <button class="btn" id="btn-revelar" onclick="revelar()" disabled>✦ Revelar las cartas</button>
-    </div>
-
-    <div id="step3" style="display:none;">
-      <div class="step-label"><div class="step-num">3</div> Tu tirada</div>
-      <div class="cartas" id="cartas"></div>
-      <div class="step-label" style="margin-top:1.5rem;"><div class="step-num">4</div> Interpretación</div>
-      <div class="interpretacion loading" id="interpretacion">El oráculo está leyendo las cartas...</div>
-      <button class="btn" onclick="nuevaConsulta()">✦ Nueva consulta</button>
-    </div>
-
-  </div>
-
-  <div id="tab-planes" class="tab">
-    <div class="step-label" style="margin-bottom:1.5rem;">Elegí tu camino</div>
-    <div class="planes">
-      <div class="plan">
-        <div class="plan-badge">Consulta</div>
-        <div class="plan-precio">$3 <span>USD</span></div>
-        <ul class="plan-items">
-          <li>1 tirada completa</li>
-          <li>Interpretación personalizada</li>
-          <li>Explicación de cada carta</li>
-        </ul>
-      </div>
-      <div class="plan popular">
-        <div class="plan-badge">✦ Más elegido</div>
-        <div class="plan-precio">$9 <span>USD/semana</span></div>
-        <ul class="plan-items">
-          <li>1 consulta por día</li>
-          <li>Historial de lecturas</li>
-          <li>Seguimiento del oráculo</li>
-        </ul>
-      </div>
-      <div class="plan">
-        <div class="plan-badge">Mensual</div>
-        <div class="plan-precio">$19 <span>USD/mes</span></div>
-        <ul class="plan-items">
-          <li>Consultas ilimitadas</li>
-          <li>Historial completo</li>
-          <li>Perfil espiritual</li>
-        </ul>
-      </div>
+<!-- CONSULTA -->
+<div id="tab-consulta" class="tab active">
+  <div id="step1">
+    <div class="slabel" style="margin-bottom:10px;"><div class="snum">1</div> Área de consulta</div>
+    <div class="hint">¿Sobre qué área de tu vida querés consultar hoy?</div>
+    <div class="chips">
+      <div class="chip" onclick="selArea(this,'amor')">❤️ Amor y vínculos</div>
+      <div class="chip" onclick="selArea(this,'trabajo')">💼 Trabajo y proyectos</div>
+      <div class="chip" onclick="selArea(this,'dinero')">✨ Dinero y abundancia</div>
+      <div class="chip" onclick="selArea(this,'personal')">🌱 Crecimiento personal</div>
+      <div class="chip" onclick="selArea(this,'decision')">🔮 Una decisión difícil</div>
+      <div class="chip" onclick="selArea(this,'otro')">🌙 Otro</div>
     </div>
   </div>
 
-  <div id="tab-sobre" class="tab">
-    <div class="sobre-texto">
-      <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una <strong>sabiduría profunda</strong> esperando ser escuchada.</p>
-      <p>El tarot no predice el futuro — lo ilumina. Cada carta es un espejo de tu momento presente, la fuerza que impulsa tus próximos pasos.</p>
-      <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida. Tu <strong>luz interior</strong>, la respuesta.</p>
+  <div id="step2" style="display:none;">
+    <div class="slabel"><div class="snum">2</div> Tu pregunta</div>
+    <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
+    <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
+    <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
+    <button class="btn-sm" id="btnProf" onclick="profundizar()" style="display:none;">✦ Quiero profundizar mi pregunta</button>
+    <div id="divProf" style="display:none;margin-top:1rem;">
+      <div class="bprofunda"><p id="textoProf"></p></div>
+      <textarea id="respProf" rows="3" placeholder="Respondé aquí para enriquecer tu consulta..."></textarea>
+    </div>
+    <button class="btn" id="btnRevelar" onclick="revelar()" disabled>✦ Revelar las cartas</button>
+  </div>
+
+  <div id="step3" style="display:none;">
+    <div class="slabel"><div class="snum">3</div> Tu tirada</div>
+    <div class="cartas" id="cartas"></div>
+    <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div> Interpretación</div>
+    <div class="interp loading" id="interp">El oráculo está leyendo las cartas...</div>
+    <button class="btn" onclick="reset()">✦ Nueva consulta</button>
+  </div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<div id="tab-como" class="tab">
+  <div class="hint" style="margin-bottom:1.5rem;">El oráculo de Luz & Fuerza combina la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte lecturas personalizadas y profundas.</div>
+  <div class="cfrow">
+    <div class="cfcard"><div class="icon">🎴</div><h3>78 cartas del tarot</h3><p>Trabajamos con el mazo completo — 22 arcanos mayores y 56 arcanos menores. Cada carta es única y su significado varía según la posición en la tirada.</p></div>
+    <div class="cfcard"><div class="icon">🔮</div><h3>Tirada de 3 cartas</h3><p>Cada consulta revela 3 cartas: Pasado (lo que te trajo aquí), Presente (tu energía actual) y Futuro (hacia dónde se mueve tu camino).</p></div>
+    <div class="cfcard"><div class="icon">🧠</div><h3>Interpretación con IA</h3><p>La inteligencia artificial analiza tu pregunta, el área de consulta y las cartas que salieron para generar una lectura única y personalizada para vos.</p></div>
+    <div class="cfcard"><div class="icon">💬</div><h3>Pregunta guiada</h3><p>Antes de revelar las cartas, el oráculo puede hacerte una pregunta para profundizar tu consulta. Cuanto más específica la pregunta, más precisa la lectura.</p></div>
+  </div>
+  <div class="hblock">
+    <h3>Los arcanos mayores</h3>
+    <p>Las 22 cartas más poderosas del tarot. Representan los grandes temas de vida: transformación, amor, poder, destino. Cuando aparecen en una tirada, hablan de situaciones importantes y momentos de cambio profundo.</p>
+  </div>
+  <div class="hblock">
+    <h3>Los arcanos menores</h3>
+    <p>56 cartas divididas en 4 palos que hablan de la vida cotidiana:</p>
+    <div class="arcanos-grid">
+      <div class="arcano-card"><div class="arcano-emoji">💧</div><div class="arcano-info"><h4>Copas</h4><p>Emociones, amor, vínculos y mundo interior.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">💰</div><div class="arcano-info"><h4>Oros</h4><p>Dinero, trabajo, recursos y mundo material.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">⚔️</div><div class="arcano-info"><h4>Espadas</h4><p>Mente, conflictos, decisiones y verdades.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🔥</div><div class="arcano-info"><h4>Bastos</h4><p>Acción, creatividad, energía y proyectos.</p></div></div>
     </div>
   </div>
+</div>
+
+<!-- HISTORIA -->
+<div id="tab-historia" class="tab">
+  <div class="hblock">
+    <h3>El origen del tarot</h3>
+    <p>El tarot nació en el norte de Italia en el siglo XV como un juego de cartas para la nobleza. Con el tiempo, en el siglo XVIII, se transformó en una herramienta de adivinación y reflexión espiritual en Francia y Europa.</p>
+    <p>Las cartas que conocemos hoy tienen su base en el Tarot de Marsella (siglo XVII) y el Rider-Waite (1909), el más influyente de la historia moderna, diseñado por Arthur Edward Waite e ilustrado por Pamela Colman Smith.</p>
+  </div>
+  <div class="hblock">
+    <h3>El poder de los oráculos</h3>
+    <p>Los oráculos han acompañado a la humanidad desde siempre — desde el Oráculo de Delfos en la antigua Grecia hasta el I Ching chino. No predicen el futuro: son espejos que reflejan lo que ya sabemos pero no vemos con claridad.</p>
+    <p>El tarot funciona como un mapa del alma. Cada carta que aparece en una tirada no es un azar — es una invitación a mirar más profundo, a conectar con tu intuición y con la sabiduría que ya llevás dentro.</p>
+  </div>
+  <div class="hblock">
+    <h3>Los 22 arcanos mayores</h3>
+    <p>El viaje del Loco al Mundo es el viaje de toda alma humana — de la inocencia a la plenitud, pasando por todas las experiencias posibles.</p>
+    <div class="arcanos-grid">
+      <div class="arcano-card"><div class="arcano-emoji">🌟</div><div class="arcano-info"><h4>El Loco</h4><p>El inicio, la inocencia, los nuevos comienzos.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🪄</div><div class="arcano-info"><h4>El Mago</h4><p>La voluntad, la manifestación, el poder personal.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">📖</div><div class="arcano-info"><h4>La Sacerdotisa</h4><p>La intuición, el misterio, el conocimiento oculto.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌸</div><div class="arcano-info"><h4>La Emperatriz</h4><p>La abundancia, la fertilidad, la creatividad.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">👑</div><div class="arcano-info"><h4>El Emperador</h4><p>La autoridad, la estructura, el liderazgo.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🏛️</div><div class="arcano-info"><h4>El Hierofante</h4><p>La tradición, la guía espiritual, la enseñanza.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">💫</div><div class="arcano-info"><h4>Los Enamorados</h4><p>Las elecciones del corazón, la unión, los valores.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🏆</div><div class="arcano-info"><h4>El Carro</h4><p>La determinación, la victoria, el avance.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🦁</div><div class="arcano-info"><h4>La Fuerza</h4><p>El coraje interior, la compasión, la paciencia.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🕯️</div><div class="arcano-info"><h4>El Ermitaño</h4><p>La reflexión, la sabiduría interior, la soledad.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🎡</div><div class="arcano-info"><h4>La Rueda de la Fortuna</h4><p>Los ciclos, el destino, los cambios inevitables.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">⚖️</div><div class="arcano-info"><h4>La Justicia</h4><p>El equilibrio, la verdad, el karma.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🙃</div><div class="arcano-info"><h4>El Colgado</h4><p>La pausa, la entrega, la nueva perspectiva.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🦋</div><div class="arcano-info"><h4>La Muerte</h4><p>La transformación, los finales que liberan.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌊</div><div class="arcano-info"><h4>La Templanza</h4><p>El equilibrio, la moderación, la paciencia.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">⛓️</div><div class="arcano-info"><h4>El Diablo</h4><p>Los apegos, las sombras, la liberación.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">⚡</div><div class="arcano-info"><h4>La Torre</h4><p>Los cambios profundos, la destrucción creadora.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">✨</div><div class="arcano-info"><h4>La Estrella</h4><p>La esperanza, la guía, la renovación.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌙</div><div class="arcano-info"><h4>La Luna</h4><p>La intuición, el misterio, lo oculto.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">☀️</div><div class="arcano-info"><h4>El Sol</h4><p>La claridad, la alegría, el éxito.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🎺</div><div class="arcano-info"><h4>El Juicio</h4><p>El despertar, el llamado, la redención.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌍</div><div class="arcano-info"><h4>El Mundo</h4><p>La completud, el logro, los ciclos que cierran.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANES -->
+<div id="tab-planes" class="tab">
+  <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
+  <div class="planes">
+    <div class="plan">
+      <div class="pbadge">Consulta</div>
+      <div class="pprecio">$3 <span>USD</span></div>
+      <ul class="pitems">
+        <li>1 tirada completa</li>
+        <li>Interpretación personalizada</li>
+        <li>Explicación de cada carta</li>
+      </ul>
+    </div>
+    <div class="plan pop">
+      <div class="pbadge">✦ Más elegido</div>
+      <div class="pprecio">$9 <span>USD/semana</span></div>
+      <ul class="pitems">
+        <li>1 consulta por día</li>
+        <li>Historial de lecturas</li>
+        <li>Seguimiento del oráculo</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <div class="pbadge">Mensual</div>
+      <div class="pprecio">$19 <span>USD/mes</span></div>
+      <ul class="pitems">
+        <li>Consultas ilimitadas</li>
+        <li>Historial completo</li>
+        <li>Perfil espiritual</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<div id="tab-sobre" class="tab">
+  <div class="sobre">
+    <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una <strong>sabiduría profunda</strong> esperando ser escuchada.</p>
+    <p>El tarot no predice el futuro — lo ilumina. Cada carta que aparece es un espejo de tu momento presente, la fuerza que impulsa tus próximos pasos.</p>
+    <p>Combinamos la sabiduría ancestral del tarot con la tecnología de inteligencia artificial más avanzada para ofrecerte lecturas que realmente resuenen con tu situación única.</p>
+    <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida. Tu <strong>luz interior</strong>, la respuesta.</p>
+  </div>
+</div>
 
 </main>
-
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
 <script>
-const mazo = [
-  { nombre:"El Loco", emoji:"🌟", energia:"nuevos comienzos y libertad", pasado:"Un salto de fe que tomaste sin saber bien a dónde ibas.", presente:"Estás en un momento de apertura total, sin ataduras.", futuro:"Se acerca una nueva etapa que te pedirá soltar el control." },
-  { nombre:"La Emperatriz", emoji:"🌸", energia:"abundancia y creación", pasado:"Hubo un período de florecimiento y nutrición en tu vida.", presente:"Tenés una fuerza creadora activa que espera ser expresada.", futuro:"La abundancia viene hacia vos cuando confíes en tu propio ritmo." },
-  { nombre:"El Ermitaño", emoji:"🕯️", energia:"reflexión interior y sabiduría", pasado:"Atravesaste un retiro necesario para encontrarte a vos mismo.", presente:"Tu respuesta está adentro — el silencio es tu mejor aliado ahora.", futuro:"La claridad llegará a través de la introspección, no de los demás." },
-  { nombre:"La Luna", emoji:"🌙", energia:"intuición y lo que está oculto", pasado:"Algo no se veía claramente — había ilusiones o miedos que distorsionaban.", presente:"Confiá en tu intuición aunque no tengas pruebas concretas todavía.", futuro:"Lo que está en las sombras saldrá a la luz en el momento justo." },
-  { nombre:"El Sol", emoji:"☀️", energia:"claridad, alegría y éxito", pasado:"Hubo un momento de gran claridad y vitalidad en tu camino.", presente:"Estás irradiando una energía que atrae lo que necesitás.", futuro:"Un período luminoso se abre ante vos — confiá en ese brillo." },
-  { nombre:"La Justicia", emoji:"⚖️", energia:"equilibrio, verdad y karma", pasado:"Una situación pidió que tomaras una decisión importante y justa.", presente:"Es momento de actuar con honestidad — lo que siembres, cosecharás.", futuro:"Lo que se debe equilibrar, se equilibrará. Confiá en ese proceso." },
-  { nombre:"La Torre", emoji:"⚡", energia:"cambios profundos e inevitables", pasado:"Algo se derrumbó para que pudieras construir sobre bases más sólidas.", presente:"Estás en medio de una transformación que no podés detener.", futuro:"Un cambio brusco viene a liberarte de algo que ya no te servía." },
-  { nombre:"La Estrella", emoji:"✨", energia:"esperanza, guía y renovación", pasado:"Después de una tormenta, encontraste tu propia luz de nuevo.", presente:"Hay una guía sutil que te orienta — prestale atención.", futuro:"La esperanza no es ilusión: el camino se ilumina hacia adelante." },
-  { nombre:"El Mundo", emoji:"🌍", energia:"completud y ciclos que cierran", pasado:"Completaste algo importante — un ciclo llegó a su fin natural.", presente:"Estás cerca de alcanzar una meta o cerrar algo pendiente.", futuro:"Un ciclo se completa y te lleva a un nuevo nivel de experiencia." },
-  { nombre:"La Fuerza", emoji:"🦁", energia:"coraje interior y compasión", pasado:"Enfrentaste algo difícil con más valentía de lo que creías tener.", presente:"Tu fuerza más poderosa ahora es la calma, no la imposición.", futuro:"La situación se resuelve con paciencia y amor propio, no con fuerza bruta." },
-  { nombre:"El Carro", emoji:"🏆", energia:"determinación y voluntad", pasado:"Te pusiste en movimiento con una meta clara y nada te detuvo.", presente:"Tenés toda la energía para avanzar — el momento de actuar es ahora.", futuro:"Si mantenés el foco, llegás a donde querés llegar." },
-  { nombre:"Los Enamorados", emoji:"💫", energia:"elecciones del corazón y unión", pasado:"Una elección importante moldeó el camino que tomaste.", presente:"Estás frente a una decisión que involucra el corazón y los valores.", futuro:"Una conexión o elección importante se acerca — escuchá lo que tu corazón sabe." }
+const c="rgba(123,175,212,0.3)";
+const cl="rgba(123,175,212,0.16)";
+const svgs=[
+  `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><path d="M27 4 C14 4 4 14 4 27 C4 40 14 50 27 46 C40 50 50 40 50 27 C50 14 40 4 27 4Z" stroke="${c}" stroke-width="1.2" fill="none"/><circle cx="19" cy="27" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><line x1="28" y1="6" x2="28" y2="50" stroke="${cl}" stroke-width="1"/><line x1="6" y1="28" x2="50" y2="28" stroke="${cl}" stroke-width="1"/><circle cx="28" cy="28" r="6" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="48" height="68" viewBox="0 0 48 68" fill="none"><line x1="24" y1="4" x2="24" y2="54" stroke="${c}" stroke-width="1.5"/><path d="M24 4 L14 24 L24 18 L34 24 Z" stroke="${c}" stroke-width="1.2" fill="none"/><line x1="14" y1="54" x2="34" y2="54" stroke="${c}" stroke-width="1.5"/></svg>`,
+  `<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><polygon points="29,4 35,21 53,21 39,32 44,49 29,39 14,49 19,32 5,21 23,21" stroke="${c}" stroke-width="1.2" fill="none"/></svg>`,
+  `<svg width="52" height="62" viewBox="0 0 52 62" fill="none"><ellipse cx="26" cy="28" rx="18" ry="23" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M26 5 Q38 17 26 28 Q14 17 26 5Z" stroke="${cl}" stroke-width="1" fill="none"/><line x1="26" y1="51" x2="26" y2="60" stroke="${c}" stroke-width="1.2"/><line x1="19" y1="57" x2="33" y2="57" stroke="${c}" stroke-width="1.2"/></svg>`,
+  `<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><circle cx="29" cy="29" r="23" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M29 6 L29 52 M6 29 L52 29 M12 12 L46 46 M46 12 L12 46" stroke="${cl}" stroke-width="0.8"/><circle cx="29" cy="29" r="7" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="50" height="60" viewBox="0 0 50 60" fill="none"><path d="M25 5 L45 50 L25 42 L5 50 Z" stroke="${c}" stroke-width="1.2" fill="none"/></svg>`,
+  `<svg width="60" height="50" viewBox="0 0 60 50" fill="none"><path d="M5 25 Q15 5 30 25 Q45 45 55 25" stroke="${c}" stroke-width="1.5" fill="none"/><circle cx="5" cy="25" r="3" stroke="${c}" stroke-width="1" fill="none"/><circle cx="55" cy="25" r="3" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><rect x="8" y="8" width="39" height="39" rx="3" stroke="${c}" stroke-width="1.2" fill="none"/><rect x="16" y="16" width="23" height="23" rx="2" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 L52 28 L28 52 L4 28 Z" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M28 14 L42 28 L28 42 L14 28 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="54" height="54" viewBox="0 0 54 54" fill="none"><circle cx="27" cy="27" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M27 5 L31 18 L44 18 L34 26 L38 39 L27 32 L16 39 L20 26 L10 18 L23 18 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><circle cx="27" cy="27" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><circle cx="27" cy="27" r="14" stroke="${cl}" stroke-width="1" fill="none"/><circle cx="27" cy="27" r="5" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="52" height="65" viewBox="0 0 52 65" fill="none"><path d="M26 4 L48 18 L48 47 L26 61 L4 47 L4 18 Z" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M26 14 L38 22 L38 43 L26 51 L14 43 L14 22 Z" stroke="${cl}" stroke-width="0.8" fill="none"/></svg>`,
+  `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 C38 4 48 14 48 28 C48 42 38 52 28 52 C18 52 8 42 8 28 C8 14 18 4 28 4Z M28 4 C22 14 22 42 28 52 M28 4 C34 14 34 42 28 52 M8 28 C18 22 38 22 48 28 M8 28 C18 34 38 34 48 28" stroke="${c}" stroke-width="0.9" fill="none"/></svg>`,
+  `<svg width="50" height="60" viewBox="0 0 50 60" fill="none"><line x1="25" y1="4" x2="25" y2="56" stroke="${c}" stroke-width="1.2"/><line x1="4" y1="20" x2="46" y2="20" stroke="${c}" stroke-width="1.2"/><circle cx="25" cy="20" r="5" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="58" height="40" viewBox="0 0 58 40" fill="none"><path d="M4 20 Q29 4 54 20 Q29 36 4 20Z" stroke="${c}" stroke-width="1.2" fill="none"/><circle cx="29" cy="20" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+  `<svg width="60" height="45" viewBox="0 0 60 45" fill="none"><path d="M5 40 L30 5 L55 40 Z" stroke="${c}" stroke-width="1.2" fill="none"/><line x1="30" y1="5" x2="30" y2="40" stroke="${cl}" stroke-width="0.8"/></svg>`,
+  `<svg width="54" height="54" viewBox="0 0 54 54" fill="none"><circle cx="27" cy="27" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M27 5 L27 49 M5 27 L49 27" stroke="${cl}" stroke-width="0.8"/><path d="M11 11 L43 43 M43 11 L11 43" stroke="${cl}" stroke-width="0.6"/></svg>`
 ];
 
-const posiciones = [
-  { nombre:"Pasado", clave:"pasado", desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual." },
-  { nombre:"Presente", clave:"presente", desc:"La energía que te rodea ahora mismo — tu momento presente." },
-  { nombre:"Futuro", clave:"futuro", desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren." }
-];
+const used=new Set();
+function getRnd(){let i,t=0;do{i=Math.floor(Math.random()*svgs.length);t++;}while(used.has(i)&&t<20);used.add(i);if(used.size>9)used.clear();return i;}
 
-const preguntas_profundas = {
-  amor:"¿Hay algo específico en esta relación o vínculo que te genera duda o que querés entender mejor?",
-  trabajo:"¿Qué es lo que más te preocupa o genera incertidumbre en esta situación laboral?",
-  dinero:"¿Estás buscando orientación sobre una decisión económica específica o sobre tu relación general con la abundancia?",
-  personal:"¿Qué aspecto de vos mismo o tu vida querés transformar o entender más profundamente?",
+function spawnHero(){
+  const bg=document.getElementById('heroBg');
+  const w=document.createElement('div');w.className='sym';
+  w.innerHTML=svgs[getRnd()];
+  const l=5+Math.random()*82,r=(Math.random()-.5)*30,d=22+Math.random()*14,s=0.9+Math.random()*0.8;
+  w.style.cssText=`left:${l}%;bottom:-80px;--r:${r}deg;animation-duration:${d}s;`;
+  w.querySelector('svg').style.transform=`scale(${s})`;
+  bg.appendChild(w);setTimeout(()=>w.remove(),d*1000);
+  setTimeout(spawnHero,5000+Math.random()*4000);
+}
+function spawnBody(){
+  const bg=document.getElementById('bodyBg');
+  const w=document.createElement('div');w.className='sym-body';
+  w.innerHTML=svgs[getRnd()];
+  const l=Math.random()*80,t=Math.random()*50,r=(Math.random()-.5)*20;
+  const dx=(Math.random()-.5)*60+'px',dy=(Math.random()-.5)*40+'px',d=28+Math.random()*14;
+  w.style.cssText=`left:${l}%;top:${t}%;--r:${r}deg;--dx:${dx};--dy:${dy};animation-duration:${d}s;`;
+  bg.appendChild(w);setTimeout(()=>w.remove(),d*1000);
+  setTimeout(spawnBody,9000+Math.random()*7000);
+}
+for(let i=0;i<3;i++)setTimeout(spawnHero,i*2000);
+for(let i=0;i<2;i++)setTimeout(spawnBody,i*3500);
+
+const preguntas={
+  amor:"¿Hay algo específico en esta relación o vínculo que te genera duda?",
+  trabajo:"¿Qué es lo que más te preocupa en esta situación laboral?",
+  dinero:"¿Buscás orientación sobre una decisión económica específica?",
+  personal:"¿Qué aspecto de vos mismo querés transformar o entender?",
   decision:"¿Cuáles son las dos opciones o caminos que estás considerando?",
-  otro:"¿Podés contarme un poco más sobre qué está pasando en tu vida que te trajo a consultar hoy?"
+  otro:"¿Podés contarme un poco más sobre qué te trajo a consultar hoy?"
 };
 
-let areaSeleccionada = "";
+const hints={
+  amor:"Contame sobre tu situación en el amor — ¿hay una persona, relación o algo que estás procesando?",
+  trabajo:"¿Qué está pasando en tu trabajo o proyecto? ¿Hay una decisión pendiente?",
+  dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",
+  personal:"¿Qué querés transformar o entender de vos mismo en este momento?",
+  decision:"Describí la situación — ¿qué decisión enfrentás y qué opciones ves?",
+  otro:"Contame libremente qué te trajo aquí hoy."
+};
 
-function showTab(tab, el) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-  document.getElementById("tab-" + tab).classList.add("active");
+const posiciones=[
+  {nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual."},
+  {nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo — tu momento presente."},
+  {nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren."}
+];
+
+let area="";
+
+function showTab(t,el){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+  document.getElementById("tab-"+t).classList.add("active");
   el.classList.add("active");
 }
 
-function seleccionarArea(el, area) {
-  document.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
-  el.classList.add("selected");
-  areaSeleccionada = area;
-  document.getElementById("step2").style.display = "block";
-  const hints = {
-    amor:"Contame sobre tu situación en el amor — ¿hay una persona, una relación o algo que estás procesando?",
-    trabajo:"¿Qué está pasando en tu trabajo o proyecto? ¿Hay una decisión pendiente o algo que te genera incertidumbre?",
-    dinero:"¿Estás atravesando un momento económico difícil, o buscás orientación para una decisión financiera?",
-    personal:"¿Qué querés transformar o entender de vos mismo en este momento?",
-    decision:"Describí la situación — ¿qué decisión estás enfrentando y qué opciones ves?",
-    otro:"Contame libremente qué te trajo aquí hoy."
-  };
-  document.getElementById("hint-pregunta").textContent = hints[area] || hints.otro;
+function selArea(el,a){
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("sel"));
+  el.classList.add("sel");area=a;
+  document.getElementById("step2").style.display="block";
+  document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;
 }
 
-function validarPregunta() {
-  const texto = document.getElementById("pregunta").value.trim();
-  const palabras = texto.split(/\s+/).filter(w => w.length > 0).length;
-  const counter = document.getElementById("counter");
-  const btnRevelar = document.getElementById("btn-revelar");
-  const btnProfundizar = document.getElementById("btn-profundizar");
-  if (palabras >= 8) {
-    counter.textContent = "✦ " + palabras + " palabras — podés revelar las cartas";
-    counter.classList.add("ok");
-    btnRevelar.disabled = false;
-    btnProfundizar.style.display = "inline-block";
-  } else {
-    counter.textContent = palabras + "/8 palabras mínimas para una lectura precisa";
-    counter.classList.remove("ok");
-    btnRevelar.disabled = true;
-    btnProfundizar.style.display = "none";
-  }
+function validar(){
+  const txt=document.getElementById("pregunta").value.trim();
+  const words=txt.split(/\s+/).filter(w=>w.length>0).length;
+  const cnt=document.getElementById("counter");
+  const btn=document.getElementById("btnRevelar");
+  const bp=document.getElementById("btnProf");
+  if(words>=8){cnt.textContent="✦ "+words+" palabras — podés revelar las cartas";cnt.classList.add("ok");btn.disabled=false;bp.style.display="inline-block";}
+  else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;bp.style.display="none";}
 }
 
-function profundizar() {
-  const div = document.getElementById("pregunta-profunda");
-  div.style.display = "block";
-  document.getElementById("texto-profunda").textContent = preguntas_profundas[areaSeleccionada] || preguntas_profundas.otro;
+function profundizar(){
+  document.getElementById("divProf").style.display="block";
+  document.getElementById("textoProf").textContent=preguntas[area]||preguntas.otro;
 }
 
-async function revelar() {
-  const pregunta = document.getElementById("pregunta").value.trim();
-  const respuestaProfunda = document.getElementById("respuesta-profunda").value.trim();
-  const contexto = respuestaProfunda ? pregunta + ". Contexto adicional: " + respuestaProfunda : pregunta;
-
-  document.getElementById("step1").style.display = "none";
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("step3").style.display = "block";
-
-  const tres = [...mazo].sort(() => Math.random() - 0.5).slice(0, 3);
-
-  document.getElementById("cartas").innerHTML = tres.map((c, i) => `
+async function revelar(){
+  const preg=document.getElementById("pregunta").value.trim();
+  const rp=document.getElementById("respProf").value.trim();
+  const ctx=rp?preg+". Contexto adicional: "+rp:preg;
+  document.getElementById("step1").style.display="none";
+  document.getElementById("step2").style.display="none";
+  document.getElementById("step3").style.display="block";
+  const tres=[...mazo].sort(()=>Math.random()-.5).slice(0,3);
+  document.getElementById("cartas").innerHTML=tres.map((c,i)=>`
     <div class="carta">
-      <div class="carta-pos">${posiciones[i].nombre}</div>
-      <div class="carta-emoji">${c.emoji}</div>
-      <div class="carta-nombre">${c.nombre}</div>
-      <div class="carta-energia">${c.energia}</div>
-      <div class="carta-desc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div>
-    </div>
-  `).join("");
-
-  const interpDiv = document.getElementById("interpretacion");
-  interpDiv.classList.add("loading");
-  interpDiv.textContent = "El oráculo está leyendo las cartas...";
-
-  const cartasTexto = tres.map((c,i) => posiciones[i].nombre + ": " + c.nombre + " (" + c.energia + ")").join(", ");
-
-  try {
-    const response = await fetch("/consultar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pregunta: contexto, cartas: cartasTexto, area: areaSeleccionada })
-    });
-    const data = await response.json();
-    interpDiv.textContent = data.respuesta || "El oráculo necesita un momento. Intentá de nuevo.";
+      <div class="cpos">${posiciones[i].nombre}</div>
+      <div class="cemoji">${c.emoji}</div>
+      <div class="cnombre">${c.nombre}</div>
+      <div class="cpalo">${c.palo}</div>
+      <div class="cenergia">${c.energia}</div>
+      <div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div>
+    </div>`).join("");
+  const interpDiv=document.getElementById("interp");
+  interpDiv.classList.add("loading");interpDiv.textContent="El oráculo está leyendo las cartas...";
+  const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
+  try{
+    const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});
+    const d=await r.json();
+    interpDiv.textContent=d.respuesta||"El oráculo necesita un momento. Intentá de nuevo.";
     interpDiv.classList.remove("loading");
-  } catch(e) {
-    interpDiv.textContent = "El oráculo necesita un momento. Intentá de nuevo.";
-    interpDiv.classList.remove("loading");
-  }
+  }catch(e){interpDiv.textContent="El oráculo necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
 }
 
-function nuevaConsulta() {
-  document.getElementById("step1").style.display = "block";
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("step3").style.display = "none";
-  document.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
-  document.getElementById("pregunta").value = "";
-  document.getElementById("respuesta-profunda").value = "";
-  document.getElementById("pregunta-profunda").style.display = "none";
-  document.getElementById("counter").textContent = "Mínimo 8 palabras para una lectura precisa";
+function reset(){
+  document.getElementById("step1").style.display="block";
+  document.getElementById("step2").style.display="none";
+  document.getElementById("step3").style.display="none";
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("sel"));
+  document.getElementById("pregunta").value="";
+  document.getElementById("respProf").value="";
+  document.getElementById("divProf").style.display="none";
+  document.getElementById("counter").textContent="Mínimo 8 palabras para una lectura precisa";
   document.getElementById("counter").classList.remove("ok");
-  document.getElementById("btn-profundizar").style.display = "none";
-  areaSeleccionada = "";
+  document.getElementById("btnProf").style.display="none";
+  area="";
 }
+</script>
+
+<script>
+const mazo=[
+{id:0,nombre:"El Loco",palo:"Mayor",emoji:"🌟",energia:"nuevos comienzos y libertad",pasado:"Un salto de fe que tomaste sin saber bien a dónde ibas.",presente:"Estás en un momento de apertura total, sin ataduras.",futuro:"Se acerca una nueva etapa que te pedirá soltar el control."},
+{id:1,nombre:"El Mago",palo:"Mayor",emoji:"🪄",energia:"voluntad y manifestación",pasado:"Tuviste todo lo necesario para crear algo importante.",presente:"Tenés las herramientas — solo falta que las uses con intención.",futuro:"Lo que imagines con claridad, podés manifestarlo."},
+{id:2,nombre:"La Sacerdotisa",palo:"Mayor",emoji:"📖",energia:"intuición y misterio",pasado:"Hubo algo que sabías sin poder explicar, y tenías razón.",presente:"Tu intuición te habla — escuchala antes de actuar.",futuro:"La respuesta llegará desde adentro, no desde afuera."},
+{id:3,nombre:"La Emperatriz",palo:"Mayor",emoji:"🌸",energia:"abundancia y creación",pasado:"Hubo un período de florecimiento y nutrición en tu vida.",presente:"Tenés una fuerza creadora activa que espera ser expresada.",futuro:"La abundancia viene hacia vos cuando confíes en tu propio ritmo."},
+{id:4,nombre:"El Emperador",palo:"Mayor",emoji:"👑",energia:"autoridad y estructura",pasado:"Construiste algo sólido sobre bases firmes.",presente:"Es momento de poner orden y tomar el mando de tu situación.",futuro:"La estabilidad que buscás llega cuando establecés límites claros."},
+{id:5,nombre:"El Hierofante",palo:"Mayor",emoji:"🏛️",energia:"tradición y guía espiritual",pasado:"Una enseñanza o guía fue importante en tu camino.",presente:"Buscás una verdad más profunda o una guía en quien confiar.",futuro:"Una enseñanza o mentor aparecerá para orientarte."},
+{id:6,nombre:"Los Enamorados",palo:"Mayor",emoji:"💫",energia:"elecciones del corazón y unión",pasado:"Una elección importante moldeó el camino que tomaste.",presente:"Estás frente a una decisión que involucra el corazón y los valores.",futuro:"Una conexión o elección importante se acerca — escuchá lo que tu corazón sabe."},
+{id:7,nombre:"El Carro",palo:"Mayor",emoji:"🏆",energia:"determinación y voluntad",pasado:"Te pusiste en movimiento con una meta clara y nada te detuvo.",presente:"Tenés toda la energía para avanzar — el momento de actuar es ahora.",futuro:"Si mantenés el foco, llegás a donde querés llegar."},
+{id:8,nombre:"La Fuerza",palo:"Mayor",emoji:"🦁",energia:"coraje interior y compasión",pasado:"Enfrentaste algo difícil con más valentía de lo que creías tener.",presente:"Tu fuerza más poderosa ahora es la calma, no la imposición.",futuro:"La situación se resuelve con paciencia y amor propio, no con fuerza bruta."},
+{id:9,nombre:"El Ermitaño",palo:"Mayor",emoji:"🕯️",energia:"reflexión interior y sabiduría",pasado:"Atravesaste un retiro necesario para encontrarte a vos mismo.",presente:"Tu respuesta está adentro — el silencio es tu mejor aliado ahora.",futuro:"La claridad llegará a través de la introspección, no de los demás."},
+{id:10,nombre:"La Rueda de la Fortuna",palo:"Mayor",emoji:"🎡",energia:"ciclos y cambios del destino",pasado:"Un giro inesperado cambió el rumbo de las cosas.",presente:"Estás en un punto de inflexión — algo está por cambiar.",futuro:"Un ciclo nuevo comienza — prepárate para lo inesperado."},
+{id:11,nombre:"La Justicia",palo:"Mayor",emoji:"⚖️",energia:"equilibrio, verdad y karma",pasado:"Una situación pidió que tomaras una decisión importante y justa.",presente:"Es momento de actuar con honestidad — lo que siembres, cosecharás.",futuro:"Lo que se debe equilibrar, se equilibrará. Confiá en ese proceso."},
+{id:12,nombre:"El Colgado",palo:"Mayor",emoji:"🙃",energia:"pausa, entrega y nueva perspectiva",pasado:"Una pausa forzada te dio una visión que no hubieras tenido de otra forma.",presente:"Soltar el control es el movimiento más poderoso que podés hacer ahora.",futuro:"Una pausa necesaria te dará la claridad que estás buscando."},
+{id:13,nombre:"La Muerte",palo:"Mayor",emoji:"🦋",energia:"transformación y finales que liberan",pasado:"Algo terminó para dejar espacio a algo nuevo y mejor.",presente:"Estás en medio de una transformación profunda — dejá ir lo que ya no sirve.",futuro:"Un final necesario abre la puerta a una nueva versión de vos."},
+{id:14,nombre:"La Templanza",palo:"Mayor",emoji:"🌊",energia:"equilibrio, paciencia y moderación",pasado:"Encontraste el equilibrio mezclando opuestos con sabiduría.",presente:"La paciencia y el fluir son tus aliados más poderosos ahora.",futuro:"La armonía llega cuando dejás de forzar y empezás a fluir."},
+{id:15,nombre:"El Diablo",palo:"Mayor",emoji:"⛓️",energia:"apegos, sombras y liberación",pasado:"Algo te tuvo atado más tiempo del necesario.",presente:"Hay algo que te limita — y tenés el poder de soltarlo.",futuro:"La libertad llega cuando reconocés qué cadenas son tuyas y cuáles son ilusorias."},
+{id:16,nombre:"La Torre",palo:"Mayor",emoji:"⚡",energia:"cambios profundos e inevitables",pasado:"Algo se derrumbó para que pudieras construir sobre bases más sólidas.",presente:"Estás en medio de una transformación que no podés detener.",futuro:"Un cambio brusco viene a liberarte de algo que ya no te servía."},
+{id:17,nombre:"La Estrella",palo:"Mayor",emoji:"✨",energia:"esperanza, guía y renovación",pasado:"Después de una tormenta, encontraste tu propia luz de nuevo.",presente:"Hay una guía sutil que te orienta — prestale atención.",futuro:"La esperanza no es ilusión: el camino se ilumina hacia adelante."},
+{id:18,nombre:"La Luna",palo:"Mayor",emoji:"🌙",energia:"intuición y lo que está oculto",pasado:"Algo no se veía claramente — había ilusiones o miedos que distorsionaban.",presente:"Confiá en tu intuición aunque no tengas pruebas concretas todavía.",futuro:"Lo que está en las sombras saldrá a la luz en el momento justo."},
+{id:19,nombre:"El Sol",palo:"Mayor",emoji:"☀️",energia:"claridad, alegría y éxito",pasado:"Hubo un momento de gran claridad y vitalidad en tu camino.",presente:"Estás irradiando una energía que atrae lo que necesitás.",futuro:"Un período luminoso se abre ante vos — confiá en ese brillo."},
+{id:20,nombre:"El Juicio",palo:"Mayor",emoji:"🎺",energia:"despertar, llamado y redención",pasado:"Respondiste a un llamado importante que cambió tu dirección.",presente:"Es momento de evaluar honestamente tu camino y hacer las paces con el pasado.",futuro:"Un despertar profundo te llevará a una versión renovada de vos mismo."},
+{id:21,nombre:"El Mundo",palo:"Mayor",emoji:"🌍",energia:"completud y ciclos que cierran",pasado:"Completaste algo importante — un ciclo llegó a su fin natural.",presente:"Estás cerca de alcanzar una meta o cerrar algo pendiente.",futuro:"Un ciclo se completa y te lleva a un nuevo nivel de experiencia."},
+{id:22,nombre:"As de Copas",palo:"Copas",emoji:"🏆",energia:"nuevo amor y apertura emocional",pasado:"Un nuevo sentimiento o vínculo comenzó a florecer.",presente:"Tu corazón está abierto y listo para recibir amor o alegría.",futuro:"Una nueva conexión emocional o una etapa de plenitud se acerca."},
+{id:23,nombre:"Dos de Copas",palo:"Copas",emoji:"🥂",energia:"unión y conexión mutua",pasado:"Hubo una conexión especial que marcó ese momento.",presente:"Una relación equilibrada y recíproca está presente en tu vida.",futuro:"Una unión significativa o reconciliación se aproxima."},
+{id:24,nombre:"Tres de Copas",palo:"Copas",emoji:"🎉",energia:"celebración y amistad",pasado:"Un momento de alegría compartida con personas queridas.",presente:"Es tiempo de celebrar, conectar y disfrutar en comunidad.",futuro:"Una celebración o reunión especial está por venir."},
+{id:25,nombre:"Cuatro de Copas",palo:"Copas",emoji:"😔",energia:"introspección y descontento",pasado:"Hubo un período de apatía donde no veías lo que tenías.",presente:"Estás ensimismado — quizás hay una oportunidad que no estás viendo.",futuro:"Una nueva perspectiva te sacará del estancamiento."},
+{id:26,nombre:"Cinco de Copas",palo:"Copas",emoji:"😢",energia:"pérdida y duelo",pasado:"Una pérdida o decepción marcó ese tiempo.",presente:"Estás procesando una pérdida — está bien sentirlo.",futuro:"El dolor se transforma — lo que queda en pie vale más de lo que perdiste."},
+{id:27,nombre:"Seis de Copas",palo:"Copas",emoji:"🌼",energia:"nostalgia y recuerdos del pasado",pasado:"Momentos de inocencia y conexión pura definieron ese tiempo.",presente:"El pasado aparece — quizás hay algo allí que vale la pena rescatar.",futuro:"Una reconexión con el pasado o alguien de antes puede surgir."},
+{id:28,nombre:"Siete de Copas",palo:"Copas",emoji:"🌀",energia:"ilusiones y fantasías",pasado:"Te perdiste en posibilidades sin concretar ninguna.",presente:"Hay demasiadas opciones — necesitás claridad para elegir.",futuro:"Distinguir lo real de lo ilusorio será clave para avanzar."},
+{id:29,nombre:"Ocho de Copas",palo:"Copas",emoji:"🚶",energia:"dejar ir y seguir adelante",pasado:"Dejaste algo atrás aunque todavía funcionaba, porque ya no te llenaba.",presente:"Es momento de alejarte de algo que ya no te nutre.",futuro:"Un abandono necesario te llevará hacia algo más significativo."},
+{id:30,nombre:"Nueve de Copas",palo:"Copas",emoji:"😊",energia:"satisfacción y deseos cumplidos",pasado:"Alcanzaste algo que deseabas y te llenó de satisfacción.",presente:"Estás en un momento de bienestar — reconocelo y disfrutalo.",futuro:"Un deseo importante está por cumplirse."},
+{id:31,nombre:"Diez de Copas",palo:"Copas",emoji:"🏡",energia:"felicidad familiar y plenitud",pasado:"Hubo armonía y plenitud en tus vínculos más cercanos.",presente:"La felicidad está en los vínculos que te rodean — valoralos.",futuro:"Una etapa de armonía y plenitud emocional se aproxima."},
+{id:32,nombre:"Sota de Copas",palo:"Copas",emoji:"💌",energia:"mensajes emocionales y creatividad",pasado:"Un mensaje o noticia tocó tu corazón de forma inesperada.",presente:"Hay una invitación a explorar tus emociones con curiosidad.",futuro:"Una noticia o mensaje cargado de emoción está por llegar."},
+{id:33,nombre:"Caballero de Copas",palo:"Copas",emoji:"🦢",energia:"romanticismo y propuestas",pasado:"Alguien llegó con gestos románticos o propuestas emotivas.",presente:"Tu corazón guía tus acciones — seguilo con moderación.",futuro:"Una propuesta emotiva o romántica puede materializarse."},
+{id:34,nombre:"Reina de Copas",palo:"Copas",emoji:"🧜",energia:"empatía y sabiduría emocional",pasado:"La compasión y la intuición te guiaron en ese momento.",presente:"Tu capacidad de sentir profundamente es tu mayor fortaleza ahora.",futuro:"Una figura empática y sabia aparecerá para guiarte."},
+{id:35,nombre:"Rey de Copas",palo:"Copas",emoji:"🌊",energia:"madurez emocional y equilibrio",pasado:"Manejaste una situación emocional difícil con sabiduría.",presente:"Podés ser emocionalmente fuerte sin perder la sensibilidad.",futuro:"La madurez emocional que desarrollaste te dará estabilidad."},
+{id:36,nombre:"As de Oros",palo:"Oros",emoji:"💰",energia:"nueva oportunidad material",pasado:"Una oportunidad económica o material se abrió ante vos.",presente:"Hay una semilla de prosperidad lista para ser plantada.",futuro:"Una nueva oportunidad financiera o material está por llegar."},
+{id:37,nombre:"Dos de Oros",palo:"Oros",emoji:"⚖️",energia:"equilibrio y adaptabilidad",pasado:"Manejaste varias responsabilidades al mismo tiempo con habilidad.",presente:"Estás haciendo malabarismo con tus recursos — buscá el equilibrio.",futuro:"La flexibilidad y adaptación serán clave para manejar lo que viene."},
+{id:38,nombre:"Tres de Oros",palo:"Oros",emoji:"🏗️",energia:"trabajo en equipo y habilidad",pasado:"El trabajo colaborativo produjo algo de valor duradero.",presente:"Es momento de reconocer tu talento y trabajar con otros.",futuro:"Un proyecto en equipo dará frutos si cada uno aporta su mejor parte."},
+{id:39,nombre:"Cuatro de Oros",palo:"Oros",emoji:"🤲",energia:"control y apego material",pasado:"El miedo a perder te llevó a aferrarte demasiado.",presente:"El apego al control puede estar limitando tu crecimiento.",futuro:"Soltar el control de lo material abrirá nuevas posibilidades."},
+{id:40,nombre:"Cinco de Oros",palo:"Oros",emoji:"❄️",energia:"dificultad material y apoyo",pasado:"Atravesaste un momento de escasez o sensación de abandono.",presente:"Estás en una etapa difícil — pero hay ayuda disponible si la buscás.",futuro:"La situación difícil tiene salida — no estás solo en esto."},
+{id:41,nombre:"Seis de Oros",palo:"Oros",emoji:"🤝",energia:"generosidad y reciprocidad",pasado:"Dar y recibir fluyó de forma equilibrada en ese momento.",presente:"La generosidad — dar o recibir — es el tema central ahora.",futuro:"Lo que des con generosidad volverá multiplicado."},
+{id:42,nombre:"Siete de Oros",palo:"Oros",emoji:"🌱",energia:"paciencia y evaluación",pasado:"Invertiste tiempo y esfuerzo esperando que los frutos llegaran.",presente:"Es momento de evaluar si lo que estás cultivando vale la pena.",futuro:"La paciencia dará sus frutos — el proceso tarda pero el resultado llega."},
+{id:43,nombre:"Ocho de Oros",palo:"Oros",emoji:"🔨",energia:"dedicación y aprendizaje",pasado:"El trabajo constante y la dedicación te llevaron a dominar algo.",presente:"El momento pide enfocarte y perfeccionar tu habilidad.",futuro:"La dedicación sostenida te llevará a un nivel de maestría."},
+{id:44,nombre:"Nueve de Oros",palo:"Oros",emoji:"🦚",energia:"independencia y logro personal",pasado:"Alcanzaste algo por tu propio esfuerzo y lo disfrutaste en plenitud.",presente:"Estás en un momento de independencia y autosuficiencia.",futuro:"Tu trabajo dará un fruto que podrás disfrutar con orgullo."},
+{id:45,nombre:"Diez de Oros",palo:"Oros",emoji:"🏰",energia:"prosperidad y legado familiar",pasado:"La prosperidad y la estabilidad familiar fueron sólidas.",presente:"Hay abundancia material y estabilidad en tu entorno.",futuro:"Una base de prosperidad duradera y legado está tomando forma."},
+{id:46,nombre:"Sota de Oros",palo:"Oros",emoji:"📚",energia:"estudio y oportunidades prácticas",pasado:"Una etapa de aprendizaje práctico abrió nuevas puertas.",presente:"Hay oportunidades concretas disponibles — prestales atención.",futuro:"Una oportunidad práctica de crecimiento está por presentarse."},
+{id:47,nombre:"Caballero de Oros",palo:"Oros",emoji:"🐂",energia:"constancia y trabajo metódico",pasado:"La disciplina y el método te dieron resultados sólidos.",presente:"La constancia y el enfoque metódico son tu mejor estrategia ahora.",futuro:"El avance lento pero firme te llevará a donde querés llegar."},
+{id:48,nombre:"Reina de Oros",palo:"Oros",emoji:"🌿",energia:"cuidado y prosperidad práctica",pasado:"Cuidaste lo material y lo emocional con sabiduría práctica.",presente:"Tu capacidad de crear ambientes seguros y prósperos brilla.",futuro:"Una figura generosa y práctica traerá estabilidad a tu vida."},
+{id:49,nombre:"Rey de Oros",palo:"Oros",emoji:"🏆",energia:"éxito material y liderazgo",pasado:"Lograste estabilidad y éxito a través del trabajo sostenido.",presente:"Tenés la capacidad de liderar y construir algo duradero.",futuro:"El éxito material y el reconocimiento llegan como resultado de tu trabajo."},
+{id:50,nombre:"As de Espadas",palo:"Espadas",emoji:"⚔️",energia:"claridad mental y verdad",pasado:"Una verdad cortó lo innecesario y te dio claridad.",presente:"Es momento de hablar con claridad y enfrentar la verdad.",futuro:"Una verdad reveladora o una decisión clara está por llegar."},
+{id:51,nombre:"Dos de Espadas",palo:"Espadas",emoji:"🙈",energia:"indecisión y bloqueo mental",pasado:"Evitaste una decisión difícil cerrando los ojos a la realidad.",presente:"Estás bloqueado — necesitás más información o valor para decidir.",futuro:"La parálisis cederá cuando decidas mirar la situación de frente."},
+{id:52,nombre:"Tres de Espadas",palo:"Espadas",emoji:"💔",energia:"dolor, traición y pena",pasado:"Una traición o pérdida dolorosa dejó una marca profunda.",presente:"Hay una herida que necesita ser reconocida para poder sanar.",futuro:"El dolor que atravesás ahora lleva a una sanación más profunda."},
+{id:53,nombre:"Cuatro de Espadas",palo:"Espadas",emoji:"😴",energia:"descanso y recuperación",pasado:"Un período de retiro y descanso fue necesario para recuperarte.",presente:"Tu mente y cuerpo piden una pausa — dásela sin culpa.",futuro:"El descanso ahora te dará la energía para lo que viene."},
+{id:54,nombre:"Cinco de Espadas",palo:"Espadas",emoji:"😤",energia:"conflicto y derrota",pasado:"Hubo un conflicto donde alguien ganó pero todos perdieron algo.",presente:"Una batalla que no vale la pena ganar — considerá retirarte.",futuro:"Ganar de forma deshonesta tiene un costo — elegí bien tus batallas."},
+{id:55,nombre:"Seis de Espadas",palo:"Espadas",emoji:"⛵",energia:"transición y alejamiento",pasado:"Te alejaste de una situación difícil hacia algo más tranquilo.",presente:"Estás en tránsito — dejando atrás lo turbulento.",futuro:"Un alejamiento necesario te llevará a aguas más calmas."},
+{id:56,nombre:"Siete de Espadas",palo:"Espadas",emoji:"🦊",energia:"astucia y engaño",pasado:"Alguien actuó de forma deshonesta o vos evitaste una confrontación.",presente:"Hay algo que no se está diciendo — investigá antes de confiar.",futuro:"La verdad oculta saldrá a la luz — preparate para enfrentarla."},
+{id:57,nombre:"Ocho de Espadas",palo:"Espadas",emoji:"🕸️",energia:"atrapamiento y limitación mental",pasado:"Te sentiste atrapado, pero las limitaciones eran más mentales que reales.",presente:"Las cadenas que sentís son en parte creadas por tu propia mente.",futuro:"Cuando cambies tu perspectiva, verás que tenés más libertad de la que creés."},
+{id:58,nombre:"Nueve de Espadas",palo:"Espadas",emoji:"😰",energia:"ansiedad y pensamientos negativos",pasado:"La ansiedad y los pensamientos oscuros te quitaron el sueño.",presente:"El miedo nocturno amplifica lo que de día parece manejable.",futuro:"Los miedos que te agobian son más grandes en tu mente que en la realidad."},
+{id:59,nombre:"Diez de Espadas",palo:"Espadas",emoji:"🌅",energia:"final doloroso y nuevo amanecer",pasado:"Algo llegó a su fin de forma dolorosa pero definitiva.",presente:"Estás en el punto más bajo — pero esto también marca un nuevo comienzo.",futuro:"Después del final más difícil viene el amanecer más luminoso."},
+{id:60,nombre:"Sota de Espadas",palo:"Espadas",emoji:"🔍",energia:"curiosidad y comunicación directa",pasado:"La búsqueda de verdad y claridad guió tus pasos.",presente:"Es momento de hacer las preguntas difíciles y comunicarte con claridad.",futuro:"Una información importante o una conversación clave está por llegar."},
+{id:61,nombre:"Caballero de Espadas",palo:"Espadas",emoji:"💨",energia:"acción rápida y determinación",pasado:"Actuaste con rapidez y decisión, a veces sin medir consecuencias.",presente:"Tenés energía para actuar — canalizala con estrategia.",futuro:"Una acción rápida y decidida marcará la diferencia."},
+{id:62,nombre:"Reina de Espadas",palo:"Espadas",emoji:"🌬️",energia:"claridad, independencia y honestidad",pasado:"La razón y la honestidad te guiaron incluso cuando dolía.",presente:"Tu claridad mental es tu mayor fortaleza — usala con compasión.",futuro:"Una figura de gran claridad y honestidad te dará una perspectiva valiosa."},
+{id:63,nombre:"Rey de Espadas",palo:"Espadas",emoji:"⚖️",energia:"autoridad intelectual y justicia",pasado:"La lógica y la justicia guiaron decisiones importantes.",presente:"Es momento de aplicar razón y criterio claro a tu situación.",futuro:"La justicia y la claridad intelectual resolverán lo que parece complejo."},
+{id:64,nombre:"As de Bastos",palo:"Bastos",emoji:"🔥",energia:"inspiración y nuevos proyectos",pasado:"Una chispa de inspiración encendió algo nuevo y emocionante.",presente:"Hay una energía creativa y entusiasta lista para explotar.",futuro:"Un nuevo proyecto o inspiración poderosa está por llegar."},
+{id:65,nombre:"Dos de Bastos",palo:"Bastos",emoji:"🌐",energia:"planificación y visión futura",pasado:"Planificaste con visión de largo plazo y eso te dio ventaja.",presente:"Tenés el mundo ante vos — es momento de decidir qué dirección tomar.",futuro:"Una decisión sobre tu futuro cercano requiere visión y valentía."},
+{id:66,nombre:"Tres de Bastos",palo:"Bastos",emoji:"⛵",energia:"expansión y resultados que llegan",pasado:"Lo que sembraste empezó a dar sus primeros frutos.",presente:"Lo que iniciaste está creciendo — seguí expandiendo.",futuro:"Los resultados de tu esfuerzo están llegando desde lejos."},
+{id:67,nombre:"Cuatro de Bastos",palo:"Bastos",emoji:"🎊",energia:"celebración y estabilidad",pasado:"Hubo un momento de celebración y logro compartido.",presente:"Es momento de celebrar lo construido y disfrutar la estabilidad.",futuro:"Una celebración importante o un hito festivo se aproxima."},
+{id:68,nombre:"Cinco de Bastos",palo:"Bastos",emoji:"⚔️",energia:"competencia y desacuerdo",pasado:"Hubo competencia o conflicto que generó caos pero también movimiento.",presente:"Hay tensiones y desacuerdos — buscá el diálogo antes del enfrentamiento.",futuro:"La competencia o el conflicto se resolverá a tu favor si mantenés la calma."},
+{id:69,nombre:"Seis de Bastos",palo:"Bastos",emoji:"🥇",energia:"victoria y reconocimiento",pasado:"Un logro fue reconocido públicamente y te dio confianza.",presente:"Tu esfuerzo está siendo visto — merecés el reconocimiento.",futuro:"Una victoria o reconocimiento público está por llegar."},
+{id:70,nombre:"Siete de Bastos",palo:"Bastos",emoji:"🛡️",energia:"defensa y perseverancia",pasado:"Tuviste que defender tu posición ante muchos desafíos.",presente:"Seguís en terreno elevado — defendé lo que construiste.",futuro:"La perseverancia ante los obstáculos dará sus frutos."},
+{id:71,nombre:"Ocho de Bastos",palo:"Bastos",emoji:"💫",energia:"velocidad y movimiento",pasado:"Las cosas se movieron muy rápido en ese momento.",presente:"Todo está acelerando — mantené el foco mientras fluís.",futuro:"Los eventos se acelerarán — preparate para actuar rápido."},
+{id:72,nombre:"Nueve de Bastos",palo:"Bastos",emoji:"🏋️",energia:"resistencia y perseverancia final",pasado:"Llegaste al límite pero no te rendiste.",presente:"Estás cansado pero cerca de la meta — no aflojes ahora.",futuro:"Un último esfuerzo te llevará al resultado que tanto esperás."},
+{id:73,nombre:"Diez de Bastos",palo:"Bastos",emoji:"😓",energia:"carga excesiva y responsabilidad",pasado:"Cargaste con demasiado y el peso te agotó.",presente:"Estás sobrecargado — es momento de delegar o soltar algo.",futuro:"Liberar carga innecesaria te dará la energía para seguir."},
+{id:74,nombre:"Sota de Bastos",palo:"Bastos",emoji:"🌋",energia:"entusiasmo y aventura",pasado:"Una energía joven y aventurera marcó ese período.",presente:"Tu entusiasmo es contagioso — canalizalo en algo concreto.",futuro:"Una aventura o nuevo comienzo emocionante está por presentarse."},
+{id:75,nombre:"Caballero de Bastos",palo:"Bastos",emoji:"🏇",energia:"pasión y acción impulsiva",pasado:"Actuaste con pasión y velocidad, sin mirar demasiado atrás.",presente:"La energía está alta — actuá con pasión pero con dirección.",futuro:"Un movimiento rápido y apasionado te llevará a nuevos territorios."},
+{id:76,nombre:"Reina de Bastos",palo:"Bastos",emoji:"🦁",energia:"confianza y liderazgo carismático",pasado:"Tu confianza y carisma inspiraron a quienes te rodeaban.",presente:"Tu energía magnética atrae lo que necesitás — confiá en vos.",futuro:"Una figura carismática y poderosa traerá inspiración a tu vida."},
+{id:77,nombre:"Rey de Bastos",palo:"Bastos",emoji:"🦅",energia:"visión y liderazgo creativo",pasado:"Lideraste con visión y creatividad dejando una huella importante.",presente:"Es tu momento de liderar con audacia y visión de largo plazo.",futuro:"Tu capacidad de inspirar y crear marcará el camino a seguir."}
+];
 </script>
 
 </body>
