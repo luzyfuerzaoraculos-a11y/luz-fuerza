@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/consultar", "destination": "/api/consultar" }
+    { "source": "/consultar", "destination": "/api/consultar" },
+    { "source": "/", "destination": "/api/consultar" }
   ]
 }
