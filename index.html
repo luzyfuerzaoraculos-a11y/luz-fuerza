@@ -18,19 +18,21 @@ radial-gradient(ellipse at 90% 10%,rgba(20,80,100,0.3) 0%,transparent 40%),#0608
 background-image:radial-gradient(circle,rgba(255,255,255,0.8) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.4) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.2) 1px,transparent 1px);
 background-size:150px 150px,90px 90px,60px 60px;background-position:20px 20px,55px 45px,10px 70px;}
 
-.hero{background:linear-gradient(160deg,rgba(26,10,46,0.85) 0%,rgba(13,27,62,0.8) 50%,rgba(10,22,40,0.85) 100%);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(42,58,92,0.6);position:relative;overflow:hidden;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
+/* HERO DORADO */
+.hero{background:radial-gradient(ellipse at 50% 0%,rgba(255,240,180,0.45) 0%,transparent 50%),radial-gradient(ellipse at 20% 60%,rgba(200,120,0,0.55) 0%,transparent 45%),radial-gradient(ellipse at 80% 40%,rgba(255,180,0,0.45) 0%,transparent 45%),radial-gradient(ellipse at 50% 100%,rgba(255,100,0,0.2) 0%,transparent 40%),linear-gradient(160deg,#1a0d00 0%,#3d2000 40%,#2d1500 100%) !important;}
+
+.hero{background:radial-gradient(ellipse at 50% 0%,rgba(255,240,180,0.45) 0%,transparent 50%),radial-gradient(ellipse at 20% 60%,rgba(200,120,0,0.55) 0%,transparent 45%),radial-gradient(ellipse at 80% 40%,rgba(255,180,0,0.45) 0%,transparent 45%),radial-gradient(ellipse at 50% 100%,rgba(255,100,0,0.2) 0%,transparent 40%),linear-gradient(160deg,#1a0d00 0%,#3d2000 40%,#2d1500 100%);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(180,100,0,0.4);position:relative;overflow:hidden;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
+.stars-hero{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,rgba(255,220,100,0.9) 1.5px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,0.7) 1px,transparent 1px),radial-gradient(circle,rgba(255,200,50,0.4) 1px,transparent 1px);background-size:90px 90px,55px 55px,130px 130px;background-position:10px 10px,35px 25px,60px 60px;pointer-events:none;}
 .sym-c{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
 .sym{position:absolute;pointer-events:none;animation:subirLento linear forwards;opacity:0;}
 @keyframes subirLento{0%{transform:translateY(0) rotate(var(--r));opacity:0;}8%{opacity:0.85;}50%{opacity:0.6;}92%{opacity:0.3;}100%{transform:translateY(-320px) rotate(calc(var(--r)+10deg));opacity:0;}}
-.moon{width:72px;height:72px;border-radius:50%;border:1.5px solid rgba(200,216,240,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;position:relative;z-index:2;box-shadow:0 0 30px rgba(123,175,212,0.15);}
-.moon-inner{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#d4e8ff,#7bafd4);}
-h1{font-size:32px;font-weight:400;color:#e8f0ff;letter-spacing:4px;position:relative;z-index:2;text-shadow:0 0 40px rgba(123,175,212,0.3);}
-.amp{color:#8baad4;}
-.tagline{font-size:13px;color:#7a9acd;letter-spacing:1px;font-style:italic;margin-top:8px;position:relative;z-index:2;}
+h1{font-size:32px;font-weight:400;color:#fff;letter-spacing:4px;position:relative;z-index:2;text-shadow:0 0 20px rgba(255,200,50,0.9),0 0 40px rgba(200,120,0,0.6),0 0 80px rgba(150,80,0,0.4);}
+.amp{color:#ffcc44;}
+.tagline{font-size:13px;color:#ffcc66;letter-spacing:1px;font-style:italic;margin-top:8px;position:relative;z-index:2;text-shadow:0 0 15px rgba(255,180,0,0.5);}
 
-nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(10,14,26,0.92);border-bottom:0.5px solid #1e2a45;position:relative;z-index:1;backdrop-filter:blur(10px);}
-nav button{background:none;border:none;border-bottom:2px solid transparent;color:#4a6fa5;font-size:12px;font-family:Georgia,serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
-nav button.active{color:#c8d8f0;border-bottom:2px solid #7bafd4;}
+nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(10,6,0,0.92);border-bottom:0.5px solid rgba(200,120,0,0.3);position:relative;z-index:1;backdrop-filter:blur(10px);}
+nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,180,50,0.5);font-size:12px;font-family:Georgia,serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
+nav button.active{color:#ffcc44;border-bottom:2px solid #ffaa00;}
 
 main{max-width:700px;margin:0 auto;padding:2rem 1.5rem;background:rgba(10,14,26,0.85);min-height:60vh;position:relative;z-index:1;backdrop-filter:blur(8px);}
 .tab{display:none;}.tab.active{display:block;}
@@ -95,8 +97,44 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 <div class="nebulosa"></div>
 
 <header class="hero">
+  <div class="stars-hero"></div>
   <div class="sym-c" id="heroBg"></div>
-  <div class="moon"><div class="moon-inner"></div></div>
+  <div style="position:relative;z-index:2;margin-bottom:1.25rem;">
+    <svg width="90" height="90" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="55" stroke="url(#lg1)" stroke-width="2" fill="none"/>
+      <circle cx="60" cy="60" r="48" stroke="rgba(255,180,50,0.15)" stroke-width="0.5" fill="none"/>
+      <line x1="60" y1="3" x2="60" y2="14" stroke="rgba(255,210,80,0.9)" stroke-width="2"/>
+      <line x1="60" y1="106" x2="60" y2="117" stroke="rgba(255,210,80,0.5)" stroke-width="1.5"/>
+      <line x1="3" y1="60" x2="14" y2="60" stroke="rgba(255,210,80,0.5)" stroke-width="1.5"/>
+      <line x1="106" y1="60" x2="117" y2="60" stroke="rgba(255,210,80,0.5)" stroke-width="1.5"/>
+      <line x1="19" y1="19" x2="27" y2="27" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
+      <line x1="101" y1="19" x2="93" y2="27" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
+      <line x1="19" y1="101" x2="27" y2="93" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
+      <line x1="101" y1="101" x2="93" y2="93" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
+      <circle cx="60" cy="60" r="36" stroke="rgba(255,180,50,0.2)" stroke-width="0.8" fill="none"/>
+      <polygon points="60,16 65,58 60,48 55,58" fill="url(#lg2)"/>
+      <polygon points="60,104 65,62 60,72 55,62" fill="rgba(120,80,20,0.6)"/>
+      <path d="M60 14 Q54 7 60 2 Q69 7 60 14Z" fill="rgba(255,220,100,0.7)"/>
+      <circle cx="60" cy="60" r="7" fill="url(#lg2)" opacity="0.95"/>
+      <circle cx="60" cy="60" r="3" fill="white" opacity="0.8"/>
+      <circle cx="60" cy="18" r="2" fill="rgba(255,220,100,0.8)"/>
+      <circle cx="60" cy="102" r="1.5" fill="rgba(255,180,50,0.5)"/>
+      <circle cx="18" cy="60" r="1.5" fill="rgba(255,180,50,0.5)"/>
+      <circle cx="102" cy="60" r="1.5" fill="rgba(255,180,50,0.5)"/>
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="rgba(255,220,80,0.9)"/>
+          <stop offset="50%" stop-color="rgba(255,150,0,0.7)"/>
+          <stop offset="100%" stop-color="rgba(180,80,0,0.5)"/>
+        </linearGradient>
+        <linearGradient id="lg2" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="30%" stop-color="#ffee88"/>
+          <stop offset="100%" stop-color="#cc7700"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
   <h1>LUZ <span class="amp">&</span> FUERZA</h1>
   <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
 </header>
@@ -217,7 +255,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
 <script>
-const cc="rgba(123,175,212,0.32)",cl="rgba(123,175,212,0.16)";
+const cc="rgba(200,140,0,0.5)",cl="rgba(180,120,0,0.25)";
 const svgs=[
 `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><path d="M27 4 C14 4 4 14 4 27 C4 40 14 50 27 46 C40 50 50 40 50 27 C50 14 40 4 27 4Z" stroke="${cc}" stroke-width="1.2" fill="none"/><circle cx="19" cy="27" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
 `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="28" y1="6" x2="28" y2="50" stroke="${cl}" stroke-width="1"/><line x1="6" y1="28" x2="50" y2="28" stroke="${cl}" stroke-width="1"/><circle cx="28" cy="28" r="6" stroke="${cc}" stroke-width="1" fill="none"/></svg>`,
