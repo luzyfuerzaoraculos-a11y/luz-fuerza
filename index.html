@@ -21,7 +21,7 @@ background-size:150px 150px,90px 90px,60px 60px;background-position:20px 20px,55
 .hero{background:linear-gradient(160deg,rgba(26,10,46,0.85) 0%,rgba(13,27,62,0.8) 50%,rgba(10,22,40,0.85) 100%);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(42,58,92,0.6);position:relative;overflow:hidden;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
 .sym-c{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
 .sym{position:absolute;pointer-events:none;animation:subirLento linear forwards;opacity:0;}
-@keyframes subirLento{0%{transform:translateY(0) rotate(var(--r));opacity:0;}15%{opacity:0.8;}85%{opacity:0.5;}100%{transform:translateY(-350px) rotate(calc(var(--r)+12deg));opacity:0;}}
+@keyframes subirLento{0%{transform:translateY(0) rotate(var(--r));opacity:0;}10%{opacity:0.9;}70%{opacity:0.7;}100%{transform:translateY(-280px) rotate(calc(var(--r)+12deg));opacity:0;}}
 .moon{width:72px;height:72px;border-radius:50%;border:1.5px solid rgba(200,216,240,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;position:relative;z-index:2;box-shadow:0 0 30px rgba(123,175,212,0.15);}
 .moon-inner{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#d4e8ff,#7bafd4);}
 h1{font-size:32px;font-weight:400;color:#e8f0ff;letter-spacing:4px;position:relative;z-index:2;text-shadow:0 0 40px rgba(123,175,212,0.3);}
@@ -244,7 +244,7 @@ function spawnHero(){
   const w=document.createElement('div');w.className='sym';
   w.innerHTML=svgs[Math.floor(Math.random()*svgs.length)];
   const rot=(Math.random()-.5)*25,dur=8+Math.random()*5,scale=0.85+Math.random()*0.7;
-  w.style.cssText=`left:${left}%;bottom:-70px;--r:${rot}deg;animation-duration:${dur}s;`;
+  w.style.cssText=`left:${left}%;bottom:20px;--r:${rot}deg;animation-duration:${dur}s;`;
   w.querySelector('svg').style.transform=`scale(${scale})`;
   bg.appendChild(w);setTimeout(()=>w.remove(),dur*1000);
   setTimeout(spawnHero,2000+Math.random()*1500);
