@@ -8,110 +8,94 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#060810;color:#c8d8f0;font-family:Georgia,serif;min-height:100vh;}
 
-.hero{background:linear-gradient(160deg,#1a0a2e 0%,#0d1b3e 50%,#0a1628 100%);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid #2a3a5c;position:relative;overflow:hidden;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.stars{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,rgba(255,255,255,0.6) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:100px 100px,65px 65px;background-position:15px 15px,45px 35px;pointer-events:none;}
-.sym-bg{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
-.sym{position:absolute;pointer-events:none;z-index:1;animation:subirLento linear infinite;}
-@keyframes subirLento{0%{transform:translateY(100px) rotate(var(--r));opacity:0;}20%{opacity:0.9;}80%{opacity:0.6;}100%{transform:translateY(-180px) rotate(calc(var(--r) + 10deg));opacity:0;}}
-.sym-body{position:absolute;pointer-events:none;animation:derivar linear infinite;}
-@keyframes derivar{0%{transform:translate(0,0) rotate(var(--r));opacity:0;}25%{opacity:0.6;}75%{opacity:0.3;}100%{transform:translate(var(--dx),var(--dy)) rotate(calc(var(--r) + 8deg));opacity:0;}}
-.moon{width:72px;height:72px;border-radius:50%;border:1.5px solid rgba(200,216,240,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;position:relative;z-index:2;}
+.nebulosa{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;
+background:radial-gradient(ellipse at 20% 30%,rgba(80,20,120,0.4) 0%,transparent 50%),
+radial-gradient(ellipse at 80% 70%,rgba(20,60,120,0.5) 0%,transparent 50%),
+radial-gradient(ellipse at 50% 50%,rgba(40,10,80,0.3) 0%,transparent 60%),
+radial-gradient(ellipse at 10% 80%,rgba(100,30,60,0.25) 0%,transparent 40%),
+radial-gradient(ellipse at 90% 10%,rgba(20,80,100,0.3) 0%,transparent 40%),#060810;}
+.nebulosa::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+background-image:radial-gradient(circle,rgba(255,255,255,0.8) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.4) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.2) 1px,transparent 1px);
+background-size:150px 150px,90px 90px,60px 60px;background-position:20px 20px,55px 45px,10px 70px;}
+
+.hero{background:linear-gradient(160deg,rgba(26,10,46,0.85) 0%,rgba(13,27,62,0.8) 50%,rgba(10,22,40,0.85) 100%);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(42,58,92,0.6);position:relative;overflow:hidden;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
+.sym-c{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
+.sym{position:absolute;pointer-events:none;animation:subirLento linear forwards;opacity:0;}
+@keyframes subirLento{0%{transform:translateY(0) rotate(var(--r));opacity:0;}15%{opacity:0.8;}85%{opacity:0.5;}100%{transform:translateY(var(--dy)) rotate(calc(var(--r)+12deg));opacity:0;}}
+.moon{width:72px;height:72px;border-radius:50%;border:1.5px solid rgba(200,216,240,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;position:relative;z-index:2;box-shadow:0 0 30px rgba(123,175,212,0.15);}
 .moon-inner{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#d4e8ff,#7bafd4);}
-h1{font-size:32px;font-weight:400;color:#e8f0ff;letter-spacing:4px;position:relative;z-index:2;}
+h1{font-size:32px;font-weight:400;color:#e8f0ff;letter-spacing:4px;position:relative;z-index:2;text-shadow:0 0 40px rgba(123,175,212,0.3);}
 .amp{color:#8baad4;}
 .tagline{font-size:13px;color:#7a9acd;letter-spacing:1px;font-style:italic;margin-top:8px;position:relative;z-index:2;}
 
-nav{display:flex;justify-content:center;flex-wrap:wrap;background:#0a0e1a;border-bottom:0.5px solid #1e2a45;}
+nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(10,14,26,0.92);border-bottom:0.5px solid #1e2a45;position:relative;z-index:1;backdrop-filter:blur(10px);}
 nav button{background:none;border:none;border-bottom:2px solid transparent;color:#4a6fa5;font-size:12px;font-family:Georgia,serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
 nav button.active{color:#c8d8f0;border-bottom:2px solid #7bafd4;}
 
-main{max-width:700px;margin:0 auto;padding:2rem 1.5rem;background:#0a0e1a;min-height:60vh;position:relative;overflow:hidden;}
-
+main{max-width:700px;margin:0 auto;padding:2rem 1.5rem;background:rgba(10,14,26,0.85);min-height:60vh;position:relative;z-index:1;backdrop-filter:blur(8px);}
 .tab{display:none;}.tab.active{display:block;}
 
-.slabel{font-size:11px;letter-spacing:2.5px;color:#4a6fa5;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.slabel{font-size:11px;letter-spacing:2.5px;color:#4a6fa5;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 .snum{width:20px;height:20px;border-radius:50%;border:0.5px solid #4a6fa5;font-size:11px;color:#4a6fa5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.hint{font-size:14px;color:#8baad4;margin-bottom:14px;line-height:1.6;}
+.hint{font-size:14px;color:#8baad4;margin-bottom:18px;line-height:1.6;}
 
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.5rem;}
-.chip{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:20px;padding:10px 18px;font-size:14px;color:#7bafd4;cursor:pointer;font-family:Georgia,serif;}
-.chip:hover,.chip.sel{border-color:#7bafd4;color:#c8d8f0;background:#162035;}
+.chips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+.chip-card{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:14px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all 0.25s ease;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.chip-card:hover,.chip-card.sel{border-color:#7bafd4;background:rgba(22,32,53,0.9);transform:translateY(-2px);box-shadow:0 4px 20px rgba(123,175,212,0.15);}
+.chip-icon{font-size:36px;transition:transform 0.25s ease;line-height:1;}
+.chip-card:hover .chip-icon,.chip-card.sel .chip-icon{transform:scale(1.2);}
+.chip-label{font-size:12px;color:#7bafd4;letter-spacing:0.5px;font-family:Georgia,serif;}
+.chip-card.sel .chip-label{color:#c8d8f0;}
 
-textarea{width:100%;background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:16px;color:#c8d8f0;font-size:15px;resize:none;line-height:1.7;font-family:Georgia,serif;}
-textarea::placeholder{color:#2e4060;}
-textarea:focus{outline:none;border-color:#4a6fa5;}
-.counter{font-size:12px;color:#2e4060;text-align:right;margin-top:6px;}
-.counter.ok{color:#4a6fa5;}
-
-.bprofunda{background:#0f1628;border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+textarea{width:100%;background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:16px;color:#c8d8f0;font-size:15px;resize:none;line-height:1.7;font-family:Georgia,serif;}
+textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4a6fa5;}
+.counter{font-size:12px;color:#2e4060;text-align:right;margin-top:6px;}.counter.ok{color:#4a6fa5;}
+.bprofunda{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
 .bprofunda p{font-size:14px;color:#8baad4;font-style:italic;line-height:1.7;}
 
-.btn{width:100%;padding:15px;background:#0f1628;border:0.5px solid #4a6fa5;border-radius:12px;color:#c8d8f0;font-size:15px;cursor:pointer;letter-spacing:1px;font-family:Georgia,serif;margin-top:1.5rem;}
-.btn:hover{background:#162035;}.btn:disabled{opacity:0.4;cursor:not-allowed;}
+.btn{width:100%;padding:15px;background:rgba(15,22,40,0.8);border:0.5px solid #4a6fa5;border-radius:12px;color:#c8d8f0;font-size:15px;cursor:pointer;letter-spacing:1px;font-family:Georgia,serif;margin-top:1.5rem;transition:all 0.2s;}
+.btn:hover{background:rgba(22,32,53,0.9);box-shadow:0 4px 20px rgba(123,175,212,0.1);}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
 .btn-sm{display:inline-block;padding:10px 20px;background:none;border:0.5px solid #4a6fa5;border-radius:12px;color:#7bafd4;font-size:13px;cursor:pointer;font-family:Georgia,serif;margin-top:10px;}
-.btn-sm:hover{background:#162035;}
+.btn-sm:hover{background:rgba(22,32,53,0.9);}
 
 .cartas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
-.carta{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem 0.75rem;text-align:center;}
+.carta{background:rgba(15,22,40,0.85);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem 0.75rem;text-align:center;}
 .cpos{font-size:10px;letter-spacing:2px;color:#2e4060;text-transform:uppercase;margin-bottom:10px;}
-.cemoji{font-size:30px;margin-bottom:8px;}
-.cnombre{font-size:13px;color:#c8d8f0;margin-bottom:4px;}
+.cemoji{font-size:30px;margin-bottom:8px;}.cnombre{font-size:13px;color:#c8d8f0;margin-bottom:4px;}
 .cpalo{font-size:10px;color:#2e4060;margin-bottom:6px;letter-spacing:1px;}
 .cenergia{font-size:11px;color:#4a6fa5;font-style:italic;margin-bottom:10px;line-height:1.4;}
 .cdesc{font-size:12px;color:#5a7aaa;line-height:1.6;border-top:0.5px solid #1e2a45;padding-top:10px;}
+.interp{background:rgba(15,22,40,0.85);border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.5rem;font-size:15px;line-height:1.9;color:#8baad4;font-style:italic;}
 
-.interp{background:#0f1628;border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.5rem;font-size:15px;line-height:1.9;color:#8baad4;font-style:italic;}
-
-/* Planes */
 .planes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.plan{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:1.5rem 1rem;text-align:center;}
+.plan{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.5rem 1rem;text-align:center;}
 .plan.pop{border-color:#7bafd4;}
 .pbadge{font-size:10px;background:#162035;color:#7bafd4;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;}
 .plan.pop .pbadge{background:#1e3055;color:#c8d8f0;}
-.pprecio{font-size:26px;color:#c8d8f0;margin-bottom:4px;}
-.pprecio span{font-size:13px;color:#4a6fa5;}
-.pitems{list-style:none;margin-top:12px;}
-.pitems li{font-size:12px;color:#5a7aaa;padding:5px 0;border-top:0.5px solid #1e2a45;}
+.pprecio{font-size:26px;color:#c8d8f0;margin-bottom:4px;}.pprecio span{font-size:13px;color:#4a6fa5;}
+.pitems{list-style:none;margin-top:12px;}.pitems li{font-size:12px;color:#5a7aaa;padding:5px 0;border-top:0.5px solid #1e2a45;}
 
-/* Como funciona */
 .cfrow{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:2rem;}
-.cfcard{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem;}
-.cfcard h3{font-size:14px;color:#c8d8f0;font-weight:400;margin-bottom:8px;}
-.cfcard p{font-size:13px;color:#5a7aaa;line-height:1.7;}
-.cfcard .icon{font-size:24px;margin-bottom:10px;}
-
-/* Historia */
-.hblock{margin-bottom:2rem;}
-.hblock h3{font-size:16px;color:#c8d8f0;font-weight:400;margin-bottom:10px;border-bottom:0.5px solid #1e2a45;padding-bottom:8px;}
-.hblock p{font-size:14px;color:#5a7aaa;line-height:1.8;margin-bottom:10px;}
+.cfcard{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem;}
+.cfcard h3{font-size:14px;color:#c8d8f0;font-weight:400;margin-bottom:8px;}.cfcard p{font-size:13px;color:#5a7aaa;line-height:1.7;}.cfcard .icon{font-size:24px;margin-bottom:10px;}
+.hblock{margin-bottom:2rem;}.hblock h3{font-size:16px;color:#c8d8f0;font-weight:400;margin-bottom:10px;border-bottom:0.5px solid #1e2a45;padding-bottom:8px;}.hblock p{font-size:14px;color:#5a7aaa;line-height:1.8;margin-bottom:10px;}
 .arcanos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1rem;}
-.arcano-card{background:#0f1628;border:0.5px solid #2a3a5c;border-radius:10px;padding:1rem;display:flex;gap:10px;align-items:flex-start;}
-.arcano-emoji{font-size:20px;flex-shrink:0;}
-.arcano-info h4{font-size:12px;color:#8baad4;margin-bottom:4px;}
-.arcano-info p{font-size:11px;color:#4a6fa5;line-height:1.5;}
+.arcano-card{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:10px;padding:1rem;display:flex;gap:10px;align-items:flex-start;}
+.arcano-emoji{font-size:20px;flex-shrink:0;}.arcano-info h4{font-size:12px;color:#8baad4;margin-bottom:4px;}.arcano-info p{font-size:11px;color:#4a6fa5;line-height:1.5;}
+.sobre{color:#5a7aaa;font-size:15px;line-height:1.9;}.sobre p{margin-bottom:1.25rem;}.sobre strong{color:#8baad4;font-weight:400;}
 
-/* Sobre */
-.sobre{color:#5a7aaa;font-size:15px;line-height:1.9;}
-.sobre p{margin-bottom:1.25rem;}
-.sobre strong{color:#8baad4;font-weight:400;}
-
-footer{text-align:center;padding:1.5rem;background:#060810;border-top:0.5px solid #1e2a45;font-size:11px;color:#1e2a45;letter-spacing:1px;}
-
+footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0.5px solid #1e2a45;font-size:11px;color:#1e2a45;letter-spacing:1px;position:relative;z-index:1;}
 .loading{animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
-
-@media(max-width:500px){
-  .cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}
-  h1{font-size:24px;}
-  nav button{padding:10px 10px;font-size:11px;}
-}
+@media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:11px;}}
 </style>
 </head>
 <body>
+<div class="nebulosa"></div>
 
 <header class="hero">
-  <div class="stars"></div>
-  <div class="sym-bg" id="heroBg"></div>
+  <div class="sym-c" id="heroBg"></div>
   <div class="moon"><div class="moon-inner"></div></div>
   <h1>LUZ <span class="amp">&</span> FUERZA</h1>
   <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
@@ -126,25 +110,22 @@ footer{text-align:center;padding:1.5rem;background:#060810;border-top:0.5px soli
 </nav>
 
 <main>
-<div class="sym-bg" id="bodyBg" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;"></div>
 
-<!-- CONSULTA -->
 <div id="tab-consulta" class="tab active">
   <div id="step1">
-    <div class="slabel" style="margin-bottom:10px;"><div class="snum">1</div> Área de consulta</div>
+    <div class="slabel"><div class="snum">1</div>Área de consulta</div>
     <div class="hint">¿Sobre qué área de tu vida querés consultar hoy?</div>
-    <div class="chips">
-      <div class="chip" onclick="selArea(this,'amor')">❤️ Amor y vínculos</div>
-      <div class="chip" onclick="selArea(this,'trabajo')">💼 Trabajo y proyectos</div>
-      <div class="chip" onclick="selArea(this,'dinero')">✨ Dinero y abundancia</div>
-      <div class="chip" onclick="selArea(this,'personal')">🌱 Crecimiento personal</div>
-      <div class="chip" onclick="selArea(this,'decision')">🔮 Una decisión difícil</div>
-      <div class="chip" onclick="selArea(this,'otro')">🌙 Otro</div>
+    <div class="chips-grid">
+      <div class="chip-card" onclick="selArea(this,'amor')"><div class="chip-icon">❤️</div><div class="chip-label">Amor y vínculos</div></div>
+      <div class="chip-card" onclick="selArea(this,'trabajo')"><div class="chip-icon">💼</div><div class="chip-label">Trabajo y proyectos</div></div>
+      <div class="chip-card" onclick="selArea(this,'dinero')"><div class="chip-icon">✨</div><div class="chip-label">Dinero y abundancia</div></div>
+      <div class="chip-card" onclick="selArea(this,'personal')"><div class="chip-icon">🌱</div><div class="chip-label">Crecimiento personal</div></div>
+      <div class="chip-card" onclick="selArea(this,'decision')"><div class="chip-icon">🔮</div><div class="chip-label">Una decisión difícil</div></div>
+      <div class="chip-card" onclick="selArea(this,'otro')"><div class="chip-icon">🌙</div><div class="chip-label">Otro</div></div>
     </div>
   </div>
-
   <div id="step2" style="display:none;">
-    <div class="slabel"><div class="snum">2</div> Tu pregunta</div>
+    <div class="slabel"><div class="snum">2</div>Tu pregunta</div>
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
     <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
@@ -155,32 +136,25 @@ footer{text-align:center;padding:1.5rem;background:#060810;border-top:0.5px soli
     </div>
     <button class="btn" id="btnRevelar" onclick="revelar()" disabled>✦ Revelar las cartas</button>
   </div>
-
   <div id="step3" style="display:none;">
-    <div class="slabel"><div class="snum">3</div> Tu tirada</div>
+    <div class="slabel"><div class="snum">3</div>Tu tirada</div>
     <div class="cartas" id="cartas"></div>
-    <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div> Interpretación</div>
+    <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div>Interpretación</div>
     <div class="interp loading" id="interp">El oráculo está leyendo las cartas...</div>
     <button class="btn" onclick="reset()">✦ Nueva consulta</button>
   </div>
 </div>
 
-<!-- COMO FUNCIONA -->
 <div id="tab-como" class="tab">
   <div class="hint" style="margin-bottom:1.5rem;">El oráculo de Luz & Fuerza combina la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte lecturas personalizadas y profundas.</div>
   <div class="cfrow">
     <div class="cfcard"><div class="icon">🎴</div><h3>78 cartas del tarot</h3><p>Trabajamos con el mazo completo — 22 arcanos mayores y 56 arcanos menores. Cada carta es única y su significado varía según la posición en la tirada.</p></div>
     <div class="cfcard"><div class="icon">🔮</div><h3>Tirada de 3 cartas</h3><p>Cada consulta revela 3 cartas: Pasado (lo que te trajo aquí), Presente (tu energía actual) y Futuro (hacia dónde se mueve tu camino).</p></div>
-    <div class="cfcard"><div class="icon">🧠</div><h3>Interpretación con IA</h3><p>La inteligencia artificial analiza tu pregunta, el área de consulta y las cartas que salieron para generar una lectura única y personalizada para vos.</p></div>
-    <div class="cfcard"><div class="icon">💬</div><h3>Pregunta guiada</h3><p>Antes de revelar las cartas, el oráculo puede hacerte una pregunta para profundizar tu consulta. Cuanto más específica la pregunta, más precisa la lectura.</p></div>
+    <div class="cfcard"><div class="icon">🧠</div><h3>Interpretación con IA</h3><p>La inteligencia artificial analiza tu pregunta, el área de consulta y las cartas para generar una lectura única y personalizada para vos.</p></div>
+    <div class="cfcard"><div class="icon">💬</div><h3>Pregunta guiada</h3><p>Antes de revelar las cartas, el oráculo puede hacerte una pregunta para profundizar. Cuanto más específica la pregunta, más precisa la lectura.</p></div>
   </div>
-  <div class="hblock">
-    <h3>Los arcanos mayores</h3>
-    <p>Las 22 cartas más poderosas del tarot. Representan los grandes temas de vida: transformación, amor, poder, destino. Cuando aparecen en una tirada, hablan de situaciones importantes y momentos de cambio profundo.</p>
-  </div>
-  <div class="hblock">
-    <h3>Los arcanos menores</h3>
-    <p>56 cartas divididas en 4 palos que hablan de la vida cotidiana:</p>
+  <div class="hblock"><h3>Los arcanos mayores</h3><p>Las 22 cartas más poderosas del tarot. Representan los grandes temas de vida: transformación, amor, poder, destino. Cuando aparecen, hablan de situaciones importantes y momentos de cambio profundo.</p></div>
+  <div class="hblock"><h3>Los arcanos menores</h3><p>56 cartas divididas en 4 palos que hablan de la vida cotidiana:</p>
     <div class="arcanos-grid">
       <div class="arcano-card"><div class="arcano-emoji">💧</div><div class="arcano-info"><h4>Copas</h4><p>Emociones, amor, vínculos y mundo interior.</p></div></div>
       <div class="arcano-card"><div class="arcano-emoji">💰</div><div class="arcano-info"><h4>Oros</h4><p>Dinero, trabajo, recursos y mundo material.</p></div></div>
@@ -190,21 +164,10 @@ footer{text-align:center;padding:1.5rem;background:#060810;border-top:0.5px soli
   </div>
 </div>
 
-<!-- HISTORIA -->
 <div id="tab-historia" class="tab">
-  <div class="hblock">
-    <h3>El origen del tarot</h3>
-    <p>El tarot nació en el norte de Italia en el siglo XV como un juego de cartas para la nobleza. Con el tiempo, en el siglo XVIII, se transformó en una herramienta de adivinación y reflexión espiritual en Francia y Europa.</p>
-    <p>Las cartas que conocemos hoy tienen su base en el Tarot de Marsella (siglo XVII) y el Rider-Waite (1909), el más influyente de la historia moderna, diseñado por Arthur Edward Waite e ilustrado por Pamela Colman Smith.</p>
-  </div>
-  <div class="hblock">
-    <h3>El poder de los oráculos</h3>
-    <p>Los oráculos han acompañado a la humanidad desde siempre — desde el Oráculo de Delfos en la antigua Grecia hasta el I Ching chino. No predicen el futuro: son espejos que reflejan lo que ya sabemos pero no vemos con claridad.</p>
-    <p>El tarot funciona como un mapa del alma. Cada carta que aparece en una tirada no es un azar — es una invitación a mirar más profundo, a conectar con tu intuición y con la sabiduría que ya llevás dentro.</p>
-  </div>
-  <div class="hblock">
-    <h3>Los 22 arcanos mayores</h3>
-    <p>El viaje del Loco al Mundo es el viaje de toda alma humana — de la inocencia a la plenitud, pasando por todas las experiencias posibles.</p>
+  <div class="hblock"><h3>El origen del tarot</h3><p>El tarot nació en el norte de Italia en el siglo XV como un juego de cartas para la nobleza. Con el tiempo se transformó en una herramienta de adivinación y reflexión espiritual en Francia y Europa.</p><p>Las cartas que conocemos hoy tienen su base en el Tarot de Marsella (siglo XVII) y el Rider-Waite (1909), el más influyente de la historia moderna.</p></div>
+  <div class="hblock"><h3>El poder de los oráculos</h3><p>Los oráculos han acompañado a la humanidad desde siempre — desde el Oráculo de Delfos en la antigua Grecia hasta el I Ching chino. No predicen el futuro: son espejos que reflejan lo que ya sabemos pero no vemos con claridad.</p><p>El tarot funciona como un mapa del alma. Cada carta es una invitación a mirar más profundo y conectar con tu intuición.</p></div>
+  <div class="hblock"><h3>Los 22 arcanos mayores</h3><p>El viaje del Loco al Mundo es el viaje de toda alma humana.</p>
     <div class="arcanos-grid">
       <div class="arcano-card"><div class="arcano-emoji">🌟</div><div class="arcano-info"><h4>El Loco</h4><p>El inicio, la inocencia, los nuevos comienzos.</p></div></div>
       <div class="arcano-card"><div class="arcano-emoji">🪄</div><div class="arcano-info"><h4>El Mago</h4><p>La voluntad, la manifestación, el poder personal.</p></div></div>
@@ -232,41 +195,15 @@ footer{text-align:center;padding:1.5rem;background:#060810;border-top:0.5px soli
   </div>
 </div>
 
-<!-- PLANES -->
 <div id="tab-planes" class="tab">
   <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
   <div class="planes">
-    <div class="plan">
-      <div class="pbadge">Consulta</div>
-      <div class="pprecio">$3 <span>USD</span></div>
-      <ul class="pitems">
-        <li>1 tirada completa</li>
-        <li>Interpretación personalizada</li>
-        <li>Explicación de cada carta</li>
-      </ul>
-    </div>
-    <div class="plan pop">
-      <div class="pbadge">✦ Más elegido</div>
-      <div class="pprecio">$9 <span>USD/semana</span></div>
-      <ul class="pitems">
-        <li>1 consulta por día</li>
-        <li>Historial de lecturas</li>
-        <li>Seguimiento del oráculo</li>
-      </ul>
-    </div>
-    <div class="plan">
-      <div class="pbadge">Mensual</div>
-      <div class="pprecio">$19 <span>USD/mes</span></div>
-      <ul class="pitems">
-        <li>Consultas ilimitadas</li>
-        <li>Historial completo</li>
-        <li>Perfil espiritual</li>
-      </ul>
-    </div>
+    <div class="plan"><div class="pbadge">Consulta</div><div class="pprecio">$3 <span>USD</span></div><ul class="pitems"><li>1 tirada completa</li><li>Interpretación personalizada</li><li>Explicación de cada carta</li></ul></div>
+    <div class="plan pop"><div class="pbadge">✦ Más elegido</div><div class="pprecio">$9 <span>USD/semana</span></div><ul class="pitems"><li>1 consulta por día</li><li>Historial de lecturas</li><li>Seguimiento del oráculo</li></ul></div>
+    <div class="plan"><div class="pbadge">Mensual</div><div class="pprecio">$19 <span>USD/mes</span></div><ul class="pitems"><li>Consultas ilimitadas</li><li>Historial completo</li><li>Perfil espiritual</li></ul></div>
   </div>
 </div>
 
-<!-- NOSOTROS -->
 <div id="tab-sobre" class="tab">
   <div class="sobre">
     <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una <strong>sabiduría profunda</strong> esperando ser escuchada.</p>
@@ -280,151 +217,65 @@ footer{text-align:center;padding:1.5rem;background:#060810;border-top:0.5px soli
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
 <script>
-const c="rgba(123,175,212,0.3)";
-const cl="rgba(123,175,212,0.16)";
+const cc="rgba(123,175,212,0.32)",cl="rgba(123,175,212,0.16)";
 const svgs=[
-  `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><path d="M27 4 C14 4 4 14 4 27 C4 40 14 50 27 46 C40 50 50 40 50 27 C50 14 40 4 27 4Z" stroke="${c}" stroke-width="1.2" fill="none"/><circle cx="19" cy="27" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><line x1="28" y1="6" x2="28" y2="50" stroke="${cl}" stroke-width="1"/><line x1="6" y1="28" x2="50" y2="28" stroke="${cl}" stroke-width="1"/><circle cx="28" cy="28" r="6" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="48" height="68" viewBox="0 0 48 68" fill="none"><line x1="24" y1="4" x2="24" y2="54" stroke="${c}" stroke-width="1.5"/><path d="M24 4 L14 24 L24 18 L34 24 Z" stroke="${c}" stroke-width="1.2" fill="none"/><line x1="14" y1="54" x2="34" y2="54" stroke="${c}" stroke-width="1.5"/></svg>`,
-  `<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><polygon points="29,4 35,21 53,21 39,32 44,49 29,39 14,49 19,32 5,21 23,21" stroke="${c}" stroke-width="1.2" fill="none"/></svg>`,
-  `<svg width="52" height="62" viewBox="0 0 52 62" fill="none"><ellipse cx="26" cy="28" rx="18" ry="23" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M26 5 Q38 17 26 28 Q14 17 26 5Z" stroke="${cl}" stroke-width="1" fill="none"/><line x1="26" y1="51" x2="26" y2="60" stroke="${c}" stroke-width="1.2"/><line x1="19" y1="57" x2="33" y2="57" stroke="${c}" stroke-width="1.2"/></svg>`,
-  `<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><circle cx="29" cy="29" r="23" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M29 6 L29 52 M6 29 L52 29 M12 12 L46 46 M46 12 L12 46" stroke="${cl}" stroke-width="0.8"/><circle cx="29" cy="29" r="7" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="50" height="60" viewBox="0 0 50 60" fill="none"><path d="M25 5 L45 50 L25 42 L5 50 Z" stroke="${c}" stroke-width="1.2" fill="none"/></svg>`,
-  `<svg width="60" height="50" viewBox="0 0 60 50" fill="none"><path d="M5 25 Q15 5 30 25 Q45 45 55 25" stroke="${c}" stroke-width="1.5" fill="none"/><circle cx="5" cy="25" r="3" stroke="${c}" stroke-width="1" fill="none"/><circle cx="55" cy="25" r="3" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><rect x="8" y="8" width="39" height="39" rx="3" stroke="${c}" stroke-width="1.2" fill="none"/><rect x="16" y="16" width="23" height="23" rx="2" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 L52 28 L28 52 L4 28 Z" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M28 14 L42 28 L28 42 L14 28 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="54" height="54" viewBox="0 0 54 54" fill="none"><circle cx="27" cy="27" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M27 5 L31 18 L44 18 L34 26 L38 39 L27 32 L16 39 L20 26 L10 18 L23 18 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><circle cx="27" cy="27" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><circle cx="27" cy="27" r="14" stroke="${cl}" stroke-width="1" fill="none"/><circle cx="27" cy="27" r="5" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="52" height="65" viewBox="0 0 52 65" fill="none"><path d="M26 4 L48 18 L48 47 L26 61 L4 47 L4 18 Z" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M26 14 L38 22 L38 43 L26 51 L14 43 L14 22 Z" stroke="${cl}" stroke-width="0.8" fill="none"/></svg>`,
-  `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 C38 4 48 14 48 28 C48 42 38 52 28 52 C18 52 8 42 8 28 C8 14 18 4 28 4Z M28 4 C22 14 22 42 28 52 M28 4 C34 14 34 42 28 52 M8 28 C18 22 38 22 48 28 M8 28 C18 34 38 34 48 28" stroke="${c}" stroke-width="0.9" fill="none"/></svg>`,
-  `<svg width="50" height="60" viewBox="0 0 50 60" fill="none"><line x1="25" y1="4" x2="25" y2="56" stroke="${c}" stroke-width="1.2"/><line x1="4" y1="20" x2="46" y2="20" stroke="${c}" stroke-width="1.2"/><circle cx="25" cy="20" r="5" stroke="${c}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="58" height="40" viewBox="0 0 58 40" fill="none"><path d="M4 20 Q29 4 54 20 Q29 36 4 20Z" stroke="${c}" stroke-width="1.2" fill="none"/><circle cx="29" cy="20" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="60" height="45" viewBox="0 0 60 45" fill="none"><path d="M5 40 L30 5 L55 40 Z" stroke="${c}" stroke-width="1.2" fill="none"/><line x1="30" y1="5" x2="30" y2="40" stroke="${cl}" stroke-width="0.8"/></svg>`,
-  `<svg width="54" height="54" viewBox="0 0 54 54" fill="none"><circle cx="27" cy="27" r="22" stroke="${c}" stroke-width="1.2" fill="none"/><path d="M27 5 L27 49 M5 27 L49 27" stroke="${cl}" stroke-width="0.8"/><path d="M11 11 L43 43 M43 11 L11 43" stroke="${cl}" stroke-width="0.6"/></svg>`
+`<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><path d="M27 4 C14 4 4 14 4 27 C4 40 14 50 27 46 C40 50 50 40 50 27 C50 14 40 4 27 4Z" stroke="${cc}" stroke-width="1.2" fill="none"/><circle cx="19" cy="27" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="28" y1="6" x2="28" y2="50" stroke="${cl}" stroke-width="1"/><line x1="6" y1="28" x2="50" y2="28" stroke="${cl}" stroke-width="1"/><circle cx="28" cy="28" r="6" stroke="${cc}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="48" height="68" viewBox="0 0 48 68" fill="none"><line x1="24" y1="4" x2="24" y2="54" stroke="${cc}" stroke-width="1.5"/><path d="M24 4 L14 24 L24 18 L34 24 Z" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="14" y1="54" x2="34" y2="54" stroke="${cc}" stroke-width="1.5"/></svg>`,
+`<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><polygon points="29,4 35,21 53,21 39,32 44,49 29,39 14,49 19,32 5,21 23,21" stroke="${cc}" stroke-width="1.2" fill="none"/></svg>`,
+`<svg width="52" height="62" viewBox="0 0 52 62" fill="none"><ellipse cx="26" cy="28" rx="18" ry="23" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M26 5 Q38 17 26 28 Q14 17 26 5Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><circle cx="29" cy="29" r="23" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M29 6 L29 52 M6 29 L52 29 M12 12 L46 46 M46 12 L12 46" stroke="${cl}" stroke-width="0.8"/></svg>`,
+`<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 L52 28 L28 52 L4 28 Z" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M28 14 L42 28 L28 42 L14 28 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><circle cx="27" cy="27" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><circle cx="27" cy="27" r="14" stroke="${cl}" stroke-width="1" fill="none"/><circle cx="27" cy="27" r="5" stroke="${cc}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="52" height="65" viewBox="0 0 52 65" fill="none"><path d="M26 4 L48 18 L48 47 L26 61 L4 47 L4 18 Z" stroke="${cc}" stroke-width="1.2" fill="none"/></svg>`,
+`<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 C38 4 48 14 48 28 C48 42 38 52 28 52 C18 52 8 42 8 28 C8 14 18 4 28 4Z M28 4 C22 14 22 42 28 52 M28 4 C34 14 34 42 28 52 M8 28 C18 22 38 22 48 28 M8 28 C18 34 38 34 48 28" stroke="${cc}" stroke-width="0.9" fill="none"/></svg>`,
+`<svg width="60" height="45" viewBox="0 0 60 45" fill="none"><path d="M5 40 L30 5 L55 40 Z" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="30" y1="5" x2="30" y2="40" stroke="${cl}" stroke-width="0.8"/></svg>`,
+`<svg width="54" height="54" viewBox="0 0 54 54" fill="none"><circle cx="27" cy="27" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M27 5 L31 18 L44 18 L34 26 L38 39 L27 32 L16 39 L20 26 L10 18 L23 18 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`
 ];
 
-const used=new Set();
-function getRnd(){let i,t=0;do{i=Math.floor(Math.random()*svgs.length);t++;}while(used.has(i)&&t<20);used.add(i);if(used.size>9)used.clear();return i;}
+const zones=[];
+function zonaLibre(x,size){const m=size+15;for(const z of zones){if(Math.abs(z.x-x)<m)return false;}return true;}
 
 function spawnHero(){
-  const bg=document.getElementById('heroBg');
+  const bg=document.getElementById('heroBg');if(!bg)return;
+  let left,att=0;
+  do{left=5+Math.random()*82;att++;}while(!zonaLibre(left,8)&&att<20);
+  zones.push({x:left});if(zones.length>4)zones.shift();
   const w=document.createElement('div');w.className='sym';
-  w.innerHTML=svgs[getRnd()];
-  const l=5+Math.random()*82,r=(Math.random()-.5)*30,d=22+Math.random()*14,s=0.9+Math.random()*0.8;
-  w.style.cssText=`left:${l}%;bottom:-80px;--r:${r}deg;animation-duration:${d}s;`;
-  w.querySelector('svg').style.transform=`scale(${s})`;
-  bg.appendChild(w);setTimeout(()=>w.remove(),d*1000);
-  setTimeout(spawnHero,5000+Math.random()*4000);
+  w.innerHTML=svgs[Math.floor(Math.random()*svgs.length)];
+  const rot=(Math.random()-.5)*25,dur=22+Math.random()*12,scale=0.85+Math.random()*0.7;
+  const heroH=bg.offsetHeight||220;
+  w.style.cssText=`left:${left}%;bottom:-70px;--r:${rot}deg;--dy:-${heroH+140}px;animation-duration:${dur}s;`;
+  w.querySelector('svg').style.transform=`scale(${scale})`;
+  bg.appendChild(w);setTimeout(()=>w.remove(),dur*1000);
+  setTimeout(spawnHero,4500+Math.random()*3500);
 }
-function spawnBody(){
-  const bg=document.getElementById('bodyBg');
-  const w=document.createElement('div');w.className='sym-body';
-  w.innerHTML=svgs[getRnd()];
-  const l=Math.random()*80,t=Math.random()*50,r=(Math.random()-.5)*20;
-  const dx=(Math.random()-.5)*60+'px',dy=(Math.random()-.5)*40+'px',d=28+Math.random()*14;
-  w.style.cssText=`left:${l}%;top:${t}%;--r:${r}deg;--dx:${dx};--dy:${dy};animation-duration:${d}s;`;
-  bg.appendChild(w);setTimeout(()=>w.remove(),d*1000);
-  setTimeout(spawnBody,9000+Math.random()*7000);
-}
-for(let i=0;i<3;i++)setTimeout(spawnHero,i*2000);
-for(let i=0;i<2;i++)setTimeout(spawnBody,i*3500);
+for(let i=0;i<3;i++)setTimeout(spawnHero,i*2500);
 
-const preguntas={
-  amor:"¿Hay algo específico en esta relación o vínculo que te genera duda?",
-  trabajo:"¿Qué es lo que más te preocupa en esta situación laboral?",
-  dinero:"¿Buscás orientación sobre una decisión económica específica?",
-  personal:"¿Qué aspecto de vos mismo querés transformar o entender?",
-  decision:"¿Cuáles son las dos opciones o caminos que estás considerando?",
-  otro:"¿Podés contarme un poco más sobre qué te trajo a consultar hoy?"
-};
-
-const hints={
-  amor:"Contame sobre tu situación en el amor — ¿hay una persona, relación o algo que estás procesando?",
-  trabajo:"¿Qué está pasando en tu trabajo o proyecto? ¿Hay una decisión pendiente?",
-  dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",
-  personal:"¿Qué querés transformar o entender de vos mismo en este momento?",
-  decision:"Describí la situación — ¿qué decisión enfrentás y qué opciones ves?",
-  otro:"Contame libremente qué te trajo aquí hoy."
-};
-
-const posiciones=[
-  {nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual."},
-  {nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo — tu momento presente."},
-  {nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren."}
-];
-
+const preguntas={amor:"¿Hay algo específico en esta relación que te genera duda?",trabajo:"¿Qué es lo que más te preocupa en esta situación laboral?",dinero:"¿Buscás orientación sobre una decisión económica específica?",personal:"¿Qué aspecto de vos mismo querés transformar o entender?",decision:"¿Cuáles son las opciones que estás considerando?",otro:"¿Podés contarme qué te trajo a consultar hoy?"};
+const hints={amor:"Contame sobre tu situación en el amor — ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",personal:"¿Qué querés transformar o entender de vos mismo?",decision:"Describí la situación — ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
+const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual."},{nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo — tu momento presente."},{nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren."}];
 let area="";
 
-function showTab(t,el){
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
-  document.getElementById("tab-"+t).classList.add("active");
-  el.classList.add("active");
-}
-
-function selArea(el,a){
-  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("sel"));
-  el.classList.add("sel");area=a;
-  document.getElementById("step2").style.display="block";
-  document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;
-}
-
-function validar(){
-  const txt=document.getElementById("pregunta").value.trim();
-  const words=txt.split(/\s+/).filter(w=>w.length>0).length;
-  const cnt=document.getElementById("counter");
-  const btn=document.getElementById("btnRevelar");
-  const bp=document.getElementById("btnProf");
-  if(words>=8){cnt.textContent="✦ "+words+" palabras — podés revelar las cartas";cnt.classList.add("ok");btn.disabled=false;bp.style.display="inline-block";}
-  else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;bp.style.display="none";}
-}
-
-function profundizar(){
-  document.getElementById("divProf").style.display="block";
-  document.getElementById("textoProf").textContent=preguntas[area]||preguntas.otro;
-}
+function showTab(t,el){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));document.getElementById("tab-"+t).classList.add("active");el.classList.add("active");}
+function selArea(el,a){document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));el.classList.add("sel");area=a;document.getElementById("step2").style.display="block";document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;}
+function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");const bp=document.getElementById("btnProf");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés revelar las cartas";cnt.classList.add("ok");btn.disabled=false;bp.style.display="inline-block";}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;bp.style.display="none";}}
+function profundizar(){document.getElementById("divProf").style.display="block";document.getElementById("textoProf").textContent=preguntas[area]||preguntas.otro;}
 
 async function revelar(){
   const preg=document.getElementById("pregunta").value.trim();
   const rp=document.getElementById("respProf").value.trim();
   const ctx=rp?preg+". Contexto adicional: "+rp:preg;
-  document.getElementById("step1").style.display="none";
-  document.getElementById("step2").style.display="none";
-  document.getElementById("step3").style.display="block";
+  document.getElementById("step1").style.display="none";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="block";
   const tres=[...mazo].sort(()=>Math.random()-.5).slice(0,3);
-  document.getElementById("cartas").innerHTML=tres.map((c,i)=>`
-    <div class="carta">
-      <div class="cpos">${posiciones[i].nombre}</div>
-      <div class="cemoji">${c.emoji}</div>
-      <div class="cnombre">${c.nombre}</div>
-      <div class="cpalo">${c.palo}</div>
-      <div class="cenergia">${c.energia}</div>
-      <div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div>
-    </div>`).join("");
-  const interpDiv=document.getElementById("interp");
-  interpDiv.classList.add("loading");interpDiv.textContent="El oráculo está leyendo las cartas...";
+  document.getElementById("cartas").innerHTML=tres.map((c,i)=>`<div class="carta"><div class="cpos">${posiciones[i].nombre}</div><div class="cemoji">${c.emoji}</div><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div></div>`).join("");
+  const interpDiv=document.getElementById("interp");interpDiv.classList.add("loading");interpDiv.textContent="El oráculo está leyendo las cartas...";
   const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
-  try{
-    const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});
-    const d=await r.json();
-    interpDiv.textContent=d.respuesta||"El oráculo necesita un momento. Intentá de nuevo.";
-    interpDiv.classList.remove("loading");
-  }catch(e){interpDiv.textContent="El oráculo necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
+  try{const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});const d=await r.json();interpDiv.textContent=d.respuesta||"El oráculo necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
+  catch(e){interpDiv.textContent="El oráculo necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
 }
 
-function reset(){
-  document.getElementById("step1").style.display="block";
-  document.getElementById("step2").style.display="none";
-  document.getElementById("step3").style.display="none";
-  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("sel"));
-  document.getElementById("pregunta").value="";
-  document.getElementById("respProf").value="";
-  document.getElementById("divProf").style.display="none";
-  document.getElementById("counter").textContent="Mínimo 8 palabras para una lectura precisa";
-  document.getElementById("counter").classList.remove("ok");
-  document.getElementById("btnProf").style.display="none";
-  area="";
-}
+function reset(){document.getElementById("step1").style.display="block";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="none";document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));document.getElementById("pregunta").value="";document.getElementById("respProf").value="";document.getElementById("divProf").style.display="none";document.getElementById("counter").textContent="Mínimo 8 palabras para una lectura precisa";document.getElementById("counter").classList.remove("ok");document.getElementById("btnProf").style.display="none";area="";}
 </script>
 
 <script>
@@ -509,6 +360,5 @@ const mazo=[
 {id:77,nombre:"Rey de Bastos",palo:"Bastos",emoji:"🦅",energia:"visión y liderazgo creativo",pasado:"Lideraste con visión y creatividad dejando una huella importante.",presente:"Es tu momento de liderar con audacia y visión de largo plazo.",futuro:"Tu capacidad de inspirar y crear marcará el camino a seguir."}
 ];
 </script>
-
 </body>
 </html>
