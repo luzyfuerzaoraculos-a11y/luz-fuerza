@@ -243,14 +243,14 @@ function spawnHero(){
   zones.push({x:left});if(zones.length>4)zones.shift();
   const w=document.createElement('div');w.className='sym';
   w.innerHTML=svgs[Math.floor(Math.random()*svgs.length)];
-  const rot=(Math.random()-.5)*25,dur=22+Math.random()*12,scale=0.85+Math.random()*0.7;
+  const rot=(Math.random()-.5)*25,dur=8+Math.random()*5,scale=0.85+Math.random()*0.7;
   const heroH=bg.offsetHeight||220;
   w.style.cssText=`left:${left}%;bottom:-70px;--r:${rot}deg;--dy:-${heroH+140}px;animation-duration:${dur}s;`;
   w.querySelector('svg').style.transform=`scale(${scale})`;
   bg.appendChild(w);setTimeout(()=>w.remove(),dur*1000);
-  setTimeout(spawnHero,4500+Math.random()*3500);
+  setTimeout(spawnHero,2000+Math.random()*1500);
 }
-for(let i=0;i<3;i++)setTimeout(spawnHero,i*2500);
+for(let i=0;i<4;i++)setTimeout(spawnHero,i*800);
 
 const preguntas={amor:"¿Hay algo específico en esta relación que te genera duda?",trabajo:"¿Qué es lo que más te preocupa en esta situación laboral?",dinero:"¿Buscás orientación sobre una decisión económica específica?",personal:"¿Qué aspecto de vos mismo querés transformar o entender?",decision:"¿Cuáles son las opciones que estás considerando?",otro:"¿Podés contarme qué te trajo a consultar hoy?"};
 const hints={amor:"Contame sobre tu situación en el amor — ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",personal:"¿Qué querés transformar o entender de vos mismo?",decision:"Describí la situación — ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
