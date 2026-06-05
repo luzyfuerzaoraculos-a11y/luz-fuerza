@@ -244,7 +244,8 @@ function spawnHero(){
   const w=document.createElement('div');w.className='sym';
   w.innerHTML=svgs[Math.floor(Math.random()*svgs.length)];
   const rot=(Math.random()-.5)*25,dur=12+Math.random()*8,scale=0.85+Math.random()*0.7;
-  w.style.cssText=`left:${left}%;bottom:-80px;--r:${rot}deg;animation-duration:${dur}s;`;
+  const startY = 150 + Math.random()*50;
+  w.style.cssText=`left:${left}%;top:${startY}px;--r:${rot}deg;animation-duration:${dur}s;`;
   w.querySelector('svg').style.transform=`scale(${scale})`;
   bg.appendChild(w);setTimeout(()=>w.remove(),dur*1000);
   setTimeout(spawnHero,2000+Math.random()*1500);
