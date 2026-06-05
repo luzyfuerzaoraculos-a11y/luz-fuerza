@@ -88,6 +88,16 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 .sobre{color:#5a7aaa;font-size:15px;line-height:1.9;}.sobre p{margin-bottom:1.25rem;}.sobre strong{color:#8baad4;font-weight:400;}
 
 footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0.5px solid #1e2a45;font-size:11px;color:#1e2a45;letter-spacing:1px;position:relative;z-index:1;}
+
+/* LAYOUT CON COSTADOS */
+.page-layout{display:grid;grid-template-columns:1fr minmax(0,700px) 1fr;min-height:70vh;}
+.side{position:relative;overflow:hidden;background:transparent;}
+.carta-float{position:absolute;width:65px;height:105px;border:1px solid rgba(255,180,50,0.2);border-radius:8px;background:rgba(255,150,0,0.03);animation:cartaFlota linear infinite;pointer-events:none;}
+.carta-float::before{content:'';position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:0.5px solid rgba(255,180,50,0.1);border-radius:4px;}
+@keyframes cartaFlota{0%{opacity:0;transform:translateY(30px) rotate(var(--r));}15%{opacity:0.9;}75%{opacity:0.5;}100%{opacity:0;transform:translateY(-80px) rotate(calc(var(--r)+6deg));}}
+.frase-wrap{position:fixed;bottom:40px;left:0;width:calc((100vw - 700px)/2);text-align:center;pointer-events:none;z-index:10;animation:frasePulsa ease-in-out;}
+.frase-wrap p{font-size:12px;color:rgba(255,180,50,0.55);font-style:italic;letter-spacing:1px;line-height:1.6;padding:0 1rem;}
+@keyframes frasePulsa{0%,100%{opacity:0;}25%,75%{opacity:1;}}
 .loading{animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
 @media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:11px;}}
@@ -147,7 +157,9 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <button onclick="showTab('sobre',this)">Nosotros</button>
 </nav>
 
-<main>
+<div class="page-layout">
+<div class="side" id="sideLeft"></div>
+<main style="position:relative;z-index:2;">
 
 <div id="tab-consulta" class="tab active">
   <div id="step1">
@@ -252,6 +264,11 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 </div>
 
 </main>
+<div class="side" id="sideRight"></div>
+</div>
+
+<div class="frase-wrap" id="fraseWrap"><p id="fraseTexto"></p></div>
+
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
 <script>
@@ -397,6 +414,57 @@ const mazo=[
 {id:76,nombre:"Reina de Bastos",palo:"Bastos",emoji:"🦁",energia:"confianza y liderazgo carismático",pasado:"Tu confianza y carisma inspiraron a quienes te rodeaban.",presente:"Tu energía magnética atrae lo que necesitás — confiá en vos.",futuro:"Una figura carismática y poderosa traerá inspiración a tu vida."},
 {id:77,nombre:"Rey de Bastos",palo:"Bastos",emoji:"🦅",energia:"visión y liderazgo creativo",pasado:"Lideraste con visión y creatividad dejando una huella importante.",presente:"Es tu momento de liderar con audacia y visión de largo plazo.",futuro:"Tu capacidad de inspirar y crear marcará el camino a seguir."}
 ];
+</script>
+<script>
+const frases=[
+  "El oráculo te espera...",
+  "Las cartas ya te están leyendo...",
+  "Tu camino tiene una respuesta...",
+  "Cada carta es un espejo del alma...",
+  "La luz interior siempre guía...",
+  "El universo habla cuando escuchás...",
+  "Tu fuerza impulsa este momento...",
+  "Las respuestas ya están en vos...",
+  "Confiá en lo que el oráculo revela...",
+  "Este es tu momento de claridad..."
+];
+
+let fi=0;
+const fraseEl=document.getElementById('fraseTexto');
+const fraseWrap=document.getElementById('fraseWrap');
+
+function rotateFrase(){
+  fraseEl.textContent=frases[fi%frases.length];fi++;
+  fraseWrap.style.animation='none';
+  fraseWrap.offsetHeight;
+  fraseWrap.style.animation='frasePulsa 4s ease-in-out';
+  setTimeout(rotateFrase,4800);
+}
+setTimeout(rotateFrase,2000);
+
+const simbolos=['☽','★','✦','⚔','⚖','♦','∞','◈','☀','△'];
+
+function spawnCarta(sideId){
+  const side=document.getElementById(sideId);
+  if(!side||side.offsetWidth<60)return;
+  const carta=document.createElement('div');
+  carta.className='carta-float';
+  const left=10+Math.random()*70;
+  const top=5+Math.random()*65;
+  const rot=(Math.random()-.5)*20;
+  const dur=7+Math.random()*6;
+  carta.style.cssText=`left:${left}%;top:${top}%;--r:${rot}deg;animation-duration:${dur}s;`;
+  const sym=document.createElement('span');
+  sym.style.cssText='position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:16px;color:rgba(255,180,50,0.18);';
+  sym.textContent=simbolos[Math.floor(Math.random()*simbolos.length)];
+  carta.appendChild(sym);
+  side.appendChild(carta);
+  setTimeout(()=>carta.remove(),dur*1000);
+  setTimeout(()=>spawnCarta(sideId),3500+Math.random()*3000);
+}
+
+setTimeout(()=>{spawnCarta('sideLeft');spawnCarta('sideLeft');},500);
+setTimeout(()=>{spawnCarta('sideRight');spawnCarta('sideRight');},1200);
 </script>
 </body>
 </html>
