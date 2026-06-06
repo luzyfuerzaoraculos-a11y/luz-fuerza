@@ -619,5 +619,91 @@ function showTab(t,el){
   }
 }
 </script>
+<script>
+// Canvas de estrellas orgánicas
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas(){
+    const hero = canvas.parentElement;
+    canvas.width = hero ? hero.offsetWidth : window.innerWidth;
+    canvas.height = hero ? hero.offsetHeight : 320;
+    if(canvas.width < 10) canvas.width = window.innerWidth;
+    if(canvas.height < 10) canvas.height = 320;
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 200);
+
+  const estrellas = [];
+  for(let i = 0; i < 200; i++){
+    estrellas.push({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 1.8 + 0.3,
+      op: Math.random() * 0.7 + 0.2,
+      vel: Math.random() * 0.02 + 0.005,
+      fase: Math.random() * Math.PI * 2,
+      color: Math.random() > 0.7 ? 'rgba(200,180,255,' : Math.random() > 0.5 ? 'rgba(150,200,255,' : 'rgba(255,255,255,'
+    });
+  }
+
+  const grandes = [];
+  for(let i = 0; i < 15; i++){
+    grandes.push({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 2 + 1.5,
+      op: Math.random() * 0.5 + 0.4,
+      vel: Math.random() * 0.015 + 0.003,
+      fase: Math.random() * Math.PI * 2
+    });
+  }
+
+  let t = 0;
+  function dibujar(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    t += 0.01;
+
+    estrellas.forEach(s => {
+      const op = s.op * (0.5 + 0.5 * Math.sin(t * s.vel * 100 + s.fase));
+      ctx.beginPath();
+      ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = s.color + op + ')';
+      ctx.fill();
+    });
+
+    grandes.forEach(s => {
+      const op = s.op * (0.4 + 0.6 * Math.sin(t * s.vel * 100 + s.fase));
+      const x = s.x * canvas.width;
+      const y = s.y * canvas.height;
+
+      ctx.beginPath();
+      ctx.arc(x, y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,200,255,${op})`;
+      ctx.fill();
+
+      const largo = s.r * 5 * op;
+      const g1 = ctx.createLinearGradient(x - largo, y, x + largo, y);
+      g1.addColorStop(0, 'transparent');
+      g1.addColorStop(0.5, `rgba(220,200,255,${op * 0.5})`);
+      g1.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.strokeStyle = g1; ctx.lineWidth = 0.8;
+      ctx.moveTo(x - largo, y); ctx.lineTo(x + largo, y); ctx.stroke();
+
+      const g2 = ctx.createLinearGradient(x, y - largo, x, y + largo);
+      g2.addColorStop(0, 'transparent');
+      g2.addColorStop(0.5, `rgba(220,200,255,${op * 0.5})`);
+      g2.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.strokeStyle = g2;
+      ctx.moveTo(x, y - largo); ctx.lineTo(x, y + largo); ctx.stroke();
+    });
+
+    requestAnimationFrame(dibujar);
+  }
+  dibujar();
+})();
+</script>
 </body>
 </html>
