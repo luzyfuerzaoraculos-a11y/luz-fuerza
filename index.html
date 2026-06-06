@@ -28,15 +28,14 @@ background-size:150px 150px,90px 90px,60px 60px;background-position:20px 20px,55
     radial-gradient(ellipse at 60% 100%,rgba(0,80,200,0.2) 0%,transparent 35%),
     linear-gradient(160deg,#0d0025 0%,#1a0050 40%,#100035 100%);
 padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(150,100,255,0.3);position:relative;overflow:hidden;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
-.stars-hero{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,rgba(255,255,255,1) 1.5px,transparent 1.5px),radial-gradient(circle,rgba(180,150,255,0.7) 1px,transparent 1px),radial-gradient(circle,rgba(100,200,255,0.4) 1px,transparent 1px);background-size:90px 90px,55px 55px,130px 130px;background-position:10px 10px,35px 25px,60px 60px;pointer-events:none;}
-.destello{position:absolute;border-radius:50%;pointer-events:none;animation:destella ease-in-out infinite;filter:blur(40px);}
-.d1{width:300px;height:200px;top:-60px;left:10%;background:rgba(150,80,255,0.2);animation-duration:4s;}
-.d2{width:200px;height:200px;top:0;right:5%;background:rgba(0,150,255,0.15);animation-duration:5s;animation-delay:1.5s;}
-.d3{width:250px;height:150px;bottom:-40px;left:30%;background:rgba(100,0,200,0.15);animation-duration:6s;animation-delay:0.8s;}
-@keyframes destella{0%,100%{opacity:0.4;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
-.sym-c{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
-.sym{position:absolute;pointer-events:none;animation:subirLento linear forwards;opacity:0;}
-@keyframes subirLento{0%{transform:translateY(0) rotate(var(--r));opacity:0;}8%{opacity:0.85;}50%{opacity:0.6;}92%{opacity:0.3;}100%{transform:translateY(-320px) rotate(calc(var(--r)+10deg));opacity:0;}}
+.aurora{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;animation:auroraFloat ease-in-out infinite;}
+.a1{width:400px;height:250px;top:-80px;left:5%;background:rgba(120,60,220,0.25);animation-duration:7s;}
+.a2{width:300px;height:200px;top:30px;right:0%;background:rgba(0,100,220,0.2);animation-duration:9s;animation-delay:2s;}
+.a3{width:350px;height:180px;bottom:-60px;left:25%;background:rgba(80,0,180,0.2);animation-duration:11s;animation-delay:1s;}
+.a4{width:200px;height:200px;top:10px;left:40%;background:rgba(160,80,255,0.12);animation-duration:8s;animation-delay:3s;}
+@keyframes auroraFloat{0%,100%{transform:translate(0,0) scale(1);opacity:0.6;}33%{transform:translate(20px,-15px) scale(1.05);opacity:1;}66%{transform:translate(-15px,10px) scale(0.95);opacity:0.7;}}
+#heroCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.hero-contenido{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
 h1{font-family:"Cinzel",serif;font-size:36px;font-weight:600;color:#fff;letter-spacing:5px;position:relative;z-index:2;text-shadow:0 0 30px rgba(180,130,255,1),0 0 60px rgba(120,60,255,0.7);}
 .amp{color:#cc99ff;}
 .tagline{font-family:"Cinzel",serif;font-size:13px;color:rgba(200,170,255,0.8);letter-spacing:1.5px;margin-top:10px;position:relative;z-index:2;}
@@ -111,6 +110,21 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 
 .loading{animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+
+/* MODAL REGISTRO */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.85);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+.modal-overlay.active{display:flex;}
+.modal-box{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(30,15,60,0.98));border:1px solid rgba(150,100,255,0.4);border-radius:16px;padding:2.5rem 2rem;max-width:420px;width:90%;text-align:center;box-shadow:0 0 60px rgba(100,50,200,0.3);}
+.modal-brujula{font-size:40px;margin-bottom:1rem;}
+.modal-titulo{font-family:"Cinzel",serif;font-size:20px;color:#fff;letter-spacing:2px;margin-bottom:0.75rem;text-shadow:0 0 20px rgba(150,100,255,0.8);}
+.modal-desc{font-family:"Cormorant Garamond",serif;font-size:16px;color:rgba(200,180,255,0.8);line-height:1.7;margin-bottom:1.5rem;}
+.modal-checks{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;text-align:left;}
+.modal-check{font-family:"Cormorant Garamond",serif;font-size:14px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:8px;}
+.modal-btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Cinzel",serif;font-size:14px;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4);margin-bottom:10px;}
+.modal-btn-primary:hover{box-shadow:0 0 35px rgba(150,80,255,0.6);transform:translateY(-1px);}
+.modal-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Cinzel",serif;font-size:12px;cursor:pointer;letter-spacing:0.5px;}
+.modal-btn-secondary:hover{border-color:rgba(150,100,255,0.6);color:#c8b8ff;}
+.modal-sub{font-family:"Cormorant Garamond",serif;font-size:12px;color:rgba(120,100,200,0.5);margin-top:12px;font-style:italic;}
 @media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:11px;}}
 </style>
 </head>
@@ -118,12 +132,13 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 <div class="nebulosa"></div>
 
 <header class="hero">
-  <div class="stars-hero"></div>
-  <div class="d1 destello"></div>
-  <div class="d2 destello"></div>
-  <div class="d3 destello"></div>
-  <div class="sym-c" id="heroBg"></div>
-  <div style="position:relative;z-index:2;margin-bottom:1.25rem;">
+  <canvas id="heroCanvas"></canvas>
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <div class="aurora a4"></div>
+  <div class="hero-contenido">
+  <div style="margin-bottom:1.25rem;">
     <svg width="90" height="90" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="60" cy="60" r="55" stroke="url(#lg1)" stroke-width="2" fill="none"/>
       <circle cx="60" cy="60" r="48" stroke="rgba(255,180,50,0.15)" stroke-width="0.5" fill="none"/>
@@ -310,6 +325,24 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
+<!-- MODAL REGISTRO -->
+<div class="modal-overlay" id="modalRegistro">
+  <div class="modal-box">
+    <div class="modal-brujula">🧭</div>
+    <div class="modal-titulo">Tu primera consulta es gratis</div>
+    <div class="modal-desc">Creá tu cuenta para empezar. Las cartas ya tienen un mensaje para vos.</div>
+    <div class="modal-checks">
+      <div class="modal-check">✅ Primera consulta sin costo</div>
+      <div class="modal-check">✅ Interpretación personalizada con IA</div>
+      <div class="modal-check">✅ Carta del día según tu signo</div>
+      <div class="modal-check">✅ Disponible las 24 horas</div>
+    </div>
+    <button class="modal-btn-primary" onclick="alert('Próximamente: registro')">Crear cuenta y comenzar</button>
+    <button class="modal-btn-secondary" onclick="alert('Próximamente: login')">Ya tengo cuenta — Iniciar sesión</button>
+    <div class="modal-sub">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
+  </div>
+</div>
+
 <script>
 const cc="rgba(130,80,255,0.35)",cl="rgba(100,60,220,0.18)";
 const svgs=[
@@ -352,7 +385,24 @@ const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aq
 let area="";
 
 function showTab(t,el){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));document.getElementById("tab-"+t).classList.add("active");el.classList.add("active");}
-function selArea(el,a){document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));el.classList.add("sel");area=a;document.getElementById("step2").style.display="block";document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;}
+function selArea(el,a){
+  // Verificar si está logueada (por ahora simulamos que no)
+  const estaLogueada = false; // Esto se reemplaza con auth real en Etapa 2
+  if(!estaLogueada){
+    document.getElementById('modalRegistro').classList.add('active');
+    return;
+  }
+  document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));
+  el.classList.add("sel");area=a;
+  document.getElementById("step2").style.display="block";
+  document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;
+}
+
+// Cerrar modal al hacer clic fuera
+document.addEventListener('click', function(e){
+  const modal = document.getElementById('modalRegistro');
+  if(e.target === modal) modal.classList.remove('active');
+});
 function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");const bp=document.getElementById("btnProf");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés revelar las cartas";cnt.classList.add("ok");btn.disabled=false;bp.style.display="inline-block";}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;bp.style.display="none";}}
 function profundizar(){document.getElementById("divProf").style.display="block";document.getElementById("textoProf").textContent=preguntas[area]||preguntas.otro;}
 
