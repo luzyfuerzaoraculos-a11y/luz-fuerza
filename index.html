@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Luz & Fuerza · Oráculo de Tarot</title>
+<title>Luz & Fuerza · Tarot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#060810;color:#c8d8f0;font-family:Georgia,serif;min-height:100vh;}
+body{background:#060810;color:#c8d8f0;font-family:"Cormorant Garamond",Georgia,serif;min-height:100vh;}
 
 .nebulosa{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;
 background:radial-gradient(ellipse at 20% 30%,rgba(80,20,120,0.4) 0%,transparent 50%),
@@ -18,21 +20,30 @@ radial-gradient(ellipse at 90% 10%,rgba(20,80,100,0.3) 0%,transparent 40%),#0608
 background-image:radial-gradient(circle,rgba(255,255,255,0.8) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.4) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.2) 1px,transparent 1px);
 background-size:150px 150px,90px 90px,60px 60px;background-position:20px 20px,55px 45px,10px 70px;}
 
-/* HERO DORADO */
-.hero{background:radial-gradient(ellipse at 50% 0%,rgba(255,240,180,0.45) 0%,transparent 50%),radial-gradient(ellipse at 20% 60%,rgba(200,120,0,0.55) 0%,transparent 45%),radial-gradient(ellipse at 80% 40%,rgba(255,180,0,0.45) 0%,transparent 45%),radial-gradient(ellipse at 50% 100%,rgba(255,100,0,0.2) 0%,transparent 40%),linear-gradient(160deg,#1a0d00 0%,#3d2000 40%,#2d1500 100%) !important;}
 
-.hero{background:radial-gradient(ellipse at 50% 0%,rgba(255,240,180,0.45) 0%,transparent 50%),radial-gradient(ellipse at 20% 60%,rgba(200,120,0,0.55) 0%,transparent 45%),radial-gradient(ellipse at 80% 40%,rgba(255,180,0,0.45) 0%,transparent 45%),radial-gradient(ellipse at 50% 100%,rgba(255,100,0,0.2) 0%,transparent 40%),linear-gradient(160deg,#1a0d00 0%,#3d2000 40%,#2d1500 100%);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(180,100,0,0.4);position:relative;overflow:hidden;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
-.stars-hero{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,rgba(255,220,100,0.9) 1.5px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,0.7) 1px,transparent 1px),radial-gradient(circle,rgba(255,200,50,0.4) 1px,transparent 1px);background-size:90px 90px,55px 55px,130px 130px;background-position:10px 10px,35px 25px,60px 60px;pointer-events:none;}
+.hero{background:
+    radial-gradient(ellipse at 40% 0%,rgba(200,150,255,0.35) 0%,transparent 45%),
+    radial-gradient(ellipse at 80% 30%,rgba(100,180,255,0.25) 0%,transparent 40%),
+    radial-gradient(ellipse at 20% 70%,rgba(120,0,220,0.4) 0%,transparent 45%),
+    radial-gradient(ellipse at 60% 100%,rgba(0,80,200,0.2) 0%,transparent 35%),
+    linear-gradient(160deg,#0d0025 0%,#1a0050 40%,#100035 100%);
+padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(150,100,255,0.3);position:relative;overflow:hidden;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
+.stars-hero{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,rgba(255,255,255,1) 1.5px,transparent 1.5px),radial-gradient(circle,rgba(180,150,255,0.7) 1px,transparent 1px),radial-gradient(circle,rgba(100,200,255,0.4) 1px,transparent 1px);background-size:90px 90px,55px 55px,130px 130px;background-position:10px 10px,35px 25px,60px 60px;pointer-events:none;}
+.destello{position:absolute;border-radius:50%;pointer-events:none;animation:destella ease-in-out infinite;filter:blur(40px);}
+.d1{width:300px;height:200px;top:-60px;left:10%;background:rgba(150,80,255,0.2);animation-duration:4s;}
+.d2{width:200px;height:200px;top:0;right:5%;background:rgba(0,150,255,0.15);animation-duration:5s;animation-delay:1.5s;}
+.d3{width:250px;height:150px;bottom:-40px;left:30%;background:rgba(100,0,200,0.15);animation-duration:6s;animation-delay:0.8s;}
+@keyframes destella{0%,100%{opacity:0.4;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
 .sym-c{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
 .sym{position:absolute;pointer-events:none;animation:subirLento linear forwards;opacity:0;}
 @keyframes subirLento{0%{transform:translateY(0) rotate(var(--r));opacity:0;}8%{opacity:0.85;}50%{opacity:0.6;}92%{opacity:0.3;}100%{transform:translateY(-320px) rotate(calc(var(--r)+10deg));opacity:0;}}
-h1{font-size:32px;font-weight:400;color:#fff;letter-spacing:4px;position:relative;z-index:2;text-shadow:0 0 20px rgba(255,200,50,0.9),0 0 40px rgba(200,120,0,0.6),0 0 80px rgba(150,80,0,0.4);}
-.amp{color:#ffcc44;}
-.tagline{font-size:13px;color:#ffcc66;letter-spacing:1px;font-style:italic;margin-top:8px;position:relative;z-index:2;text-shadow:0 0 15px rgba(255,180,0,0.5);}
+h1{font-family:"Cinzel",serif;font-size:36px;font-weight:600;color:#fff;letter-spacing:5px;position:relative;z-index:2;text-shadow:0 0 30px rgba(180,130,255,1),0 0 60px rgba(120,60,255,0.7);}
+.amp{color:#cc99ff;}
+.tagline{font-family:"Cinzel",serif;font-size:13px;color:rgba(200,170,255,0.8);letter-spacing:1.5px;margin-top:10px;position:relative;z-index:2;}
 
-nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(10,6,0,0.92);border-bottom:0.5px solid rgba(200,120,0,0.3);position:relative;z-index:1;backdrop-filter:blur(10px);}
-nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,180,50,0.5);font-size:12px;font-family:Georgia,serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
-nav button.active{color:#ffcc44;border-bottom:2px solid #ffaa00;}
+nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(8,4,20,0.92);border-bottom:0.5px solid rgba(150,100,255,0.2);position:relative;z-index:1;backdrop-filter:blur(10px);}
+nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(150,120,255,0.5);font-size:12px;font-family:"Cinzel",serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
+nav button.active{color:#c8b8ff;border-bottom:2px solid #8855ff;}
 
 main{max-width:700px;margin:0 auto;padding:2rem 1.5rem;background:rgba(10,14,26,0.85);min-height:60vh;position:relative;z-index:1;backdrop-filter:blur(8px);}
 .tab{display:none;}.tab.active{display:block;}
@@ -95,9 +106,9 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .carta-float{position:absolute;width:65px;height:105px;border:1px solid rgba(255,180,50,0.2);border-radius:8px;background:rgba(255,150,0,0.03);animation:cartaFlota linear infinite;pointer-events:none;}
 .carta-float::before{content:'';position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:0.5px solid rgba(255,180,50,0.1);border-radius:4px;}
 @keyframes cartaFlota{0%{opacity:0;transform:translateY(30px) rotate(var(--r));}15%{opacity:0.9;}75%{opacity:0.5;}100%{opacity:0;transform:translateY(-80px) rotate(calc(var(--r)+6deg));}}
-.frase-wrap{position:fixed;bottom:40px;left:0;width:calc((100vw - 700px)/2);text-align:center;pointer-events:none;z-index:10;animation:frasePulsa ease-in-out;}
-.frase-wrap p{font-size:12px;color:rgba(255,180,50,0.55);font-style:italic;letter-spacing:1px;line-height:1.6;padding:0 1rem;}
-@keyframes frasePulsa{0%,100%{opacity:0;}25%,75%{opacity:1;}}
+
+
+
 .loading{animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
 @media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:11px;}}
@@ -108,53 +119,67 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 
 <header class="hero">
   <div class="stars-hero"></div>
+  <div class="d1 destello"></div>
+  <div class="d2 destello"></div>
+  <div class="d3 destello"></div>
   <div class="sym-c" id="heroBg"></div>
   <div style="position:relative;z-index:2;margin-bottom:1.25rem;">
     <svg width="90" height="90" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="60" cy="60" r="55" stroke="url(#lg1)" stroke-width="2" fill="none"/>
       <circle cx="60" cy="60" r="48" stroke="rgba(255,180,50,0.15)" stroke-width="0.5" fill="none"/>
-      <line x1="60" y1="3" x2="60" y2="14" stroke="rgba(255,210,80,0.9)" stroke-width="2"/>
-      <line x1="60" y1="106" x2="60" y2="117" stroke="rgba(255,210,80,0.5)" stroke-width="1.5"/>
-      <line x1="3" y1="60" x2="14" y2="60" stroke="rgba(255,210,80,0.5)" stroke-width="1.5"/>
-      <line x1="106" y1="60" x2="117" y2="60" stroke="rgba(255,210,80,0.5)" stroke-width="1.5"/>
-      <line x1="19" y1="19" x2="27" y2="27" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
-      <line x1="101" y1="19" x2="93" y2="27" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
-      <line x1="19" y1="101" x2="27" y2="93" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
-      <line x1="101" y1="101" x2="93" y2="93" stroke="rgba(255,210,80,0.35)" stroke-width="1"/>
-      <circle cx="60" cy="60" r="36" stroke="rgba(255,180,50,0.2)" stroke-width="0.8" fill="none"/>
+      <line x1="60" y1="3" x2="60" y2="14" stroke="rgba(180,140,255,0.9)" stroke-width="2"/>
+      <line x1="60" y1="106" x2="60" y2="117" stroke="rgba(180,140,255,0.5)" stroke-width="1.5"/>
+      <line x1="3" y1="60" x2="14" y2="60" stroke="rgba(180,140,255,0.5)" stroke-width="1.5"/>
+      <line x1="106" y1="60" x2="117" y2="60" stroke="rgba(180,140,255,0.5)" stroke-width="1.5"/>
+      <line x1="19" y1="19" x2="27" y2="27" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <line x1="101" y1="19" x2="93" y2="27" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <line x1="19" y1="101" x2="27" y2="93" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <line x1="101" y1="101" x2="93" y2="93" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <circle cx="60" cy="60" r="36" stroke="rgba(150,100,255,0.2)" stroke-width="0.8" fill="none"/>
       <polygon points="60,16 65,58 60,48 55,58" fill="url(#lg2)"/>
-      <polygon points="60,104 65,62 60,72 55,62" fill="rgba(120,80,20,0.6)"/>
-      <path d="M60 14 Q54 7 60 2 Q69 7 60 14Z" fill="rgba(255,220,100,0.7)"/>
+      <polygon points="60,104 65,62 60,72 55,62" fill="rgba(80,40,150,0.6)"/>
+      <path d="M60 14 Q54 7 60 2 Q69 7 60 14Z" fill="rgba(180,140,255,0.7)"/>
       <circle cx="60" cy="60" r="7" fill="url(#lg2)" opacity="0.95"/>
       <circle cx="60" cy="60" r="3" fill="white" opacity="0.8"/>
-      <circle cx="60" cy="18" r="2" fill="rgba(255,220,100,0.8)"/>
+      <circle cx="60" cy="18" r="2" fill="rgba(200,160,255,0.8)"/>
       <circle cx="60" cy="102" r="1.5" fill="rgba(255,180,50,0.5)"/>
       <circle cx="18" cy="60" r="1.5" fill="rgba(255,180,50,0.5)"/>
       <circle cx="102" cy="60" r="1.5" fill="rgba(255,180,50,0.5)"/>
       <defs>
         <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="rgba(255,220,80,0.9)"/>
-          <stop offset="50%" stop-color="rgba(255,150,0,0.7)"/>
-          <stop offset="100%" stop-color="rgba(180,80,0,0.5)"/>
+          <stop offset="0%" stop-color="rgba(200,160,255,0.9)"/>
+          <stop offset="50%" stop-color="rgba(120,80,255,0.7)"/>
+          <stop offset="100%" stop-color="rgba(80,40,200,0.5)"/>
         </linearGradient>
         <linearGradient id="lg2" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#ffffff"/>
-          <stop offset="30%" stop-color="#ffee88"/>
-          <stop offset="100%" stop-color="#cc7700"/>
+          <stop offset="30%" stop-color="#cc99ff"/>
+          <stop offset="100%" stop-color="#6600cc"/>
         </linearGradient>
       </defs>
     </svg>
   </div>
   <h1>LUZ <span class="amp">&</span> FUERZA</h1>
   <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
+  <div style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Hacé tu pregunta y descubrí el mensaje que las cartas tienen para vos.<br>Orientación disponible cuando la necesitás.</div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:1.25rem;">
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
+    </div>
+    <button onclick="alert('Próximamente: registro')" style="font-family:'Cinzel',serif;font-size:14px;padding:14px 36px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">Crear cuenta y comenzar</button>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
+  </div>
 </header>
 
 <nav>
   <button class="active" onclick="showTab('consulta',this)">Consulta</button>
+  <button onclick="showTab('cartadia',this)">Carta del día</button>
   <button onclick="showTab('como',this)">¿Cómo funciona?</button>
   <button onclick="showTab('historia',this)">Historia y poder</button>
   <button onclick="showTab('planes',this)">Planes</button>
-  <button onclick="showTab('sobre',this)">Nosotros</button>
+  <button onclick="showTab('sobre',this)">Nosotras</button>
 </nav>
 
 <div class="page-layout">
@@ -192,6 +217,21 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div>Interpretación</div>
     <div class="interp loading" id="interp">El oráculo está leyendo las cartas...</div>
     <button class="btn" onclick="reset()">✦ Nueva consulta</button>
+  </div>
+</div>
+
+<div id="tab-cartadia" class="tab">
+  <div style="text-align:center;padding:1rem 0 1.5rem;">
+    <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:1.5rem;line-height:1.6;">Dejá que tu intuición te guíe. Elegí la carta que sentís que es para vos.</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(150,120,255,0.6);font-style:italic;margin-bottom:1.5rem;animation:pulse 2s ease-in-out infinite;" id="instruccionDia">Tocá la carta que te llame...</div>
+    <div id="mesaDia" style="display:flex;justify-content:center;align-items:flex-end;min-height:200px;margin-bottom:1.5rem;position:relative;"></div>
+    <div id="cartaDiaFlip" style="display:none;perspective:800px;width:180px;margin:0 auto;">
+      <div id="cartaDiaInner" style="width:100%;padding-bottom:160%;position:relative;transform-style:preserve-3d;animation:voltear 0.9s ease forwards;">
+        <div id="cartaDiaFrente" style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;background:linear-gradient(160deg,rgba(20,10,40,0.97),rgba(35,15,70,0.97));border:1px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.25rem;text-align:center;box-shadow:0 0 30px rgba(100,50,200,0.3);"></div>
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1px solid rgba(150,100,255,0.3);transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(150,100,255,0.3);">✦</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -258,7 +298,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <div class="sobre">
     <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una <strong>sabiduría profunda</strong> esperando ser escuchada.</p>
     <p>El tarot no predice el futuro — lo ilumina. Cada carta que aparece es un espejo de tu momento presente, la fuerza que impulsa tus próximos pasos.</p>
-    <p>Combinamos la sabiduría ancestral del tarot con la tecnología de inteligencia artificial más avanzada para ofrecerte lecturas que realmente resuenen con tu situación única.</p>
+    <p>Combinamos la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte lecturas que realmente resuenen con tu momento único.</p>
     <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida. Tu <strong>luz interior</strong>, la respuesta.</p>
   </div>
 </div>
@@ -267,12 +307,11 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 <div class="side" id="sideRight"></div>
 </div>
 
-<div class="frase-wrap" id="fraseWrap"><p id="fraseTexto"></p></div>
 
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
 <script>
-const cc="rgba(200,140,0,0.5)",cl="rgba(180,120,0,0.25)";
+const cc="rgba(130,80,255,0.35)",cl="rgba(100,60,220,0.18)";
 const svgs=[
 `<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><path d="M27 4 C14 4 4 14 4 27 C4 40 14 50 27 46 C40 50 50 40 50 27 C50 14 40 4 27 4Z" stroke="${cc}" stroke-width="1.2" fill="none"/><circle cx="19" cy="27" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
 `<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="28" y1="6" x2="28" y2="50" stroke="${cl}" stroke-width="1"/><line x1="6" y1="28" x2="50" y2="28" stroke="${cl}" stroke-width="1"/><circle cx="28" cy="28" r="6" stroke="${cc}" stroke-width="1" fill="none"/></svg>`,
@@ -416,31 +455,7 @@ const mazo=[
 ];
 </script>
 <script>
-const frases=[
-  "El oráculo te espera...",
-  "Las cartas ya te están leyendo...",
-  "Tu camino tiene una respuesta...",
-  "Cada carta es un espejo del alma...",
-  "La luz interior siempre guía...",
-  "El universo habla cuando escuchás...",
-  "Tu fuerza impulsa este momento...",
-  "Las respuestas ya están en vos...",
-  "Confiá en lo que el oráculo revela...",
-  "Este es tu momento de claridad..."
-];
 
-let fi=0;
-const fraseEl=document.getElementById('fraseTexto');
-const fraseWrap=document.getElementById('fraseWrap');
-
-function rotateFrase(){
-  fraseEl.textContent=frases[fi%frases.length];fi++;
-  fraseWrap.style.animation='none';
-  fraseWrap.offsetHeight;
-  fraseWrap.style.animation='frasePulsa 4s ease-in-out';
-  setTimeout(rotateFrase,4800);
-}
-setTimeout(rotateFrase,2000);
 
 const simbolos=['☽','★','✦','⚔','⚖','♦','∞','◈','☀','△'];
 
@@ -465,6 +480,94 @@ function spawnCarta(sideId){
 
 setTimeout(()=>{spawnCarta('sideLeft');spawnCarta('sideLeft');},500);
 setTimeout(()=>{spawnCarta('sideRight');spawnCarta('sideRight');},1200);
+</script>
+<script>
+// Carta del día interactiva
+const cartasDia=[
+  {emoji:"🌙",nombre:"La Luna",palo:"Arcano Mayor",energia:"intuición y misterio",desc:"Confiá en lo que sentís aunque no puedas explicarlo con palabras.
+
+Tu intuición es más certera que cualquier lógica en este momento."},
+  {emoji:"☀️",nombre:"El Sol",palo:"Arcano Mayor",energia:"claridad y éxito",desc:"Un momento de claridad se abre ante vos.
+
+Todo lo que iniciaste con amor está por dar sus frutos."},
+  {emoji:"🦁",nombre:"La Fuerza",palo:"Arcano Mayor",energia:"coraje interior",desc:"Tu mayor fortaleza no viene de afuera.
+
+Viene de esa calma profunda que encontrás cuando te conectás con vos misma."},
+  {emoji:"✨",nombre:"La Estrella",palo:"Arcano Mayor",energia:"esperanza y guía",desc:"Después de todo lo vivido, hay una luz que te orienta.
+
+Confiá en ese brillo — es tuyo y nadie puede quitártelo."},
+  {emoji:"🌸",nombre:"La Emperatriz",palo:"Arcano Mayor",energia:"abundancia y creación",desc:"Es tiempo de florecer y de nutrir lo que amás.
+
+Tu energía creadora está en su punto más alto."},
+  {emoji:"⚖️",nombre:"La Justicia",palo:"Arcano Mayor",energia:"equilibrio y verdad",desc:"Lo que sembraste volverá a vos.
+
+Es momento de actuar con honestidad y confiar en el proceso."},
+  {emoji:"🎡",nombre:"La Rueda",palo:"Arcano Mayor",energia:"ciclos del destino",desc:"Algo está por cambiar en tu vida.
+
+Prepárate para recibir lo nuevo con los brazos abiertos."}
+];
+
+let cartaDiaElegida=false;
+
+function crearMesaDia(){
+  const mesa=document.getElementById('mesaDia');
+  if(!mesa)return;
+  mesa.innerHTML='';
+  const angulos=[-30,-15,0,15,30,-8,8];
+  const cartas=cartasDia.slice(0,7);
+  cartas.forEach((c,i)=>{
+    const div=document.createElement('div');
+    div.style.cssText=`width:70px;height:115px;border-radius:10px;cursor:pointer;position:relative;margin:0 -6px;transition:transform 0.3s ease,box-shadow 0.3s ease;transform:rotate(${angulos[i]}deg);z-index:${i+1};display:inline-block;flex-shrink:0;`;
+    div.innerHTML=`<div style="width:100%;height:100%;border-radius:10px;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1px solid rgba(150,100,255,0.4);display:flex;align-items:center;justify-content:center;">
+      <div style="width:75%;height:75%;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(150,100,255,0.3);">✦</div>
+    </div>`;
+    div.onmouseover=()=>{if(!cartaDiaElegida)div.style.transform=`rotate(${angulos[i]}deg) translateY(-20px) scale(1.05)`;};
+    div.onmouseout=()=>{if(!cartaDiaElegida)div.style.transform=`rotate(${angulos[i]}deg)`;};
+    div.onclick=()=>elegirCartaDia(c,div,angulos[i]);
+    mesa.appendChild(div);
+  });
+}
+
+function elegirCartaDia(carta,el,rot){
+  if(cartaDiaElegida)return;
+  cartaDiaElegida=true;
+  el.style.transform=`rotate(${rot}deg) translateY(-30px) scale(1.1)`;
+  document.getElementById('instruccionDia').style.display='none';
+  setTimeout(()=>{
+    document.getElementById('mesaDia').style.display='none';
+    const flip=document.getElementById('cartaDiaFlip');
+    const frente=document.getElementById('cartaDiaFrente');
+    const descHtml=carta.desc.replace('
+
+','<br><br>');
+    frente.innerHTML=`
+      <div style="font-size:38px;margin-bottom:10px;">${carta.emoji}</div>
+      <div style="font-family:'Cinzel',serif;font-size:14px;color:#c8b8ff;margin-bottom:4px;">${carta.nombre}</div>
+      <div style="font-family:'Cinzel',serif;font-size:9px;color:rgba(150,100,255,0.5);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">${carta.palo}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(180,150,255,0.7);font-style:italic;margin-bottom:10px;line-height:1.5;">${carta.energia}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:#5a5a8a;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;">${descHtml}</div>
+    `;
+    flip.style.display='block';
+    // Reiniciar animación
+    const inner=document.getElementById('cartaDiaInner');
+    inner.style.animation='none';
+    inner.offsetHeight;
+    inner.style.animation='voltear 0.9s ease forwards';
+  },500);
+}
+
+// Inicializar mesa cuando se muestra la tab
+const origShowTab=showTab;
+function showTab(t,el){
+  origShowTab(t,el);
+  if(t==='cartadia'){
+    cartaDiaElegida=false;
+    document.getElementById('instruccionDia').style.display='block';
+    document.getElementById('cartaDiaFlip').style.display='none';
+    document.getElementById('mesaDia').style.display='flex';
+    crearMesaDia();
+  }
+}
 </script>
 </body>
 </html>
