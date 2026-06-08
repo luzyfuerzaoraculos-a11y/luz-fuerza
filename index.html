@@ -110,6 +110,25 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 
 .loading{animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+@keyframes voltear{0%{transform:rotateY(180deg);}100%{transform:rotateY(0deg);}}
+
+/* CARTA DEL DIA */
+.mesa-cartas{display:flex;justify-content:center;align-items:flex-end;min-height:180px;padding-bottom:1.5rem;}
+.carta-boca-abajo{width:80px;height:130px;border-radius:10px;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.5);display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;}
+.carta-boca-abajo::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}
+.carta-boca-abajo::after{content:'✦';font-size:20px;color:rgba(150,100,255,0.35);}
+.flip-container{perspective:900px;width:170px;margin:0 auto;display:none;}
+.flip-inner{width:100%;height:270px;transform-style:preserve-3d;position:relative;animation:voltear 1s ease forwards;}
+.flip-frente,.flip-dorso{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;}
+.flip-frente{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(35,15,70,0.98));border:1.5px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1rem;text-align:center;box-shadow:0 0 40px rgba(100,50,200,0.3);}
+.flip-dorso{background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.3);transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(150,100,255,0.3);}
+.cf-emoji{font-size:42px;margin-bottom:10px;}
+.cf-nombre{font-family:'Cinzel',serif;font-size:15px;color:#c8b8ff;margin-bottom:4px;}
+.cf-palo{font-family:'Cinzel',serif;font-size:9px;color:rgba(150,100,255,0.5);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.cf-energia{font-size:13px;color:rgba(180,150,255,0.7);font-style:italic;margin-bottom:12px;line-height:1.5;}
+.cf-desc{font-size:13px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
+.btn-nueva-carta{margin-top:1.5rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Cinzel',serif;font-size:12px;cursor:pointer;letter-spacing:1px;}
+.btn-nueva-carta:hover{border-color:#8855ff;color:#c8b8ff;}
 
 /* MODAL REGISTRO */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.85);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
@@ -238,15 +257,16 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 <div id="tab-cartadia" class="tab">
   <div style="text-align:center;padding:1rem 0 1.5rem;">
     <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:1.5rem;line-height:1.6;">Dejá que tu intuición te guíe. Elegí la carta que sentís que es para vos.</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(150,120,255,0.6);font-style:italic;margin-bottom:1.5rem;animation:pulse 2s ease-in-out infinite;" id="instruccionDia">Tocá la carta que te llame...</div>
-    <div id="mesaDia" style="display:flex;justify-content:center;align-items:flex-end;min-height:200px;margin-bottom:1.5rem;position:relative;"></div>
-    <div id="cartaDiaFlip" style="display:none;perspective:800px;width:180px;margin:0 auto;">
-      <div id="cartaDiaInner" style="width:100%;padding-bottom:160%;position:relative;transform-style:preserve-3d;animation:voltear 0.9s ease forwards;">
-        <div id="cartaDiaFrente" style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;background:linear-gradient(160deg,rgba(20,10,40,0.97),rgba(35,15,70,0.97));border:1px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.25rem;text-align:center;box-shadow:0 0 30px rgba(100,50,200,0.3);"></div>
-        <div style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1px solid rgba(150,100,255,0.3);transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(150,100,255,0.3);">✦</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:8px;line-height:1.6;">Dejá que tu intuición te guíe.</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(150,120,255,0.6);font-style:italic;margin-bottom:1.5rem;animation:pulse 2s ease-in-out infinite;" id="instruccionDia">Tocá la carta que sentís que es para vos...</div>
+    <div id="mesaDia" class="mesa-cartas"></div>
+    <div class="flip-container" id="flipContainer">
+      <div class="flip-inner" id="flipInner">
+        <div class="flip-frente" id="flipFrente"></div>
+        <div class="flip-dorso">✦</div>
       </div>
     </div>
+    <button class="btn-nueva-carta" id="btnNuevaCarta" onclick="nuevaCarta()" style="display:none;">✦ Elegir otra carta</button>
   </div>
 </div>
 
@@ -549,45 +569,30 @@ setTimeout(()=>{spawnCarta('sideRight');spawnCarta('sideRight');},1200);
 <script>
 // Carta del día interactiva
 const cartasDia=[
-  {emoji:"🌙",nombre:"La Luna",palo:"Arcano Mayor",energia:"intuición y misterio",desc:"Confiá en lo que sentís aunque no puedas explicarlo con palabras.
-
-Tu intuición es más certera que cualquier lógica en este momento."},
-  {emoji:"☀️",nombre:"El Sol",palo:"Arcano Mayor",energia:"claridad y éxito",desc:"Un momento de claridad se abre ante vos.
-
-Todo lo que iniciaste con amor está por dar sus frutos."},
-  {emoji:"🦁",nombre:"La Fuerza",palo:"Arcano Mayor",energia:"coraje interior",desc:"Tu mayor fortaleza no viene de afuera.
-
-Viene de esa calma profunda que encontrás cuando te conectás con vos misma."},
-  {emoji:"✨",nombre:"La Estrella",palo:"Arcano Mayor",energia:"esperanza y guía",desc:"Después de todo lo vivido, hay una luz que te orienta.
-
-Confiá en ese brillo — es tuyo y nadie puede quitártelo."},
-  {emoji:"🌸",nombre:"La Emperatriz",palo:"Arcano Mayor",energia:"abundancia y creación",desc:"Es tiempo de florecer y de nutrir lo que amás.
-
-Tu energía creadora está en su punto más alto."},
-  {emoji:"⚖️",nombre:"La Justicia",palo:"Arcano Mayor",energia:"equilibrio y verdad",desc:"Lo que sembraste volverá a vos.
-
-Es momento de actuar con honestidad y confiar en el proceso."},
-  {emoji:"🎡",nombre:"La Rueda",palo:"Arcano Mayor",energia:"ciclos del destino",desc:"Algo está por cambiar en tu vida.
-
-Prepárate para recibir lo nuevo con los brazos abiertos."}
+  {emoji:"🌙",nombre:"La Luna",palo:"Arcano Mayor",energia:"intuición y misterio",desc:"Confiá en lo que sentís aunque no puedas explicarlo con palabras.\n\nTu intuición es más certera que cualquier lógica en este momento."},
+  {emoji:"☀️",nombre:"El Sol",palo:"Arcano Mayor",energia:"claridad y éxito",desc:"Un momento de claridad se abre ante vos.\n\nTodo lo que iniciaste con amor está por dar sus frutos."},
+  {emoji:"🦁",nombre:"La Fuerza",palo:"Arcano Mayor",energia:"coraje interior",desc:"Tu mayor fortaleza no viene de afuera.\n\nViene de esa calma profunda que encontrás cuando te conectás con vos misma."},
+  {emoji:"✨",nombre:"La Estrella",palo:"Arcano Mayor",energia:"esperanza y guía",desc:"Después de todo lo vivido, hay una luz que te orienta.\n\nConfiá en ese brillo — es tuyo y nadie puede quitártelo."},
+  {emoji:"🌸",nombre:"La Emperatriz",palo:"Arcano Mayor",energia:"abundancia y creación",desc:"Es tiempo de florecer y de nutrir lo que amás.\n\nTu energía creadora está en su punto más alto."},
+  {emoji:"⚖️",nombre:"La Justicia",palo:"Arcano Mayor",energia:"equilibrio y verdad",desc:"Lo que sembraste volverá a vos.\n\nEs momento de actuar con honestidad y confiar en el proceso."},
+  {emoji:"🎡",nombre:"La Rueda",palo:"Arcano Mayor",energia:"ciclos del destino",desc:"Algo está por cambiar en tu vida.\n\nPrepárate para recibir lo nuevo con los brazos abiertos."}
 ];
 
+const angulos=[-28,-14,-5,4,14,25,-20];
 let cartaDiaElegida=false;
 
 function crearMesaDia(){
   const mesa=document.getElementById('mesaDia');
   if(!mesa)return;
   mesa.innerHTML='';
-  const angulos=[-30,-15,0,15,30,-8,8];
-  const cartas=cartasDia.slice(0,7);
-  cartas.forEach((c,i)=>{
+  cartasDia.forEach((c,i)=>{
     const div=document.createElement('div');
-    div.style.cssText=`width:70px;height:115px;border-radius:10px;cursor:pointer;position:relative;margin:0 -6px;transition:transform 0.3s ease,box-shadow 0.3s ease;transform:rotate(${angulos[i]}deg);z-index:${i+1};display:inline-block;flex-shrink:0;`;
-    div.innerHTML=`<div style="width:100%;height:100%;border-radius:10px;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1px solid rgba(150,100,255,0.4);display:flex;align-items:center;justify-content:center;">
-      <div style="width:75%;height:75%;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(150,100,255,0.3);">✦</div>
-    </div>`;
-    div.onmouseover=()=>{if(!cartaDiaElegida)div.style.transform=`rotate(${angulos[i]}deg) translateY(-20px) scale(1.05)`;};
-    div.onmouseout=()=>{if(!cartaDiaElegida)div.style.transform=`rotate(${angulos[i]}deg)`;};
+    div.className='carta-boca-abajo';
+    div.style.transform=`rotate(${angulos[i]}deg)`;
+    div.style.zIndex=i+1;
+    div.style.marginLeft=i===0?'0':'-14px';
+    div.onmouseover=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg) translateY(-25px) scale(1.08)`;div.style.boxShadow='0 12px 30px rgba(150,100,255,0.7)';div.style.zIndex=20;}};
+    div.onmouseout=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg)`;div.style.boxShadow='';div.style.zIndex=i+1;}};
     div.onclick=()=>elegirCartaDia(c,div,angulos[i]);
     mesa.appendChild(div);
   });
@@ -597,27 +602,27 @@ function elegirCartaDia(carta,el,rot){
   if(cartaDiaElegida)return;
   cartaDiaElegida=true;
   el.style.transform=`rotate(${rot}deg) translateY(-30px) scale(1.1)`;
+  el.style.boxShadow='0 15px 40px rgba(150,100,255,0.7)';
+  el.style.zIndex=20;
   document.getElementById('instruccionDia').style.display='none';
   setTimeout(()=>{
     document.getElementById('mesaDia').style.display='none';
-    const flip=document.getElementById('cartaDiaFlip');
-    const frente=document.getElementById('cartaDiaFrente');
-    const descHtml=carta.desc.replace('
-
-','<br><br>');
+    const frente=document.getElementById('flipFrente');
+    const descHtml=carta.desc.replace(/\n\n/g,'<br><br>');
     frente.innerHTML=`
-      <div style="font-size:38px;margin-bottom:10px;">${carta.emoji}</div>
-      <div style="font-family:'Cinzel',serif;font-size:14px;color:#c8b8ff;margin-bottom:4px;">${carta.nombre}</div>
-      <div style="font-family:'Cinzel',serif;font-size:9px;color:rgba(150,100,255,0.5);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">${carta.palo}</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(180,150,255,0.7);font-style:italic;margin-bottom:10px;line-height:1.5;">${carta.energia}</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:#5a5a8a;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;">${descHtml}</div>
+      <div class="cf-emoji">${carta.emoji}</div>
+      <div class="cf-nombre">${carta.nombre}</div>
+      <div class="cf-palo">${carta.palo}</div>
+      <div class="cf-energia">${carta.energia}</div>
+      <div class="cf-desc">${descHtml}</div>
     `;
-    flip.style.display='block';
-    // Reiniciar animación
-    const inner=document.getElementById('cartaDiaInner');
+    const container=document.getElementById('flipContainer');
+    const inner=document.getElementById('flipInner');
+    container.style.display='block';
     inner.style.animation='none';
     inner.offsetHeight;
-    inner.style.animation='voltear 0.9s ease forwards';
+    inner.style.animation='voltear 1s ease forwards';
+    document.getElementById('btnNuevaCarta').style.display='inline-block';
   },500);
 }
 
