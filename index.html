@@ -117,17 +117,17 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .carta-boca-abajo{width:80px;height:130px;border-radius:10px;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.5);display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;}
 .carta-boca-abajo::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}
 .carta-boca-abajo::after{content:'✦';font-size:20px;color:rgba(150,100,255,0.35);}
-.flip-container{perspective:900px;width:170px;margin:0 auto;display:none;}
-.flip-inner{width:100%;height:270px;transform-style:preserve-3d;position:relative;animation:voltear 1s ease forwards;}
+.flip-container{perspective:900px;width:220px;margin:0 auto 1.5rem;display:none;}
+.flip-inner{width:100%;height:auto;min-height:380px;transform-style:preserve-3d;position:relative;animation:voltear 1s ease forwards;}
 .flip-frente,.flip-dorso{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;}
-.flip-frente{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(35,15,70,0.98));border:1.5px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1rem;text-align:center;box-shadow:0 0 40px rgba(100,50,200,0.3);}
+.flip-frente{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(35,15,70,0.98));border:1.5px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1rem;text-align:center;box-shadow:0 0 40px rgba(100,50,200,0.3);overflow:visible;}
 .flip-dorso{background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.3);transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(150,100,255,0.3);}
-.cf-emoji{font-size:42px;margin-bottom:10px;}
+.cf-img{width:160px;border-radius:10px;margin-bottom:10px;display:block;}
 .cf-nombre{font-family:'Cinzel',serif;font-size:15px;color:#c8b8ff;margin-bottom:4px;}
 .cf-palo{font-family:'Cinzel',serif;font-size:9px;color:rgba(150,100,255,0.5);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
 .cf-energia{font-size:13px;color:rgba(180,150,255,0.7);font-style:italic;margin-bottom:12px;line-height:1.5;}
-.cf-desc{font-size:13px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
-.btn-nueva-carta{margin-top:1.5rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Cinzel',serif;font-size:12px;cursor:pointer;letter-spacing:1px;}
+.cf-desc{font-size:12px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
+.btn-nueva-carta{margin-top:1rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Cinzel',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
 .btn-nueva-carta:hover{border-color:#8855ff;color:#c8b8ff;}
 
 /* MODAL REGISTRO */
@@ -257,11 +257,10 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 <div id="tab-cartadia" class="tab">
   <div style="text-align:center;padding:1rem 0 1.5rem;">
     <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:8px;line-height:1.6;">Dejá que tu intuición te guíe.</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(150,120,255,0.6);font-style:italic;margin-bottom:1.5rem;animation:pulse 2s ease-in-out infinite;" id="instruccionDia">Tocá la carta que sentís que es para vos...</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:8px;line-height:1.6;" id="instruccionDia">Tocá la carta que sentís que es para vos...</div>
     <div id="mesaDia" class="mesa-cartas"></div>
     <div class="flip-container" id="flipContainer">
-      <div class="flip-inner" id="flipInner">
+      <div class="flip-inner" id="flipInner" style="position:relative;height:auto;min-height:380px;">
         <div class="flip-frente" id="flipFrente"></div>
         <div class="flip-dorso">✦</div>
       </div>
@@ -614,7 +613,7 @@ function elegirCartaDia(carta,el,rot){
     const frente=document.getElementById('flipFrente');
     const descHtml=carta.desc.replace(/\n\n/g,'<br><br>');
     frente.innerHTML=`
-      <img src="${carta.img}" alt="${carta.nombre}" style="width:120px;border-radius:10px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;" onerror="this.style.display='none'">
+      <img src="${carta.img}" alt="${carta.nombre}" class="cf-img" onerror="this.style.display='none'">
       <div class="cf-nombre">${carta.nombre}</div>
       <div class="cf-palo">${carta.palo}</div>
       <div class="cf-energia">${carta.energia}</div>
