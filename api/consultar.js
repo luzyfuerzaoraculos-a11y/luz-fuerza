@@ -3,21 +3,39 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = async (req, res) => {
-  // Servir index.html en GET /
+
+  // Servir index.html para GET /
   if (req.method === "GET") {
-    const filePath = path.join(process.cwd(), "index.html");
-    const html = fs.readFileSync(filePath, "utf8");
-    res.setHeader("Content-Type", "text/html");
-    return res.status(200).send(html);
+    try {
+      const filePath = path.join(process.cwd(), "index.html");
+      const html = fs.readFileSync(filePath, "utf8");
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      return res.status(200).send(html);
+    } catch(e) {
+      return res.status(500).send("Error cargando el sitio: " + e.message);
+    }
   }
 
+  // Manejar POST /consultar
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { pregunta, cartas } = req.body;
+  const { pregunta, cartas, area } = req.body;
 
-  const prompt = `Sos la voz de Luz & Fuerza, un oráculo de tarot cuyo lema es "Tu luz interior · La fuerza que impulsa tu camino". El consultante pregunta: "${pregunta}". Las cartas que salieron son: ${cartas}. Dá una interpretación breve, cálida y poderosa de máximo 4 oraciones en español. Mencioná la luz interior y la fuerza de manera natural. Sin asteriscos ni markdown. Hablá de vos a vos directamente.`;
+  const prompt = `Sos la voz de Luz & Fuerza, un tarot que guía desde la luz interior y la fuerza que impulsa cada paso. Tu lema es "Tu luz interior · La fuerza que impulsa tu camino".
+
+El consultante consulta sobre el área de ${area || "vida"}: "${pregunta}"
+
+Las cartas que salieron son:
+${cartas}
+
+Dá una interpretación en 3 párrafos cortos:
+1. Qué revelan las cartas sobre su situación actual
+2. Qué mensaje tiene el tarot para ellas
+3. Una acción concreta o reflexión para cerrar
+
+Tono: cálido, directo, poderoso. Hablá de vos a vos. Sin asteriscos ni markdown. Máximo 120 palabras total.`;
 
   const body = JSON.stringify({
     model: "claude-haiku-4-5-20251001",
