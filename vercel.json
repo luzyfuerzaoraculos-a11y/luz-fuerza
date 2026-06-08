@@ -1,5 +1,31 @@
 {
-  "rewrites": [
-    { "source": "/consultar", "destination": "/api/consultar" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "Imagenes/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/consultar.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/consultar",
+      "dest": "/api/consultar.js"
+    },
+    {
+      "src": "/Imagenes/(.*)",
+      "dest": "/Imagenes/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    }
   ]
 }
