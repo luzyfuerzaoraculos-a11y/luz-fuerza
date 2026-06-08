@@ -410,14 +410,18 @@ function showTab(t,el){
   document.getElementById("tab-"+t).classList.add("active");
   el.classList.add("active");
   if(t==='cartadia'){
-    cartaDiaElegida=false;
-    const instruccion=document.getElementById('instruccionDia');
-    if(instruccion)instruccion.style.display='block';
-    const flip=document.getElementById('cartaDiaFlip');
-    if(flip)flip.style.display='none';
-    const mesa=document.getElementById('mesaDia');
-    if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
-    setTimeout(crearMesaDia,50);
+    setTimeout(function(){
+      if(typeof cartaDiaElegida !== 'undefined'){
+        cartaDiaElegida=false;
+      }
+      const instruccion=document.getElementById('instruccionDia');
+      if(instruccion)instruccion.style.display='block';
+      const flip=document.getElementById('flipContainer');
+      if(flip)flip.style.display='none';
+      const mesa=document.getElementById('mesaDia');
+      if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
+      if(typeof crearMesaDia==='function')crearMesaDia();
+    },100);
   }
 }
 function selArea(el,a){
@@ -624,6 +628,19 @@ function elegirCartaDia(carta,el,rot){
     inner.style.animation='voltear 1s ease forwards';
     document.getElementById('btnNuevaCarta').style.display='inline-block';
   },500);
+}
+
+function nuevaCarta(){
+  cartaDiaElegida=false;
+  const mesa=document.getElementById('mesaDia');
+  if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
+  const instruccion=document.getElementById('instruccionDia');
+  if(instruccion)instruccion.style.display='block';
+  const flip=document.getElementById('flipContainer');
+  if(flip)flip.style.display='none';
+  const btn=document.getElementById('btnNuevaCarta');
+  if(btn)btn.style.display='none';
+  crearMesaDia();
 }
 
 // Inicializar mesa manejado en showTab principal
