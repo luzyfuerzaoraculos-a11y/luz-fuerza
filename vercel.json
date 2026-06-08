@@ -1,6 +1,23 @@
 {
-  "rewrites": [
-    { "source": "/consultar", "destination": "/api/consultar" },
-    { "source": "/", "destination": "/api/consultar" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/consultar.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/consultar",
+      "dest": "/api/consultar.js"
+    },
+    {
+      "src": "/Imagenes/(.*)",
+      "dest": "/Imagenes/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ]
 }
