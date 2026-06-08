@@ -1,22 +1,6 @@
 const https = require("https");
-const fs = require("fs");
-const path = require("path");
 
 module.exports = async (req, res) => {
-
-  // Servir index.html para GET /
-  if (req.method === "GET") {
-    try {
-      const filePath = path.join(process.cwd(), "index.html");
-      const html = fs.readFileSync(filePath, "utf8");
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      return res.status(200).send(html);
-    } catch(e) {
-      return res.status(500).send("Error cargando el sitio: " + e.message);
-    }
-  }
-
-  // Manejar POST /consultar
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
