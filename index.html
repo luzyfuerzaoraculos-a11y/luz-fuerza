@@ -552,7 +552,7 @@ function showTab(t,el){
   }
 }
 async function selArea(el,a){
-  const ok = await verificarCreditos();
+  const ok = await (window.verificarCreditos ? window.verificarCreditos() : Promise.resolve(false));
   if(!ok) return;
   document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));
   el.classList.add("sel");area=a;
@@ -830,14 +830,14 @@ function nuevaCarta(){
 // SUPABASE AUTH
 const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U";
-const supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 let usuaria = null;
 let perfil = null;
 
 // Inicializar sesión al cargar
 async function initAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supa.auth.getSession();
   if (session) {
     usuaria = session.user;
     await cargarPerfil();
@@ -846,7 +846,7 @@ async function initAuth() {
 }
 
 async function cargarPerfil() {
-  const { data } = await supabase
+  const { data } = await supa
     .from('perfiles')
     .select('*')
     .eq('id', usuaria.id)
@@ -869,7 +869,7 @@ function actualizarUI() {
   }
 }
 
-async function registrarse() {
+window.registrarse = async function() {
   const nombre = document.getElementById('reg-nombre').value.trim();
   const pronombre = document.getElementById('reg-pronombre').value;
   const email = document.getElementById('reg-email').value.trim();
@@ -886,7 +886,7 @@ async function registrarse() {
     return;
   }
 
-  const { data, error } = await supabase.auth.signUp({ email, password: pass,
+  const { data, error } = await supa.auth.signUp({ email, password: pass,
     options: { data: { nombre, pronombre, fecha_nacimiento: fecha, hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais } }
   });
 
@@ -898,7 +898,7 @@ async function registrarse() {
 
   // Actualizar perfil con datos completos
   if (data.user) {
-    await supabase.from('perfiles').update({
+    await supa.from('perfiles').update({
       nombre, pronombre, fecha_nacimiento: fecha,
       hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais
     }).eq('id', data.user.id);
@@ -911,12 +911,12 @@ async function registrarse() {
   cerrarModales();
 }
 
-async function iniciarSesion() {
+window.iniciarSesion = async function() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
   const errEl = document.getElementById('login-error');
 
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+  const { data, error } = await supa.auth.signInWithPassword({ email, password: pass });
 
   if (error) {
     errEl.textContent = 'Email o contraseña incorrectos.';
@@ -930,24 +930,24 @@ async function iniciarSesion() {
   cerrarModales();
 }
 
-async function cerrarSesion() {
-  await supabase.auth.signOut();
+window.cerrarSesion = async function() {
+  await supa.auth.signOut();
   usuaria = null;
   perfil = null;
   actualizarUI();
 }
 
-function abrirModal(id) {
+window.abrirModal = function(id) {
   cerrarModales();
   const el = document.getElementById(id);
   if (el) el.classList.add('active');
 }
 
-function cerrarModales() {
+window.cerrarModales = function() {
   document.querySelectorAll('.auth-overlay, .modal-overlay').forEach(m => m.classList.remove('active'));
 }
 
-function switchModal(cerrar, abrir) {
+window.switchModal = function(cerrar, abrir) {
   cerrarModales();
   if (abrir === 'login') abrirModal('modalLogin');
   else if (abrir === 'registro') abrirModal('modalRegistro2');
@@ -961,7 +961,7 @@ document.addEventListener('click', function(e) {
 });
 
 // Verificar créditos antes de consultar
-async function verificarCreditos() {
+window.verificarCreditos = async function() {
   if (!usuaria) {
     abrirModal('modalRegistro');
     return false;
@@ -975,10 +975,10 @@ async function verificarCreditos() {
 }
 
 // Descontar crédito después de consulta
-async function descontarCredito() {
+window.descontarCredito = async function() {
   if (!usuaria || !perfil) return;
   const nuevos = Math.max(0, perfil.creditos - 1);
-  await supabase.from('perfiles').update({ creditos: nuevos }).eq('id', usuaria.id);
+  await supa.from('perfiles').update({ creditos: nuevos }).eq('id', usuaria.id);
   perfil.creditos = nuevos;
   actualizarUI();
 }
