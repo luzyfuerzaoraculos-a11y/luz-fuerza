@@ -864,12 +864,13 @@ async function initAuth() {
 }
 
 async function cargarPerfil() {
-  const { data } = await supa
+  const { data, error } = await supa
     .from('perfiles')
     .select('*')
     .eq('id', usuaria.id)
-    .single();
+    .maybeSingle();
   if (data) { perfil = data; window.perfil = data; window.usuaria = usuaria; }
+  if (error) console.log('Error perfil:', error.message);
 }
 
 function actualizarUI() {
