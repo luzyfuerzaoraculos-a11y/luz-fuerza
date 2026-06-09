@@ -789,6 +789,11 @@ async function elegirCartaDia(carta,el,rot){
     window.abrirModal('modalRegistro');
     return;
   }
+  // Cargar perfil si no está disponible
+  if(!window.perfil){
+    await cargarPerfil();
+    await new Promise(r => setTimeout(r, 500));
+  }
   if(window.perfil && window.perfil.creditos_carta <= 0){
     window.abrirModal('modalSinCreditos');
     return;
@@ -982,12 +987,17 @@ document.addEventListener('click', function(e) {
 // Verificar créditos antes de consultar
 window.verificarCreditos = async function() {
   if (!usuaria) {
-    abrirModal('modalRegistro');
+    window.abrirModal('modalRegistro');
     return false;
   }
   await cargarPerfil();
+  if (!perfil) {
+    // Perfil no cargó aún, esperar un poco más
+    await new Promise(r => setTimeout(r, 1000));
+    await cargarPerfil();
+  }
   if (!perfil || perfil.creditos <= 0) {
-    abrirModal('modalSinCreditos');
+    window.abrirModal('modalSinCreditos');
     return false;
   }
   return true;
