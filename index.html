@@ -118,20 +118,20 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .carta-boca-abajo{width:80px;height:130px;border-radius:10px;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.5);display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;}
 .carta-boca-abajo::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}
 .carta-boca-abajo::after{content:'✦';font-size:20px;color:rgba(150,100,255,0.35);}
-.flip-container{perspective:900px;width:220px;margin:0 auto 1.5rem;display:none;}
-.flip-inner{width:100%;height:auto;min-height:380px;transform-style:preserve-3d;position:relative;animation:voltear 1s ease forwards;}
+.flip-container{perspective:900px;width:240px;margin:0 auto 1rem;display:none;}
+.flip-inner{width:100%;min-height:420px;transform-style:preserve-3d;position:relative;animation:voltear 1s ease forwards;}
 .flip-frente,.flip-dorso{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;}
-.flip-frente{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(35,15,70,0.98));border:1.5px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1rem;text-align:center;box-shadow:0 0 40px rgba(100,50,200,0.3);overflow:visible;}
+.flip-frente{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(35,15,70,0.98));border:1.5px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1rem;text-align:center;box-shadow:0 0 40px rgba(100,50,200,0.3);overflow:hidden;}
 .flip-dorso{background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.3);transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(150,100,255,0.3);}
 .cf-img{width:160px;border-radius:10px;margin-bottom:10px;display:block;}
-.cf-nombre{font-family:'Cinzel',serif;font-size:15px;color:#c8b8ff;margin-bottom:4px;}
-.cf-palo{font-family:'Cinzel',serif;font-size:9px;color:rgba(150,100,255,0.5);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.cf-energia{font-size:13px;color:rgba(180,150,255,0.7);font-style:italic;margin-bottom:12px;line-height:1.5;}
+.cf-nombre{font-family:'Cinzel',serif;font-size:16px;color:#ffffff;margin-bottom:4px;}
+.cf-palo{font-family:'Cinzel',serif;font-size:9px;color:rgba(200,180,255,0.9);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.cf-energia{font-size:13px;color:rgba(220,200,255,0.95);font-style:italic;margin-bottom:12px;line-height:1.5;}
 .cf-desc{font-size:12px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
-.cf-consejo{font-size:13px;color:rgba(200,180,255,0.85);font-style:italic;line-height:1.7;margin-bottom:12px;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
+.cf-consejo{font-size:13px;color:rgba(230,215,255,0.98);font-style:italic;line-height:1.7;margin-bottom:12px;border-top:0.5px solid rgba(150,100,255,0.3);padding-top:10px;}
 .cf-bloque{margin-top:10px;text-align:left;}
-.cf-label{display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:rgba(150,100,255,0.5);text-transform:uppercase;margin-bottom:4px;}
-.cf-texto{display:block;font-size:12px;color:#b0a8cc;line-height:1.6;}
+.cf-label{display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:4px;}
+.cf-texto{display:block;font-size:12px;color:rgba(220,210,255,0.95);line-height:1.6;}
 .btn-nueva-carta{margin-top:1rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Cinzel',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
 .btn-nueva-carta:hover{border-color:#8855ff;color:#c8b8ff;}
 
@@ -309,6 +309,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
         <div class="flip-dorso">✦</div>
       </div>
     </div>
+  </div>
+  <div style="text-align:center;margin-top:1.5rem;">
     <button class="btn-nueva-carta" id="btnNuevaCarta" onclick="showTab('consulta', document.querySelector('nav button'))" style="display:none;">✦ Quiero una consulta completa</button>
   </div>
 </div>
@@ -365,12 +367,56 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 
 <div id="tab-planes" class="tab">
   <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
-  <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:rgba(150,100,255,0.5);text-transform:uppercase;margin-bottom:10px;">Consulta de tarot · 3 cartas</div>
+  
+  <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:12px;">Consulta de tarot · 3 cartas</div>
   <div class="planes">
-    <div class="plan"><div class="pbadge">Consulta</div><div class="pprecio">$3 <span>USD</span></div><ul class="pitems"><li>1 tirada completa</li><li>Interpretación personalizada</li><li>Explicación de cada carta</li></ul></div>
-    <div class="plan pop"><div class="pbadge">✦ Más elegido</div><div class="pprecio">$9 <span>USD/semana</span></div><ul class="pitems"><li>1 consulta por día</li><li>Historial de lecturas</li><li>Seguimiento del tarot</li></ul></div>
-    <div class="plan"><div class="pbadge">Mensual</div><div class="pprecio">$19 <span>USD/mes</span></div><ul class="pitems"><li>Consultas ilimitadas</li><li>Historial completo</li><li>Perfil espiritual</li></ul></div>
+    <div class="plan">
+      <div class="pbadge">Consulta</div>
+      <div class="pprecio">$3.500 <span>ARS</span></div>
+      <ul class="pitems">
+        <li>1 tirada completa</li>
+        <li>Interpretación personalizada</li>
+        <li>Explicación de cada carta</li>
+      </ul>
+      <a href="https://mpago.la/1vKGV4N" target="_blank" class="btn-mp">Pagar con MercadoPago</a>
+    </div>
+    <div class="plan pop">
+      <div class="pbadge">✦ Más elegido</div>
+      <div class="pprecio">$9.000 <span>ARS/semana</span></div>
+      <ul class="pitems">
+        <li>1 consulta por día</li>
+        <li>Historial de lecturas</li>
+        <li>Seguimiento del tarot</li>
+      </ul>
+      <a href="https://mpago.la/15ZKXAm" target="_blank" class="btn-mp btn-mp-pop">Pagar con MercadoPago</a>
+    </div>
+    <div class="plan">
+      <div class="pbadge">Mensual</div>
+      <div class="pprecio">$18.000 <span>ARS/mes</span></div>
+      <ul class="pitems">
+        <li>Consultas ilimitadas</li>
+        <li>Historial completo</li>
+        <li>Perfil espiritual</li>
+      </ul>
+      <a href="https://mpago.la/1Ro62zH" target="_blank" class="btn-mp">Pagar con MercadoPago</a>
+    </div>
   </div>
+
+  <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Consejo del día · 1 carta</div>
+  <div class="planes" style="grid-template-columns:1fr;">
+    <div class="plan">
+      <div class="pbadge">Consejo del día</div>
+      <div class="pprecio">$2.000 <span>ARS</span></div>
+      <ul class="pitems">
+        <li>1 carta de consejo diario</li>
+        <li>Mensaje personalizado</li>
+        <li>Qué hacer y qué evitar</li>
+      </ul>
+      <a href="https://mpago.la/24NsDgh" target="_blank" class="btn-mp">Pagar con MercadoPago</a>
+    </div>
+  </div>
+
+  <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(210,190,255,0.8);text-align:center;margin-top:1.5rem;font-style:italic;">Primera consulta gratis con tu registro · Cancelá cuando quieras</div>
 </div>
 
 <div id="tab-sobre" class="tab">
