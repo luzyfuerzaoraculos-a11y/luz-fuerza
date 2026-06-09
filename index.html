@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Luz & Fuerza · Tarot</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -127,8 +128,45 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .cf-palo{font-family:'Cinzel',serif;font-size:9px;color:rgba(150,100,255,0.5);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
 .cf-energia{font-size:13px;color:rgba(180,150,255,0.7);font-style:italic;margin-bottom:12px;line-height:1.5;}
 .cf-desc{font-size:12px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
+.cf-consejo{font-size:13px;color:rgba(200,180,255,0.85);font-style:italic;line-height:1.7;margin-bottom:12px;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
+.cf-bloque{margin-top:10px;text-align:left;}
+.cf-label{display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:rgba(150,100,255,0.5);text-transform:uppercase;margin-bottom:4px;}
+.cf-texto{display:block;font-size:12px;color:#8888aa;line-height:1.6;}
 .btn-nueva-carta{margin-top:1rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Cinzel',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
 .btn-nueva-carta:hover{border-color:#8855ff;color:#c8b8ff;}
+
+/* AUTH MODALES */
+.auth-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.9);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.auth-overlay.active{display:flex;}
+.auth-box{background:linear-gradient(160deg,rgba(15,8,30,0.99),rgba(25,12,50,0.99));border:1px solid rgba(150,100,255,0.4);border-radius:16px;padding:2rem;width:90%;max-width:440px;max-height:90vh;overflow-y:auto;}
+.auth-titulo{font-family:"Cinzel",serif;font-size:18px;color:#fff;letter-spacing:2px;margin-bottom:0.5rem;text-align:center;text-shadow:0 0 20px rgba(150,100,255,0.8);}
+.auth-subtitulo{font-family:"Cormorant Garamond",serif;font-size:14px;color:rgba(180,160,255,0.7);text-align:center;margin-bottom:1.5rem;line-height:1.6;}
+.auth-campo{margin-bottom:1rem;}
+.auth-label{font-family:"Cinzel",serif;font-size:10px;letter-spacing:1.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;display:block;margin-bottom:6px;}
+.auth-input{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.3);border-radius:8px;padding:10px 14px;color:#c8d0f0;font-family:"Cormorant Garamond",serif;font-size:15px;}
+.auth-input:focus{outline:none;border-color:rgba(150,100,255,0.6);}
+.auth-input::placeholder{color:rgba(100,80,150,0.5);}
+.auth-select{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.3);border-radius:8px;padding:10px 14px;color:#c8d0f0;font-family:"Cormorant Garamond",serif;font-size:15px;}
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.auth-btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Cinzel",serif;font-size:13px;cursor:pointer;letter-spacing:1px;margin-top:1rem;box-shadow:0 0 20px rgba(120,60,255,0.3);}
+.auth-btn-primary:hover{box-shadow:0 0 30px rgba(150,80,255,0.5);}
+.auth-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Cinzel",serif;font-size:11px;cursor:pointer;margin-top:8px;letter-spacing:0.5px;}
+.auth-btn-secondary:hover{border-color:rgba(150,100,255,0.6);color:#c8b8ff;}
+.auth-error{font-family:"Cormorant Garamond",serif;font-size:13px;color:rgba(255,100,100,0.8);text-align:center;margin-top:8px;display:none;}
+.auth-link{font-family:"Cormorant Garamond",serif;font-size:13px;color:rgba(150,120,255,0.6);text-align:center;margin-top:1rem;cursor:pointer;}
+.auth-link span{color:#c8b8ff;text-decoration:underline;}
+.auth-optional{font-family:"Cinzel",serif;font-size:9px;color:rgba(100,80,150,0.5);letter-spacing:1px;margin-left:6px;}
+
+/* HEADER USUARIO LOGUEADO */
+.user-bar{position:relative;z-index:2;display:none;align-items:center;gap:12px;margin-top:10px;}
+.user-bar.visible{display:flex;}
+.user-nombre{font-family:"Cinzel",serif;font-size:12px;color:rgba(200,180,255,0.8);letter-spacing:1px;}
+.user-creditos{font-family:"Cinzel",serif;font-size:11px;color:rgba(150,220,150,0.7);background:rgba(0,100,50,0.2);border:0.5px solid rgba(0,150,80,0.3);border-radius:20px;padding:3px 10px;}
+.btn-logout{font-family:"Cinzel",serif;font-size:10px;color:rgba(150,100,255,0.5);background:none;border:0.5px solid rgba(150,100,255,0.2);border-radius:20px;padding:3px 10px;cursor:pointer;letter-spacing:0.5px;}
+.btn-logout:hover{color:#c8b8ff;border-color:rgba(150,100,255,0.5);}
+
+/* MODAL SIN CRÉDITOS */
+.modal-sin-creditos{display:none;}
 
 /* MODAL REGISTRO */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.85);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
@@ -195,6 +233,11 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   </div>
   <h1>LUZ <span class="amp">&</span> FUERZA</h1>
   <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
+  <div class="user-bar" id="userBar">
+    <span class="user-nombre" id="userNombre"></span>
+    <span class="user-creditos" id="userCreditos"></span>
+    <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+  </div>
   <div style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
     <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Hacé tu pregunta y descubrí el mensaje que las cartas tienen para vos.<br>Orientación disponible cuando la necesitás.</div>
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:1.25rem;">
@@ -202,7 +245,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
       <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
       <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
     </div>
-    <button onclick="alert('Próximamente: registro')" style="font-family:'Cinzel',serif;font-size:14px;padding:14px 36px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">Crear cuenta y comenzar</button>
+    <button onclick="abrirModal('modalRegistro2')" style="font-family:'Cinzel',serif;font-size:14px;padding:14px 36px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">Crear cuenta y comenzar</button>
     <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
   </div>
 </header>
@@ -265,7 +308,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
         <div class="flip-dorso">✦</div>
       </div>
     </div>
-    <button class="btn-nueva-carta" id="btnNuevaCarta" onclick="nuevaCarta()" style="display:none;">✦ Elegir otra carta</button>
+    <button class="btn-nueva-carta" id="btnNuevaCarta" onclick="showTab('consulta', document.querySelector('nav button'))" style="display:none;">✦ Quiero una consulta completa</button>
   </div>
 </div>
 
@@ -345,6 +388,91 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
 
 <!-- MODAL REGISTRO -->
+<!-- MODAL LOGIN -->
+<div class="auth-overlay" id="modalLogin">
+  <div class="auth-box">
+    <div style="font-size:32px;text-align:center;margin-bottom:1rem;">🧭</div>
+    <div class="auth-titulo">Bienvenida de vuelta</div>
+    <div class="auth-subtitulo">Las cartas te estaban esperando.</div>
+    <div class="auth-campo">
+      <label class="auth-label">Email</label>
+      <input class="auth-input" id="login-email" type="email" placeholder="tu@email.com">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Contraseña</label>
+      <input class="auth-input" id="login-pass" type="password" placeholder="••••••••">
+    </div>
+    <div class="auth-error" id="login-error"></div>
+    <button class="auth-btn-primary" onclick="iniciarSesion()">Entrar</button>
+    <div class="auth-link" onclick="switchModal('login','registro')">¿No tenés cuenta? <span>Registrate gratis</span></div>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL NUEVO REGISTRO -->
+<div class="auth-overlay" id="modalRegistro2">
+  <div class="auth-box">
+    <div style="font-size:32px;text-align:center;margin-bottom:1rem;">🧭</div>
+    <div class="auth-titulo">Tu primera consulta es gratis</div>
+    <div class="auth-subtitulo">Creá tu cuenta y comenzá tu camino.</div>
+    <div class="auth-campo">
+      <label class="auth-label">¿Cómo queremos llamarte?</label>
+      <input class="auth-input" id="reg-nombre" type="text" placeholder="Tu nombre o apodo">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">¿Cómo te identificás?</label>
+      <select class="auth-select" id="reg-pronombre">
+        <option value="ella">Ella</option>
+        <option value="el">Él</option>
+        <option value="elle">Elle</option>
+        <option value="ninguno">Prefiero no decir</option>
+      </select>
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Email</label>
+      <input class="auth-input" id="reg-email" type="email" placeholder="tu@email.com">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Contraseña</label>
+      <input class="auth-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div class="auth-row">
+      <div class="auth-campo">
+        <label class="auth-label">Fecha de nacimiento</label>
+        <input class="auth-input" id="reg-fecha" type="date">
+      </div>
+      <div class="auth-campo">
+        <label class="auth-label">Hora <span class="auth-optional">opcional</span></label>
+        <input class="auth-input" id="reg-hora" type="time">
+      </div>
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Ciudad de nacimiento</label>
+      <input class="auth-input" id="reg-ciudad" type="text" placeholder="Ej: Buenos Aires">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">País</label>
+      <input class="auth-input" id="reg-pais" type="text" placeholder="Argentina" value="Argentina">
+    </div>
+    <div class="auth-error" id="reg-error"></div>
+    <button class="auth-btn-primary" onclick="registrarse()">Crear cuenta y comenzar</button>
+    <div class="auth-link" onclick="switchModal('registro','login')">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL SIN CREDITOS -->
+<div class="auth-overlay" id="modalSinCreditos">
+  <div class="auth-box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:1rem;">🔮</div>
+    <div class="auth-titulo">Consultas agotadas</div>
+    <div class="auth-subtitulo">Ya usaste tu consulta gratuita. Elegí un plan para seguir consultando.</div>
+    <button class="auth-btn-primary" onclick="cerrarModales();showTab('planes',document.querySelectorAll('nav button')[4])">Ver planes</button>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cerrar</button>
+  </div>
+</div>
+
+<!-- MODAL REGISTRO (viejo - ahora redirige al nuevo) -->
 <div class="modal-overlay" id="modalRegistro">
   <div class="modal-box">
     <div class="modal-brujula">🧭</div>
@@ -356,8 +484,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
       <div class="modal-check">✅ Carta del día según tu signo</div>
       <div class="modal-check">✅ Disponible las 24 horas</div>
     </div>
-    <button class="modal-btn-primary" onclick="alert('Próximamente: registro')">Crear cuenta y comenzar</button>
-    <button class="modal-btn-secondary" onclick="alert('Próximamente: login')">Ya tengo cuenta — Iniciar sesión</button>
+    <button class="modal-btn-primary" onclick="cerrarModales();abrirModal('modalRegistro2')">Crear cuenta y comenzar</button>
+    <button class="modal-btn-secondary" onclick="cerrarModales();abrirModal('modalLogin')">Ya tengo cuenta — Iniciar sesión</button>
     <div class="modal-sub">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
   </div>
 </div>
@@ -423,13 +551,9 @@ function showTab(t,el){
     },100);
   }
 }
-function selArea(el,a){
-  // Verificar si está logueada (por ahora simulamos que no)
-  const estaLogueada = false; // Esto se reemplaza con auth real en Etapa 2
-  if(!estaLogueada){
-    document.getElementById('modalRegistro').classList.add('active');
-    return;
-  }
+async function selArea(el,a){
+  const ok = await verificarCreditos();
+  if(!ok) return;
   document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));
   el.classList.add("sel");area=a;
   document.getElementById("step2").style.display="block";
@@ -572,13 +696,69 @@ setTimeout(()=>{spawnCarta('sideRight');spawnCarta('sideRight');},1200);
 <script>
 // Carta del día interactiva
 const cartasDia=[
-  {img:"Imagenes/the-moon.png",nombre:"La Luna",palo:"Arcano Mayor",energia:"intuición y misterio",desc:"Confiá en lo que sentís aunque no puedas explicarlo con palabras.\n\nTu intuición es más certera que cualquier lógica en este momento."},
-  {img:"Imagenes/the-sun.png",nombre:"El Sol",palo:"Arcano Mayor",energia:"claridad y éxito",desc:"Un momento de claridad se abre ante vos.\n\nTodo lo que iniciaste con amor está por dar sus frutos."},
-  {img:"Imagenes/strength.png",nombre:"La Fuerza",palo:"Arcano Mayor",energia:"coraje interior",desc:"Tu mayor fortaleza no viene de afuera.\n\nViene de esa calma profunda que encontrás cuando te conectás con vos misma."},
-  {img:"Imagenes/the-star.png",nombre:"La Estrella",palo:"Arcano Mayor",energia:"esperanza y guía",desc:"Después de todo lo vivido, hay una luz que te orienta.\n\nConfiá en ese brillo — es tuyo y nadie puede quitártelo."},
-  {img:"Imagenes/the-empress.png",nombre:"La Emperatriz",palo:"Arcano Mayor",energia:"abundancia y creación",desc:"Es tiempo de florecer y nutrir lo que amás.\n\nTu energía creadora está en su punto más alto."},
-  {img:"Imagenes/justice.png",nombre:"La Justicia",palo:"Arcano Mayor",energia:"equilibrio y verdad",desc:"Lo que sembraste volverá a vos.\n\nEs momento de actuar con honestidad y confiar en el proceso."},
-  {img:"Imagenes/wheel-of-fortune.png",nombre:"La Rueda de la Fortuna",palo:"Arcano Mayor",energia:"ciclos del destino",desc:"Algo está por cambiar en tu vida.\n\nPrepárate para recibir lo nuevo con los brazos abiertos."}
+  {
+    img:"Imagenes/the-moon.png",
+    nombre:"La Luna",
+    palo:"Arcano Mayor",
+    energia:"intuición y misterio",
+    consejo:"Hoy el universo te pide que confíes en lo que sentís, aunque no puedas explicarlo con palabras.",
+    accion:"Antes de tomar cualquier decisión, detenete un momento en silencio y escuchá tu primera reacción interna. Esa voz es tu guía hoy.",
+    evitar:"Evitá dejarte llevar por el miedo o la confusión. Lo que parece oscuro hoy se aclarará si no forzás las cosas."
+  },
+  {
+    img:"Imagenes/the-sun.png",
+    nombre:"El Sol",
+    palo:"Arcano Mayor",
+    energia:"claridad y éxito",
+    consejo:"Hoy es un día para brillar. La energía que tenés es magnética y atrae exactamente lo que necesitás.",
+    accion:"Avanzá con confianza en ese proyecto o conversación que venías postergando. La claridad está de tu lado.",
+    evitar:"Evitá minimizar tus logros o dudar de vos misma. Hoy no es día para la modestia excesiva."
+  },
+  {
+    img:"Imagenes/strength.png",
+    nombre:"La Fuerza",
+    palo:"Arcano Mayor",
+    energia:"coraje interior",
+    consejo:"Tu mayor poder hoy no está en la fuerza bruta sino en la calma. La paciencia y la compasión son tus armas más poderosas.",
+    accion:"Frente a cualquier conflicto o desafío, respirá hondo antes de reaccionar. La respuesta suave siempre gana.",
+    evitar:"Evitá las confrontaciones directas o impulsivas. No necesitás demostrar nada a nadie hoy."
+  },
+  {
+    img:"Imagenes/the-star.png",
+    nombre:"La Estrella",
+    palo:"Arcano Mayor",
+    energia:"esperanza y guía",
+    consejo:"Después de todo lo que atravesaste, hay una luz que te orienta. Hoy es día de renovar la esperanza.",
+    accion:"Escribí o pensá en una cosa concreta que te genera ilusión para el futuro. Ese deseo tiene más poder del que creés.",
+    evitar:"Evitá el cinismo o la resignación. La esperanza no es ingenuidad — es una fuerza real que mueve cosas."
+  },
+  {
+    img:"Imagenes/the-empress.png",
+    nombre:"La Emperatriz",
+    palo:"Arcano Mayor",
+    energia:"abundancia y creación",
+    consejo:"Hoy tu energía creadora está en su punto más alto. Todo lo que nutras con amor crecerá.",
+    accion:"Dedicá tiempo a algo que te nutra — cocinar, crear, cuidar tu cuerpo o tu espacio. La abundancia empieza por vos.",
+    evitar:"Evitá el agotamiento por dar a otros lo que no te estás dando a vos misma primero."
+  },
+  {
+    img:"Imagenes/justice.png",
+    nombre:"La Justicia",
+    palo:"Arcano Mayor",
+    energia:"equilibrio y verdad",
+    consejo:"Hoy el universo te pide honestidad — con vos misma y con los demás. Las cosas están por equilibrarse.",
+    accion:"Si hay algo pendiente que sabés que debés resolver o decir, hoy es el día. La verdad dicha con calma siempre libera.",
+    evitar:"Evitá las medias verdades o las decisiones tomadas por conveniencia. Lo que siembres hoy, lo cosecharás pronto."
+  },
+  {
+    img:"Imagenes/wheel-of-fortune.png",
+    nombre:"La Rueda de la Fortuna",
+    palo:"Arcano Mayor",
+    energia:"ciclos del destino",
+    consejo:"Algo está por cambiar en tu vida. No es casualidad — es el ciclo natural moviéndose a tu favor.",
+    accion:"Soltá el control de cómo tienen que ser las cosas y abrí los brazos a lo nuevo. El cambio que viene es necesario.",
+    evitar:"Evitá resistirte a los cambios o aferrarte a lo que ya fue. La rueda siempre gira hacia adelante."
+  }
 ];
 
 const angulos=[-28,-14,-5,4,14,25,-20];
@@ -611,13 +791,15 @@ function elegirCartaDia(carta,el,rot){
   setTimeout(()=>{
     document.getElementById('mesaDia').style.display='none';
     const frente=document.getElementById('flipFrente');
-    const descHtml=carta.desc.replace(/\n\n/g,'<br><br>');
+    // descHtml no se usa en carta del día
     frente.innerHTML=`
       <img src="${carta.img}" alt="${carta.nombre}" class="cf-img" onerror="this.style.display='none'">
       <div class="cf-nombre">${carta.nombre}</div>
       <div class="cf-palo">${carta.palo}</div>
       <div class="cf-energia">${carta.energia}</div>
-      <div class="cf-desc">${descHtml}</div>
+      <div class="cf-consejo">${carta.consejo}</div>
+      <div class="cf-bloque"><span class="cf-label">Tu acción de hoy</span><span class="cf-texto">${carta.accion}</span></div>
+      <div class="cf-bloque"><span class="cf-label">Qué evitar</span><span class="cf-texto">${carta.evitar}</span></div>
     `;
     const container=document.getElementById('flipContainer');
     const inner=document.getElementById('flipInner');
@@ -644,6 +826,167 @@ function nuevaCarta(){
 
 // Inicializar mesa manejado en showTab principal
 </script>
+<script>
+// SUPABASE AUTH
+const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U";
+const supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let usuaria = null;
+let perfil = null;
+
+// Inicializar sesión al cargar
+async function initAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    usuaria = session.user;
+    await cargarPerfil();
+  }
+  actualizarUI();
+}
+
+async function cargarPerfil() {
+  const { data } = await supabase
+    .from('perfiles')
+    .select('*')
+    .eq('id', usuaria.id)
+    .single();
+  if (data) perfil = data;
+}
+
+function actualizarUI() {
+  const userBar = document.getElementById('userBar');
+  const ctaBox = document.querySelector('.cta-box');
+  if (usuaria && perfil) {
+    userBar.classList.add('visible');
+    document.getElementById('userNombre').textContent = perfil.nombre;
+    const credText = perfil.creditos > 0 ? perfil.creditos + ' consulta' + (perfil.creditos !== 1 ? 's' : '') : 'Sin créditos';
+    document.getElementById('userCreditos').textContent = credText;
+    if (ctaBox) ctaBox.style.display = 'none';
+  } else {
+    userBar.classList.remove('visible');
+    if (ctaBox) ctaBox.style.display = 'block';
+  }
+}
+
+async function registrarse() {
+  const nombre = document.getElementById('reg-nombre').value.trim();
+  const pronombre = document.getElementById('reg-pronombre').value;
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  const fecha = document.getElementById('reg-fecha').value;
+  const hora = document.getElementById('reg-hora').value || null;
+  const ciudad = document.getElementById('reg-ciudad').value.trim();
+  const pais = document.getElementById('reg-pais').value.trim() || 'Argentina';
+  const errEl = document.getElementById('reg-error');
+
+  if (!nombre || !email || !pass || !fecha || !ciudad) {
+    errEl.textContent = 'Por favor completá todos los campos requeridos.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const { data, error } = await supabase.auth.signUp({ email, password: pass,
+    options: { data: { nombre, pronombre, fecha_nacimiento: fecha, hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais } }
+  });
+
+  if (error) {
+    errEl.textContent = error.message === 'User already registered' ? 'Ya existe una cuenta con ese email.' : 'Error: ' + error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Actualizar perfil con datos completos
+  if (data.user) {
+    await supabase.from('perfiles').update({
+      nombre, pronombre, fecha_nacimiento: fecha,
+      hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais
+    }).eq('id', data.user.id);
+
+    usuaria = data.user;
+    await cargarPerfil();
+    actualizarUI();
+  }
+
+  cerrarModales();
+}
+
+async function iniciarSesion() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+
+  if (error) {
+    errEl.textContent = 'Email o contraseña incorrectos.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  usuaria = data.user;
+  await cargarPerfil();
+  actualizarUI();
+  cerrarModales();
+}
+
+async function cerrarSesion() {
+  await supabase.auth.signOut();
+  usuaria = null;
+  perfil = null;
+  actualizarUI();
+}
+
+function abrirModal(id) {
+  cerrarModales();
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+function cerrarModales() {
+  document.querySelectorAll('.auth-overlay, .modal-overlay').forEach(m => m.classList.remove('active'));
+}
+
+function switchModal(cerrar, abrir) {
+  cerrarModales();
+  if (abrir === 'login') abrirModal('modalLogin');
+  else if (abrir === 'registro') abrirModal('modalRegistro2');
+}
+
+// Cerrar modales al hacer clic afuera
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('auth-overlay') || e.target.classList.contains('modal-overlay')) {
+    cerrarModales();
+  }
+});
+
+// Verificar créditos antes de consultar
+async function verificarCreditos() {
+  if (!usuaria) {
+    abrirModal('modalRegistro');
+    return false;
+  }
+  await cargarPerfil();
+  if (!perfil || perfil.creditos <= 0) {
+    abrirModal('modalSinCreditos');
+    return false;
+  }
+  return true;
+}
+
+// Descontar crédito después de consulta
+async function descontarCredito() {
+  if (!usuaria || !perfil) return;
+  const nuevos = Math.max(0, perfil.creditos - 1);
+  await supabase.from('perfiles').update({ creditos: nuevos }).eq('id', usuaria.id);
+  perfil.creditos = nuevos;
+  actualizarUI();
+}
+
+// Inicializar al cargar
+window.addEventListener('load', initAuth);
+</script>
+
 <script>
 // Canvas de estrellas orgánicas
 (function(){
