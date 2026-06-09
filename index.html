@@ -140,10 +140,10 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .auth-overlay.active{display:flex;}
 .auth-box{background:linear-gradient(160deg,rgba(15,8,30,0.99),rgba(25,12,50,0.99));border:1px solid rgba(150,100,255,0.4);border-radius:16px;padding:2rem;width:90%;max-width:440px;max-height:90vh;overflow-y:auto;}
 .auth-titulo{font-family:"Cinzel",serif;font-size:18px;color:#fff;letter-spacing:2px;margin-bottom:0.5rem;text-align:center;text-shadow:0 0 20px rgba(150,100,255,0.8);}
-.auth-subtitulo{font-family:"Cormorant Garamond",serif;font-size:14px;color:rgba(180,160,255,0.7);text-align:center;margin-bottom:1.5rem;line-height:1.6;}
+.auth-subtitulo{font-family:"Cormorant Garamond",serif;font-size:15px;color:rgba(210,190,255,0.9);text-align:center;margin-bottom:1.5rem;line-height:1.6;}
 .auth-campo{margin-bottom:1rem;}
-.auth-label{font-family:"Cinzel",serif;font-size:10px;letter-spacing:1.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;display:block;margin-bottom:6px;}
-.auth-input{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.3);border-radius:8px;padding:10px 14px;color:#c8d0f0;font-family:"Cormorant Garamond",serif;font-size:15px;}
+.auth-label{font-family:"Cinzel",serif;font-size:10px;letter-spacing:1.5px;color:rgba(200,170,255,0.9);text-transform:uppercase;display:block;margin-bottom:6px;}
+.auth-input{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.4);border-radius:8px;padding:10px 14px;color:#e8e0ff;font-family:"Cormorant Garamond",serif;font-size:15px;}
 .auth-input:focus{outline:none;border-color:rgba(150,100,255,0.6);}
 .auth-input::placeholder{color:rgba(100,80,150,0.5);}
 .auth-select{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.3);border-radius:8px;padding:10px 14px;color:#c8d0f0;font-family:"Cormorant Garamond",serif;font-size:15px;}
@@ -364,6 +364,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 
 <div id="tab-planes" class="tab">
   <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
+  <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:rgba(150,100,255,0.5);text-transform:uppercase;margin-bottom:10px;">Consulta de tarot · 3 cartas</div>
   <div class="planes">
     <div class="plan"><div class="pbadge">Consulta</div><div class="pprecio">$3 <span>USD</span></div><ul class="pitems"><li>1 tirada completa</li><li>Interpretación personalizada</li><li>Explicación de cada carta</li></ul></div>
     <div class="plan pop"><div class="pbadge">✦ Más elegido</div><div class="pprecio">$9 <span>USD/semana</span></div><ul class="pitems"><li>1 consulta por día</li><li>Historial de lecturas</li><li>Seguimiento del tarot</li></ul></div>
@@ -416,7 +417,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <div class="auth-titulo">Tu primera consulta es gratis</div>
     <div class="auth-subtitulo">Creá tu cuenta y comenzá tu camino.</div>
     <div class="auth-campo">
-      <label class="auth-label">¿Cómo queremos llamarte?</label>
+      <label class="auth-label">¿Cómo querés que te llamemos?</label>
       <input class="auth-input" id="reg-nombre" type="text" placeholder="Tu nombre o apodo">
     </div>
     <div class="auth-campo">
@@ -781,8 +782,17 @@ function crearMesaDia(){
   });
 }
 
-function elegirCartaDia(carta,el,rot){
+async function elegirCartaDia(carta,el,rot){
   if(cartaDiaElegida)return;
+  // Verificar login y créditos de carta del día
+  if(!window.usuaria){
+    window.abrirModal('modalRegistro');
+    return;
+  }
+  if(window.perfil && window.perfil.creditos_carta <= 0){
+    window.abrirModal('modalSinCreditos');
+    return;
+  }
   cartaDiaElegida=true;
   el.style.transform=`rotate(${rot}deg) translateY(-30px) scale(1.1)`;
   el.style.boxShadow='0 15px 40px rgba(150,100,255,0.7)';
@@ -808,6 +818,12 @@ function elegirCartaDia(carta,el,rot){
     inner.offsetHeight;
     inner.style.animation='voltear 1s ease forwards';
     document.getElementById('btnNuevaCarta').style.display='inline-block';
+    // Descontar crédito carta del día
+    if(window.perfil && window.perfil.creditos_carta > 0){
+      const nuevos = window.perfil.creditos_carta - 1;
+      supa.from('perfiles').update({creditos_carta: nuevos}).eq('id', window.usuaria.id);
+      window.perfil.creditos_carta = nuevos;
+    }
   },500);
 }
 
@@ -832,6 +848,8 @@ const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U";
 const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
+window.usuaria = null;
+window.perfil = null;
 let usuaria = null;
 let perfil = null;
 
@@ -851,7 +869,7 @@ async function cargarPerfil() {
     .select('*')
     .eq('id', usuaria.id)
     .single();
-  if (data) perfil = data;
+  if (data) { perfil = data; window.perfil = data; window.usuaria = usuaria; }
 }
 
 function actualizarUI() {
