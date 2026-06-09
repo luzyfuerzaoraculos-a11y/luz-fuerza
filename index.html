@@ -58,7 +58,7 @@ main{max-width:700px;margin:0 auto;padding:2rem 1.5rem;background:rgba(10,14,26,
 .chip-icon{font-size:36px;transition:transform 0.25s ease;line-height:1;}
 .chip-card:hover .chip-icon,.chip-card.sel .chip-icon{transform:scale(1.2);}
 .chip-label{font-size:12px;color:#7bafd4;letter-spacing:0.5px;font-family:Georgia,serif;}
-.chip-card.sel .chip-label{color:#c8d8f0;}
+.chip-card.sel .chip-label{color:#ffffff;}
 
 textarea{width:100%;background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:16px;color:#c8d8f0;font-size:15px;resize:none;line-height:1.7;font-family:Georgia,serif;}
 textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4a6fa5;}
@@ -75,7 +75,7 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 .cartas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
 .carta{background:rgba(15,22,40,0.85);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem 0.75rem;text-align:center;}
 .cpos{font-size:10px;letter-spacing:2px;color:#2e4060;text-transform:uppercase;margin-bottom:10px;}
-.cemoji{font-size:30px;margin-bottom:8px;}.cnombre{font-size:13px;color:#c8d8f0;margin-bottom:4px;}
+.cemoji{font-size:30px;margin-bottom:8px;}.cnombre{font-size:13px;color:#e8e0ff;margin-bottom:4px;}
 .cpalo{font-size:10px;color:#2e4060;margin-bottom:6px;letter-spacing:1px;}
 .cenergia{font-size:11px;color:#4a6fa5;font-style:italic;margin-bottom:10px;line-height:1.4;}
 .cdesc{font-size:12px;color:#5a7aaa;line-height:1.6;border-top:0.5px solid #1e2a45;padding-top:10px;}
@@ -131,7 +131,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .cf-consejo{font-size:13px;color:rgba(200,180,255,0.85);font-style:italic;line-height:1.7;margin-bottom:12px;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
 .cf-bloque{margin-top:10px;text-align:left;}
 .cf-label{display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:rgba(150,100,255,0.5);text-transform:uppercase;margin-bottom:4px;}
-.cf-texto{display:block;font-size:12px;color:#8888aa;line-height:1.6;}
+.cf-texto{display:block;font-size:12px;color:#b0a8cc;line-height:1.6;}
 .btn-nueva-carta{margin-top:1rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Cinzel',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
 .btn-nueva-carta:hover{border-color:#8855ff;color:#c8b8ff;}
 
@@ -292,6 +292,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <div class="slabel"><div class="snum">3</div>Tu tirada</div>
     <div class="cartas" id="cartas"></div>
     <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div>Interpretación</div>
+    <div id="preguntaMostrada" style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(180,160,255,0.7);font-style:italic;margin-bottom:10px;padding:10px 14px;background:rgba(150,100,255,0.08);border-radius:8px;border-left:2px solid rgba(150,100,255,0.3);display:none;"></div>
     <div class="interp loading" id="interp">El tarot está leyendo las cartas...</div>
     <button class="btn" onclick="reset()">✦ Nueva consulta</button>
   </div>
@@ -574,6 +575,8 @@ async function revelar(){
   const rp=document.getElementById("respProf").value.trim();
   const ctx=rp?preg+". Contexto adicional: "+rp:preg;
   document.getElementById("step1").style.display="none";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="block";
+  const pMostrada=document.getElementById("preguntaMostrada");
+  if(pMostrada){pMostrada.textContent='"'+preg+'"';pMostrada.style.display="block";}
   const tres=[...mazo].sort(()=>Math.random()-.5).slice(0,3);
   document.getElementById("cartas").innerHTML=tres.map((c,i)=>`<div class="carta"><div class="cpos">${posiciones[i].nombre}</div><img src="${c.img}" alt="${c.nombre}" style="width:100%;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display='none'"><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div></div>`).join("");
   const interpDiv=document.getElementById("interp");interpDiv.classList.add("loading");interpDiv.textContent="El tarot está leyendo las cartas...";
