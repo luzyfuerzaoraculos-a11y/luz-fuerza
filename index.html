@@ -1259,18 +1259,22 @@ window.descontarCredito = async function() {
 // Inicializar al cargar
 window.addEventListener('load', async function(){
   // Escuchar cambios de auth - detecta cuando Supabase procesa el token de recovery
+  let modoRecovery = false;
+
   supa.auth.onAuthStateChange(async (event, session) => {
     if(event === 'PASSWORD_RECOVERY'){
-      // Supabase detectó el token de recovery
+      modoRecovery = true;
       usuaria = session.user;
       window.usuaria = session.user;
+      // NO cargar perfil ni actualizar UI - solo mostrar formulario de nueva clave
       document.getElementById('modalNuevaClave').classList.add('active');
-    } else if(event === 'SIGNED_IN' && session){
+    } else if(event === 'SIGNED_IN' && session && !modoRecovery){
       usuaria = session.user;
       window.usuaria = session.user;
       await cargarPerfil();
       actualizarUI();
     } else if(event === 'SIGNED_OUT'){
+      modoRecovery = false;
       usuaria = null; perfil = null;
       window.usuaria = null; window.perfil = null;
       actualizarUI();
