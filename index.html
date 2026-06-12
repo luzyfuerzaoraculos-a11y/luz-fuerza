@@ -1168,7 +1168,7 @@ async function olvidoPassword(){
     return;
   }
   const { error } = await supa.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://luz-fuerza.pages.dev'
+    redirectTo: 'https://luz-fuerza.pages.dev/reset.html'
   });
   if(error){
     errEl.textContent = 'Error al enviar el email.';
