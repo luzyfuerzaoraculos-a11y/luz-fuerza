@@ -272,6 +272,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <button onclick="showTab('historia',this)">Historia y poder</button>
   <button onclick="showTab('planes',this)">Planes</button>
   <button onclick="showTab('sobre',this)">Nosotras</button>
+  <button onclick="showTab('contacto',this)">Contacto</button>
 </nav>
 
 <div class="page-layout">
@@ -292,6 +293,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     </div>
   </div>
   <div id="step2" style="display:none;">
+    <button onclick="document.getElementById('step2').style.display='none';document.getElementById('step1').style.display='block';" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver al área</button>
     <div class="slabel"><div class="snum">2</div>Tu pregunta</div>
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
@@ -304,6 +306,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <button class="btn" id="btnRevelar" onclick="revelar()" disabled>✦ Revelar las cartas</button>
   </div>
   <div id="step3" style="display:none;">
+    <button onclick="document.getElementById('step3').style.display='none';document.getElementById('step2').style.display='block';" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
     <div class="slabel"><div class="snum">3</div>Tu tirada</div>
     <div class="cartas" id="cartas"></div>
     <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div>Interpretación</div>
@@ -443,6 +446,27 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   </div>
 </div>
 
+<div id="tab-contacto" class="tab">
+  <div class="slabel"><div class="snum">✦</div>Contacto</div>
+  <div class="hint" style="margin-bottom:1.5rem;">¿Tenés alguna consulta o problema con el sitio? Escribinos.</div>
+  <div style="background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:2rem;max-width:500px;margin:0 auto;text-align:center;">
+    <div style="font-size:40px;margin-bottom:1rem;">🧭</div>
+    <div style="font-family:'Marcellus',serif;font-size:16px;color:#fff;margin-bottom:1rem;">Estamos para ayudarte</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.9);line-height:1.7;margin-bottom:1.5rem;">
+      Si tenés dudas sobre tu cuenta, un pago o el funcionamiento del sitio, escribinos por email o por WhatsApp.
+    </div>
+    <a href="mailto:contacto@tarotluzyfuerza.com.ar" style="display:block;padding:12px 24px;background:rgba(100,60,180,0.3);border:1px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(220,200,255,0.9);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;margin-bottom:12px;">
+      ✉ contacto@tarotluzyfuerza.com.ar
+    </a>
+    <a href="https://wa.me/5491100000000" target="_blank" style="display:block;padding:12px 24px;background:rgba(0,100,50,0.2);border:1px solid rgba(0,180,80,0.3);border-radius:30px;color:rgba(0,220,100,0.8);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;">
+      💬 Escribinos por WhatsApp
+    </a>
+    <div style="font-family:'Montserrat',sans-serif;font-size:11px;color:rgba(150,120,255,0.4);margin-top:1.5rem;font-style:italic;">Respondemos en menos de 24 horas</div>
+  </div>
+</div>
+
+</div>
+
 </main>
 <div class="side" id="sideRight"></div>
 </div>
@@ -480,6 +504,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     </div>
     <div class="auth-error" id="login-error"></div>
     <button class="auth-btn-primary" onclick="iniciarSesion()">Entrar</button>
+    <div class="auth-link" onclick="olvidoPassword()" style="margin-top:6px;font-size:12px;color:rgba(180,160,255,0.6);">¿Olvidaste tu contraseña? <span>Recuperar</span></div>
     <div class="auth-link" onclick="switchModal('login','registro')">¿No tenés cuenta? <span>Registrate gratis</span></div>
     <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
   </div>
@@ -527,7 +552,38 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     </div>
     <div class="auth-campo">
       <label class="auth-label">Ciudad de nacimiento</label>
-      <input class="auth-input" id="reg-ciudad" type="text" placeholder="Ej: Buenos Aires">
+      <input class="auth-input" id="reg-ciudad" type="text" placeholder="Ej: Mar del Plata">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Provincia <span class="auth-optional">opcional</span></label>
+      <select class="auth-select" id="reg-provincia">
+        <option value="">Seleccioná tu provincia</option>
+        <option>Buenos Aires</option>
+        <option>CABA</option>
+        <option>Catamarca</option>
+        <option>Chaco</option>
+        <option>Chubut</option>
+        <option>Córdoba</option>
+        <option>Corrientes</option>
+        <option>Entre Ríos</option>
+        <option>Formosa</option>
+        <option>Jujuy</option>
+        <option>La Pampa</option>
+        <option>La Rioja</option>
+        <option>Mendoza</option>
+        <option>Misiones</option>
+        <option>Neuquén</option>
+        <option>Río Negro</option>
+        <option>Salta</option>
+        <option>San Juan</option>
+        <option>San Luis</option>
+        <option>Santa Cruz</option>
+        <option>Santa Fe</option>
+        <option>Santiago del Estero</option>
+        <option>Tierra del Fuego</option>
+        <option>Tucumán</option>
+        <option>Otro país</option>
+      </select>
     </div>
     <div class="auth-campo">
       <label class="auth-label">País</label>
@@ -1032,6 +1088,27 @@ window.iniciarSesion = async function() {
   await cargarPerfil();
   actualizarUI();
   cerrarModales();
+}
+
+async function olvidoPassword(){
+  const email = document.getElementById('login-email').value.trim();
+  const errEl = document.getElementById('login-error');
+  if(!email){
+    errEl.textContent = 'Ingresá tu email primero.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const { error } = await supa.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://tarotluzyfuerza.com.ar'
+  });
+  if(error){
+    errEl.textContent = 'Error al enviar el email.';
+    errEl.style.display = 'block';
+  } else {
+    errEl.style.color = 'rgba(100,220,100,0.8)';
+    errEl.textContent = 'Te enviamos un email para recuperar tu contraseña.';
+    errEl.style.display = 'block';
+  }
 }
 
 function cerrarBienvenida(){
