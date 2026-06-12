@@ -1099,7 +1099,7 @@ async function olvidoPassword(){
     return;
   }
   const { error } = await supa.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://tarotluzyfuerza.com.ar'
+    redirectTo: 'https://luz-fuerza.pages.dev'
   });
   if(error){
     errEl.textContent = 'Error al enviar el email.';
