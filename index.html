@@ -1218,28 +1218,24 @@ window.descontarCredito = async function() {
 
 // Inicializar al cargar
 window.addEventListener('load', async function(){
-  // Detectar si hay token de recovery en la URL (hash)
-  const hash = window.location.hash;
-  if(hash.includes('type=recovery') || hash.includes('access_token')){
-    // Supabase maneja el token automáticamente
-    const { data: { session } } = await supa.auth.getSession();
-    if(session){
+  // Escuchar cambios de auth - detecta cuando Supabase procesa el token de recovery
+  supa.auth.onAuthStateChange(async (event, session) => {
+    if(event === 'PASSWORD_RECOVERY'){
+      // Supabase detectó el token de recovery
       usuaria = session.user;
       window.usuaria = session.user;
       document.getElementById('modalNuevaClave').classList.add('active');
-      return;
+    } else if(event === 'SIGNED_IN' && session){
+      usuaria = session.user;
+      window.usuaria = session.user;
+      await cargarPerfil();
+      actualizarUI();
+    } else if(event === 'SIGNED_OUT'){
+      usuaria = null; perfil = null;
+      window.usuaria = null; window.perfil = null;
+      actualizarUI();
     }
-  }
-  // También detectar error en hash
-  if(hash.includes('error=access_denied')){
-    // Token expirado - mostrar login con mensaje
-    setTimeout(()=>{
-      window.abrirModal('modalLogin');
-      const errEl = document.getElementById('login-error');
-      if(errEl){ errEl.textContent='El link expiró. Pedí uno nuevo desde el login.'; errEl.style.display='block'; }
-    }, 500);
-    return;
-  }
+  });
   initAuth();
 });
 
