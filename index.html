@@ -114,9 +114,9 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 @keyframes voltear{0%{transform:rotateY(180deg);}100%{transform:rotateY(0deg);}}
 
 /* CARTA DEL DIA */
-.mesa-cartas{display:flex;justify-content:center;align-items:flex-end;min-height:200px;padding:1rem 1rem 2rem;flex-wrap:nowrap;overflow:visible;position:relative;}
+.mesa-cartas{display:flex;justify-content:center;align-items:flex-end;min-height:160px;padding:2rem 1rem 1.5rem;flex-wrap:nowrap;overflow:visible;}
 @media(max-width:480px){.carta-boca-abajo{width:55px;height:90px;}.carta-boca-abajo::after{font-size:14px;}}
-.carta-boca-abajo{width:70px;height:115px;border-radius:10px;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.5);display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;}
+.carta-boca-abajo::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}.carta-boca-abajo::after{content:"✦";font-size:18px;color:rgba(150,100,255,0.35);}
 .carta-boca-abajo::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}
 .carta-boca-abajo::after{content:'✦';font-size:20px;color:rgba(150,100,255,0.35);}
 .flip-container{perspective:900px;width:100%;max-width:320px;margin:0 auto 1rem;display:none;}
@@ -937,10 +937,18 @@ function crearMesaDia(){
   cartasDia.forEach((c,i)=>{
     const div=document.createElement('div');
     div.className='carta-boca-abajo';
-    div.style.transform=`rotate(${angulos[i]}deg)`;
-    div.style.zIndex=i+1;
-    div.style.marginLeft=i===0?'0':'-18px';
-    div.style.flexShrink='0';
+    div.style.cssText=`
+      width:65px;height:105px;border-radius:10px;cursor:pointer;
+      background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);
+      border:1.5px solid rgba(150,100,255,0.5);
+      display:inline-flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+      transform:rotate(${angulos[i]}deg);
+      z-index:${i+1};
+      margin-left:${i===0?'0':'-14px'};
+      transition:transform 0.3s ease;
+      vertical-align:bottom;
+    `;
     div.onmouseover=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg) translateY(-25px) scale(1.08)`;div.style.boxShadow='0 12px 30px rgba(150,100,255,0.7)';div.style.zIndex=20;}};
     div.onmouseout=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg)`;div.style.boxShadow='';div.style.zIndex=i+1;}};
     div.onclick=()=>elegirCartaDia(c,div,angulos[i]);
