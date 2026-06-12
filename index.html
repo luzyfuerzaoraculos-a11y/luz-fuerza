@@ -101,8 +101,8 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0.5px solid #1e2a45;font-size:11px;color:#1e2a45;letter-spacing:1px;position:relative;z-index:1;}
 
 /* LAYOUT CON COSTADOS */
-.page-layout{display:grid;grid-template-columns:1fr minmax(0,700px) 1fr;min-height:70vh;}
-.side{position:relative;overflow:hidden;background:transparent;}
+
+
 .carta-float{position:absolute;width:65px;height:105px;border:1px solid rgba(255,180,50,0.2);border-radius:8px;background:rgba(255,150,0,0.03);animation:cartaFlota linear infinite;pointer-events:none;}
 .carta-float::before{content:'';position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:0.5px solid rgba(255,180,50,0.1);border-radius:4px;}
 @keyframes cartaFlota{0%{opacity:0;transform:translateY(30px) rotate(var(--r));}15%{opacity:0.9;}75%{opacity:0.5;}100%{opacity:0;transform:translateY(-80px) rotate(calc(var(--r)+6deg));}}
@@ -279,8 +279,6 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <button onclick="showTab('contacto',this)">Contacto</button>
 </nav>
 
-<div class="page-layout">
-<div class="side" id="sideLeft"></div>
 <main style="position:relative;z-index:2;">
 
 <div id="tab-consulta" class="tab active">
@@ -471,8 +469,6 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 </div>
 
 </main>
-<div class="side" id="sideRight"></div>
-</div>
 
 
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
@@ -856,8 +852,7 @@ function spawnCarta(sideId){
   setTimeout(()=>spawnCarta(sideId),3500+Math.random()*3000);
 }
 
-setTimeout(()=>{spawnCarta('sideLeft');spawnCarta('sideLeft');},500);
-setTimeout(()=>{spawnCarta('sideRight');spawnCarta('sideRight');},1200);
+
 </script>
 <script>
 // Carta del día interactiva
