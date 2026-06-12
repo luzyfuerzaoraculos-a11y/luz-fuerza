@@ -45,7 +45,7 @@ nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(8,4,20,0.
 nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(220,200,255,0.9);font-size:12px;font-family:"Marcellus",serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
 nav button.active{color:#ffffff;border-bottom:2px solid #cc99ff;}
 
-main{max-width:700px;margin:0 auto;padding:2rem 1.5rem;background:rgba(10,14,26,0.85);min-height:60vh;position:relative;z-index:1;backdrop-filter:blur(8px);}
+main{max-width:700px;margin:0 auto;padding:1rem 1.5rem;background:rgba(10,14,26,0.85);min-height:60vh;position:relative;z-index:1;backdrop-filter:blur(8px);}
 .tab{display:none;}.tab.active{display:block;}
 
 .slabel{font-size:11px;letter-spacing:2.5px;color:#4a6fa5;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
@@ -320,7 +320,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 </div>
 
 <div id="tab-cartadia" class="tab">
-  <div style="text-align:center;padding:1rem 0 1.5rem;overflow:visible;">
+  <div style="text-align:center;padding:0.5rem 0 0;overflow:visible;">
     <div style="font-family:'Marcellus',serif;font-size:11px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
     <div style="font-family:'Montserrat',sans-serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:8px;line-height:1.6;" id="instruccionDia">Tocá la carta que sentís que es para vos...</div>
     <div id="mesaDia" class="mesa-cartas"></div>
@@ -695,6 +695,7 @@ const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aq
 let area="";
 
 function showTab(t,el){
+  window.scrollTo(0,0);
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   document.getElementById("tab-"+t).classList.add("active");
