@@ -997,6 +997,8 @@ async function elegirCartaDia(carta,el,rot){
       const nuevos = window.perfil.creditos_carta - 1;
       supa.from('perfiles').update({creditos_carta: nuevos}).eq('id', window.usuaria.id);
       window.perfil.creditos_carta = nuevos;
+      perfil = window.perfil;
+      actualizarUI();
     }
   },500);
 }
