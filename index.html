@@ -173,6 +173,10 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 /* MODAL SIN CRÉDITOS */
 .modal-sin-creditos{display:none;}
 
+/* MODAL NUEVA CONTRASEÑA */
+.reset-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.9);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.reset-overlay.active{display:flex;}
+
 /* POPUP BIENVENIDA */
 .bienvenida-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.85);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
 .bienvenida-overlay.active{display:flex;}
@@ -473,6 +477,31 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 
 
 <footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
+
+<!-- MODAL NUEVA CONTRASEÑA -->
+<div class="reset-overlay" id="modalNuevaClave">
+  <div class="auth-box">
+    <div style="font-size:32px;text-align:center;margin-bottom:1rem;">🔐</div>
+    <div class="auth-titulo">Nueva contraseña</div>
+    <div class="auth-subtitulo">Elegí tu nueva contraseña para ingresar al sitio.</div>
+    <div class="auth-campo">
+      <label class="auth-label">Nueva contraseña</label>
+      <div class="pass-wrap">
+        <input class="auth-input" id="nueva-pass" type="password" placeholder="Mínimo 6 caracteres">
+        <button class="ojo-btn" type="button" onclick="togglePass('nueva-pass',this)">👁</button>
+      </div>
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Repetir contraseña</label>
+      <div class="pass-wrap">
+        <input class="auth-input" id="nueva-pass2" type="password" placeholder="Repetí la contraseña">
+        <button class="ojo-btn" type="button" onclick="togglePass('nueva-pass2',this)">👁</button>
+      </div>
+    </div>
+    <div class="auth-error" id="nueva-pass-error"></div>
+    <button class="auth-btn-primary" onclick="guardarNuevaClave()">Guardar nueva contraseña</button>
+  </div>
+</div>
 
 <!-- POPUP BIENVENIDA -->
 <div class="bienvenida-overlay" id="popupBienvenida">
@@ -1188,7 +1217,47 @@ window.descontarCredito = async function() {
 }
 
 // Inicializar al cargar
-window.addEventListener('load', initAuth);
+window.addEventListener('load', async function(){
+  // Detectar si hay token de recovery en la URL (hash)
+  const hash = window.location.hash;
+  if(hash.includes('type=recovery') || hash.includes('access_token')){
+    // Supabase maneja el token automáticamente
+    const { data: { session } } = await supa.auth.getSession();
+    if(session){
+      usuaria = session.user;
+      window.usuaria = session.user;
+      document.getElementById('modalNuevaClave').classList.add('active');
+      return;
+    }
+  }
+  // También detectar error en hash
+  if(hash.includes('error=access_denied')){
+    // Token expirado - mostrar login con mensaje
+    setTimeout(()=>{
+      window.abrirModal('modalLogin');
+      const errEl = document.getElementById('login-error');
+      if(errEl){ errEl.textContent='El link expiró. Pedí uno nuevo desde el login.'; errEl.style.display='block'; }
+    }, 500);
+    return;
+  }
+  initAuth();
+});
+
+window.guardarNuevaClave = async function(){
+  const pass1 = document.getElementById('nueva-pass').value;
+  const pass2 = document.getElementById('nueva-pass2').value;
+  const errEl = document.getElementById('nueva-pass-error');
+  if(pass1.length < 6){ errEl.textContent='La contraseña debe tener al menos 6 caracteres.'; errEl.style.display='block'; return; }
+  if(pass1 !== pass2){ errEl.textContent='Las contraseñas no coinciden.'; errEl.style.display='block'; return; }
+  const { error } = await supa.auth.updateUser({ password: pass1 });
+  if(error){ errEl.textContent='Error: ' + error.message; errEl.style.display='block'; return; }
+  document.getElementById('modalNuevaClave').classList.remove('active');
+  await cargarPerfil();
+  actualizarUI();
+  // Limpiar la URL
+  history.replaceState(null, '', '/');
+  alert('¡Contraseña actualizada! Ya podés ingresar con tu nueva contraseña.');
+}
 </script>
 
 <script>
