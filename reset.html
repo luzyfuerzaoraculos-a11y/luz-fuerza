@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nueva contraseña · Luz & Fuerza</title>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: linear-gradient(160deg, #0d0025 0%, #1a0050 40%, #100035 100%);
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+}
+.box {
+  background: linear-gradient(160deg, rgba(15,8,30,0.99), rgba(25,12,50,0.99));
+  border: 1px solid rgba(150,100,255,0.4);
+  border-radius: 16px; padding: 2.5rem 2rem;
+  width: 90%; max-width: 420px; text-align: center;
+  box-shadow: 0 0 60px rgba(100,50,200,0.3);
+}
+.emoji { font-size: 40px; margin-bottom: 1rem; }
+h1 { font-family: 'Marcellus', serif; font-size: 20px; color: #fff; margin-bottom: 0.5rem; }
+p { font-size: 14px; color: rgba(210,190,255,0.8); margin-bottom: 1.5rem; line-height: 1.6; }
+label { display: block; font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 1.5px; color: rgba(200,180,255,0.9); text-transform: uppercase; margin-bottom: 6px; text-align: left; }
+.campo { margin-bottom: 1rem; position: relative; }
+.pass-wrap { position: relative; }
+input[type=password], input[type=text] {
+  width: 100%; background: rgba(20,10,40,0.8);
+  border: 0.5px solid rgba(150,100,255,0.4);
+  border-radius: 8px; padding: 10px 40px 10px 14px;
+  color: #e8e0ff; font-family: 'Montserrat', sans-serif; font-size: 15px;
+}
+input:focus { outline: none; border-color: rgba(150,100,255,0.7); }
+.ojo { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: rgba(150,100,255,0.5); }
+.btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, rgba(130,70,255,0.9), rgba(80,30,200,0.9));
+  border: 1px solid rgba(180,140,255,0.6);
+  border-radius: 30px; color: #fff;
+  font-family: 'Marcellus', serif; font-size: 14px;
+  cursor: pointer; margin-top: 0.5rem;
+  box-shadow: 0 0 20px rgba(120,60,255,0.3);
+}
+.error { font-size: 13px; color: rgba(255,120,100,0.9); margin-top: 8px; display: none; }
+.ok { font-size: 13px; color: rgba(100,220,150,0.9); margin-top: 8px; display: none; }
+.volver { display: block; margin-top: 1.25rem; font-size: 12px; color: rgba(150,120,255,0.6); text-decoration: none; }
+.volver:hover { color: #c8b8ff; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="emoji">🔐</div>
+  <h1>Nueva contraseña</h1>
+  <p>Elegí tu nueva contraseña para ingresar a Luz & Fuerza.</p>
+
+  <div class="campo">
+    <label>Nueva contraseña</label>
+    <div class="pass-wrap">
+      <input type="password" id="pass1" placeholder="Mínimo 6 caracteres">
+      <button class="ojo" onclick="togglePass('pass1',this)" type="button">👁</button>
+    </div>
+  </div>
+
+  <div class="campo">
+    <label>Repetir contraseña</label>
+    <div class="pass-wrap">
+      <input type="password" id="pass2" placeholder="Repetí la contraseña">
+      <button class="ojo" onclick="togglePass('pass2',this)" type="button">👁</button>
+    </div>
+  </div>
+
+  <div class="error" id="err"></div>
+  <div class="ok" id="ok"></div>
+
+  <button class="btn" onclick="guardar()">Guardar nueva contraseña</button>
+  <a href="https://luz-fuerza.pages.dev" class="volver">← Volver al sitio</a>
+</div>
+
+<script>
+const supa = window.supabase.createClient(
+  'https://iztuciguijbnpgtlvajy.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U'
+);
+
+function togglePass(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+async function guardar() {
+  const pass1 = document.getElementById('pass1').value;
+  const pass2 = document.getElementById('pass2').value;
+  const errEl = document.getElementById('err');
+  const okEl = document.getElementById('ok');
+
+  errEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  if (pass1.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.style.display = 'block'; return; }
+  if (pass1 !== pass2) { errEl.textContent = 'Las contraseñas no coinciden.'; errEl.style.display = 'block'; return; }
+
+  const { error } = await supa.auth.updateUser({ password: pass1 });
+  if (error) { errEl.textContent = 'Error: ' + error.message; errEl.style.display = 'block'; return; }
+
+  okEl.textContent = '¡Contraseña actualizada! Redirigiendo...';
+  okEl.style.display = 'block';
+  setTimeout(() => window.location.href = 'https://luz-fuerza.pages.dev', 2000);
+}
+</script>
+</body>
+</html>
