@@ -166,7 +166,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .user-bar{position:relative;z-index:2;display:none;align-items:center;gap:12px;margin-top:10px;}
 .user-bar.visible{display:flex;}
 .user-nombre{font-family:"Marcellus",serif;font-size:12px;color:rgba(200,180,255,0.8);letter-spacing:1px;}
-.user-creditos{font-family:"Marcellus",serif;font-size:11px;color:rgba(150,220,150,0.7);background:rgba(0,100,50,0.2);border:0.5px solid rgba(0,150,80,0.3);border-radius:20px;padding:3px 10px;}
+.user-creditos{font-family:"Montserrat",sans-serif;font-size:11px;color:rgba(150,220,150,0.8);background:rgba(0,100,50,0.1);border:0.5px solid rgba(0,150,80,0.3);border-radius:20px;padding:4px 12px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .btn-logout{font-family:"Marcellus",serif;font-size:10px;color:rgba(150,100,255,0.5);background:none;border:0.5px solid rgba(150,100,255,0.2);border-radius:20px;padding:3px 10px;cursor:pointer;letter-spacing:0.5px;}
 .btn-logout:hover{color:#c8b8ff;border-color:rgba(150,100,255,0.5);}
 
@@ -1049,8 +1049,48 @@ function actualizarUI() {
   if (usuaria && perfil) {
     userBar.classList.add('visible');
     document.getElementById('userNombre').textContent = perfil.nombre;
-    const credText = perfil.creditos > 0 ? perfil.creditos + ' consulta' + (perfil.creditos !== 1 ? 's' : '') : 'Sin créditos';
-    document.getElementById('userCreditos').textContent = credText;
+    
+    // Mensaje contextual según créditos
+    let credMsg = '';
+    let credColor = 'rgba(150,220,150,0.8)';
+    const c = perfil.creditos || 0;
+    const cc = perfil.creditos_carta || 0;
+    
+    if(c > 0 && cc > 0){
+      credMsg = c + ' consulta' + (c !== 1 ? 's' : '') + ' de tarot · ' + cc + ' carta del día';
+      credColor = 'rgba(150,220,150,0.8)';
+    } else if(c > 0 && cc === 0){
+      credMsg = c + ' consulta' + (c !== 1 ? 's' : '') + ' de tarot disponible' + (c !== 1 ? 's' : '');
+      credColor = 'rgba(150,220,150,0.8)';
+    } else if(c === 0 && cc > 0){
+      credMsg = cc + ' carta del día disponible';
+      credColor = 'rgba(150,220,150,0.8)';
+    } else if(perfil.consultas_gratis_usadas || c === 0){
+      credMsg = 'Ya usaste tu consulta gratuita · Ver planes';
+      credColor = 'rgba(255,150,100,0.8)';
+    } else {
+      credMsg = 'Sin consultas disponibles · Ver planes';
+      credColor = 'rgba(255,150,100,0.8)';
+    }
+    
+    const credEl = document.getElementById('userCreditos');
+    credEl.textContent = credMsg;
+    credEl.style.color = credColor;
+    credEl.style.borderColor = credColor.replace('0.8','0.3');
+    credEl.style.background = credColor.replace('rgba(','rgba(').replace(',0.8)',',0.1)');
+    
+    // Click en "Ver planes" cuando sin créditos
+    if(c === 0 && cc === 0){
+      credEl.style.cursor = 'pointer';
+      credEl.onclick = () => {
+        const planesBtn = document.querySelector('nav button:nth-child(6)');
+        if(planesBtn) showTab('planes', planesBtn);
+      };
+    } else {
+      credEl.style.cursor = 'default';
+      credEl.onclick = null;
+    }
+    
     if (ctaBox) ctaBox.style.display = 'none';
   } else {
     userBar.classList.remove('visible');
