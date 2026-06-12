@@ -302,9 +302,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
     <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
-    <button class="btn-sm" id="btnProf" onclick="profundizar()" style="display:none;">✦ Quiero profundizar mi pregunta</button>
-    <div id="divProf" style="display:none;margin-top:1rem;">
-      <div class="bprofunda"><p id="textoProf"></p></div>
+    
+    
       <textarea id="respProf" rows="3" placeholder="Respondé aquí para enriquecer tu consulta..."></textarea>
     </div>
     <button class="btn" id="btnRevelar" onclick="revelar()" disabled>✦ Revelar las cartas</button>
@@ -730,7 +729,7 @@ document.addEventListener('click', function(e){
   if(e.target === modal) modal.classList.remove('active');
 });
 function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");const bp=document.getElementById("btnProf");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés revelar las cartas";cnt.classList.add("ok");btn.disabled=false;bp.style.display="inline-block";}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;bp.style.display="none";}}
-function profundizar(){document.getElementById("divProf").style.display="block";document.getElementById("textoProf").textContent=preguntas[area]||preguntas.otro;}
+
 
 async function revelar(){
   const preg=document.getElementById("pregunta").value.trim();
