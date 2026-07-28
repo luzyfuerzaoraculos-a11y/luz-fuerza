@@ -33,6 +33,7 @@ input[type=password], input[type=text] {
   color: #e8e0ff; font-family: 'Montserrat', sans-serif; font-size: 15px;
 }
 input:focus { outline: none; border-color: rgba(150,100,255,0.7); }
+input:disabled { opacity: 0.5; }
 .ojo { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: rgba(150,100,255,0.5); }
 .btn {
   width: 100%; padding: 13px;
@@ -43,46 +44,113 @@ input:focus { outline: none; border-color: rgba(150,100,255,0.7); }
   cursor: pointer; margin-top: 0.5rem;
   box-shadow: 0 0 20px rgba(120,60,255,0.3);
 }
+.btn:disabled { opacity: 0.5; cursor: default; box-shadow: none; }
 .error { font-size: 13px; color: rgba(255,120,100,0.9); margin-top: 8px; display: none; }
 .ok { font-size: 13px; color: rgba(100,220,150,0.9); margin-top: 8px; display: none; }
 .volver { display: block; margin-top: 1.25rem; font-size: 12px; color: rgba(150,120,255,0.6); text-decoration: none; }
 .volver:hover { color: #c8b8ff; }
+.verificando { font-size: 13px; color: rgba(200,180,255,0.7); margin-top: 0.5rem; }
+.oculto { display: none; }
 </style>
 </head>
 <body>
 <div class="box">
   <div class="emoji">🔐</div>
   <h1>Nueva contraseña</h1>
-  <p>Elegí tu nueva contraseña para ingresar a Luz & Fuerza.</p>
 
-  <div class="campo">
-    <label>Nueva contraseña</label>
-    <div class="pass-wrap">
-      <input type="password" id="pass1" placeholder="Mínimo 6 caracteres">
-      <button class="ojo" onclick="togglePass('pass1',this)" type="button">👁</button>
-    </div>
+  <div id="estadoVerificando">
+    <p>Verificando tu enlace de recuperación…</p>
+    <p class="verificando">Esto puede tardar unos segundos.</p>
   </div>
 
-  <div class="campo">
-    <label>Repetir contraseña</label>
-    <div class="pass-wrap">
-      <input type="password" id="pass2" placeholder="Repetí la contraseña">
-      <button class="ojo" onclick="togglePass('pass2',this)" type="button">👁</button>
-    </div>
+  <div id="estadoError" class="oculto">
+    <p>Este enlace no es válido o ya venció. Los enlaces de recuperación duran poco tiempo y solo funcionan una vez.</p>
+    <a href="https://tarotluzyfuerza.com.ar" class="volver">← Volver a Luz & Fuerza para pedir uno nuevo</a>
   </div>
 
-  <div class="error" id="err"></div>
-  <div class="ok" id="ok"></div>
+  <form id="formNuevaClave" class="oculto" onsubmit="event.preventDefault(); guardar();">
+    <p>Elegí tu nueva contraseña para ingresar a Luz & Fuerza.</p>
 
-  <button class="btn" onclick="guardar()">Guardar nueva contraseña</button>
-  <a href="https://luz-fuerza.pages.dev" class="volver">← Volver al sitio</a>
+    <div class="campo">
+      <label>Nueva contraseña</label>
+      <div class="pass-wrap">
+        <input type="password" id="pass1" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+        <button class="ojo" onclick="togglePass('pass1',this)" type="button">👁</button>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Repetir contraseña</label>
+      <div class="pass-wrap">
+        <input type="password" id="pass2" placeholder="Repetí la contraseña" autocomplete="new-password">
+        <button class="ojo" onclick="togglePass('pass2',this)" type="button">👁</button>
+      </div>
+    </div>
+
+    <div class="error" id="err"></div>
+    <div class="ok" id="ok"></div>
+
+    <button class="btn" type="submit" id="btnGuardar">Guardar nueva contraseña</button>
+    <a href="https://tarotluzyfuerza.com.ar" class="volver">← Volver al sitio</a>
+  </form>
 </div>
 
 <script>
+const SITIO = 'https://tarotluzyfuerza.com.ar';
+
 const supa = window.supabase.createClient(
   'https://iztuciguijbnpgtlvajy.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U'
 );
+
+let recoveryListo = false;
+
+function mostrarError(){
+  document.getElementById('estadoVerificando').classList.add('oculto');
+  document.getElementById('formNuevaClave').classList.add('oculto');
+  document.getElementById('estadoError').classList.remove('oculto');
+}
+
+function mostrarFormulario(){
+  if (recoveryListo) return; // evitar duplicar si ya se mostró
+  recoveryListo = true;
+  document.getElementById('estadoVerificando').classList.add('oculto');
+  document.getElementById('estadoError').classList.add('oculto');
+  document.getElementById('formNuevaClave').classList.remove('oculto');
+}
+
+// 1) Si Supabase mandó un error en el link (vencido, ya usado, inválido) viene como
+// #error=access_denied&error_code=otp_expired&error_description=... en el hash.
+(function chequearErrorEnHash(){
+  const hash = window.location.hash;
+  if (hash && hash.includes('error=')) {
+    mostrarError();
+  }
+})();
+
+// 2) Escuchar el evento PASSWORD_RECOVERY: se dispara cuando Supabase procesa el token
+// del link y arma la sesión temporal para poder cambiar la contraseña.
+supa.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY' && session) {
+    mostrarFormulario();
+  }
+});
+
+// 3) Red de seguridad: si el evento ya se disparó antes de registrar el listener,
+// getSession() de todas formas devuelve la sesión de recovery una vez que el cliente
+// terminó de procesar la URL.
+supa.auth.getSession().then(({ data }) => {
+  if (data && data.session) {
+    mostrarFormulario();
+  }
+});
+
+// 4) Si después de unos segundos no pasó nada (ni error ni sesión), el link no sirve.
+setTimeout(() => {
+  if (!recoveryListo && document.getElementById('estadoError').classList.contains('oculto')) {
+    mostrarError();
+  }
+}, 6000);
 
 function togglePass(id, btn) {
   const inp = document.getElementById(id);
@@ -90,11 +158,26 @@ function togglePass(id, btn) {
   btn.textContent = inp.type === 'password' ? '👁' : '🙈';
 }
 
+function traducirError(msg) {
+  if (!msg) return 'No se pudo actualizar la contraseña.';
+  if (msg.includes('session missing') || msg.includes('Auth session missing')) {
+    return 'El enlace ya no es válido. Volvé a pedir uno nuevo desde el sitio.';
+  }
+  if (msg.includes('should be different')) {
+    return 'La nueva contraseña debe ser distinta a la anterior.';
+  }
+  if (msg.includes('at least')) {
+    return 'La contraseña debe tener al menos 6 caracteres.';
+  }
+  return 'Error: ' + msg;
+}
+
 async function guardar() {
   const pass1 = document.getElementById('pass1').value;
   const pass2 = document.getElementById('pass2').value;
   const errEl = document.getElementById('err');
   const okEl = document.getElementById('ok');
+  const btn = document.getElementById('btnGuardar');
 
   errEl.style.display = 'none';
   okEl.style.display = 'none';
@@ -102,12 +185,23 @@ async function guardar() {
   if (pass1.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.style.display = 'block'; return; }
   if (pass1 !== pass2) { errEl.textContent = 'Las contraseñas no coinciden.'; errEl.style.display = 'block'; return; }
 
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+
   const { error } = await supa.auth.updateUser({ password: pass1 });
-  if (error) { errEl.textContent = 'Error: ' + error.message; errEl.style.display = 'block'; return; }
+
+  if (error) {
+    errEl.textContent = traducirError(error.message);
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Guardar nueva contraseña';
+    return;
+  }
 
   okEl.textContent = '¡Contraseña actualizada! Redirigiendo...';
   okEl.style.display = 'block';
-  setTimeout(() => window.location.href = 'https://luz-fuerza.pages.dev', 2000);
+  btn.textContent = 'Listo ✓';
+  setTimeout(() => window.location.href = SITIO, 2000);
 }
 </script>
 </body>
