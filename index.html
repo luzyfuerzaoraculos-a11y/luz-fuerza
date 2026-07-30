@@ -169,6 +169,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .user-creditos{font-family:"Montserrat",sans-serif;font-size:11px;color:rgba(150,220,150,0.8);background:rgba(0,100,50,0.1);border:0.5px solid rgba(0,150,80,0.3);border-radius:20px;padding:4px 12px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .btn-logout{font-family:"Marcellus",serif;font-size:10px;color:rgba(150,100,255,0.5);background:none;border:0.5px solid rgba(150,100,255,0.2);border-radius:20px;padding:3px 10px;cursor:pointer;letter-spacing:0.5px;}
 .btn-logout:hover{color:#c8b8ff;border-color:rgba(150,100,255,0.5);}
+.btn-mp{background:none;border:none;padding:0;margin:0;font:inherit;color:#0000EE;text-decoration:underline;cursor:pointer;}
+.btn-mp:disabled{opacity:0.5;cursor:default;}
 @media(max-width:520px){.user-bar{flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;}.user-creditos{max-width:88vw;white-space:normal;overflow:visible;text-overflow:clip;text-align:center;line-height:1.4;}.user-nombre{text-align:center;}}
 
 /* MODAL SIN CRÉDITOS */
@@ -394,7 +396,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
         <li>Interpretación personalizada</li>
         <li>Explicación de cada carta</li>
       </ul>
-      <a href="https://mpago.la/1vKGV4N" target="_blank" class="btn-mp">Pagar con MercadoPago</a>
+      <button onclick="pagar('consulta')" class="btn-mp">Pagar con MercadoPago</button>
     </div>
     <div class="plan pop">
       <div class="pbadge">✦ Más elegido</div>
@@ -404,7 +406,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
         <li>Carta del día incluida</li>
         <li>Seguimiento del tarot</li>
       </ul>
-      <a href="https://mpago.la/15ZKXAm" target="_blank" class="btn-mp btn-mp-pop">Pagar con MercadoPago</a>
+      <button onclick="pagar('semanal')" class="btn-mp btn-mp-pop">Pagar con MercadoPago</button>
     </div>
     <div class="plan">
       <div class="pbadge">Mensual</div>
@@ -414,7 +416,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
         <li>Carta del día incluida</li>
         <li>Perfil espiritual</li>
       </ul>
-      <a href="https://mpago.la/1Ro62zH" target="_blank" class="btn-mp">Pagar con MercadoPago</a>
+      <button onclick="pagar('mensual')" class="btn-mp">Pagar con MercadoPago</button>
     </div>
   </div>
 
@@ -428,7 +430,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
         <li>Mensaje personalizado</li>
         <li>Qué hacer y qué evitar</li>
       </ul>
-      <a href="https://mpago.la/24NsDgh" target="_blank" class="btn-mp">Pagar con MercadoPago</a>
+      <button onclick="pagar('consejo')" class="btn-mp">Pagar con MercadoPago</button>
     </div>
   </div>
 
@@ -624,6 +626,16 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <div class="auth-titulo">Consultas agotadas</div>
     <div class="auth-subtitulo">Ya usaste tu consulta gratuita. Elegí un plan para seguir consultando.</div>
     <button class="auth-btn-primary" onclick="cerrarModales();showTab('planes',document.querySelectorAll('nav button')[4])">Ver planes</button>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cerrar</button>
+  </div>
+</div>
+
+<div class="auth-overlay" id="modalPagoOk">
+  <div class="auth-box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:1rem;">✨</div>
+    <div class="auth-titulo" id="pagoOkTitulo">¡Bárbaro! Ya podés usar tu consulta</div>
+    <div class="auth-subtitulo" id="pagoOkTexto">Tu pago se acreditó correctamente.</div>
+    <button class="auth-btn-primary" id="pagoOkBtn" onclick="cerrarModales();showTab('consulta',document.querySelectorAll('nav button')[0])">Ir a mi consulta</button>
     <button class="auth-btn-secondary" onclick="cerrarModales()">Cerrar</button>
   </div>
 </div>
@@ -1283,7 +1295,66 @@ window.addEventListener('load', async function(){
     }
   });
   initAuth();
+  chequearPagoOk();
 });
+
+window.pagar = async function(plan){
+  if(!usuaria){ window.abrirModal('modalRegistro'); return; }
+  const { data: { session } } = await supa.auth.getSession();
+  if(!session){ window.abrirModal('modalLogin'); return; }
+  const btns = document.querySelectorAll('.btn-mp');
+  btns.forEach(b=>b.disabled=true);
+  try{
+    const r = await fetch('/crear-preferencia', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ plan, access_token: session.access_token })
+    });
+    const d = await r.json();
+    if(d.init_point){
+      window.location.href = d.init_point;
+    } else {
+      alert('No se pudo iniciar el pago. Probá de nuevo en un momento.');
+      btns.forEach(b=>b.disabled=false);
+    }
+  } catch(e){
+    alert('No se pudo iniciar el pago. Probá de nuevo en un momento.');
+    btns.forEach(b=>b.disabled=false);
+  }
+}
+
+const nombresPlan = {
+  consulta: '¡Bárbaro! Ya podés hacer tu consulta',
+  semanal: '¡Bárbaro! Ya tenés tu Pack Semanal activo',
+  mensual: '¡Bárbaro! Ya tenés consultas ilimitadas',
+  consejo: '¡Bárbaro! Ya podés usar tu carta del día'
+};
+
+function chequearPagoOk(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('pago') !== 'ok') return;
+  const plan = params.get('plan');
+  history.replaceState(null, '', window.location.pathname);
+  let intentos = 0;
+  const antes = JSON.stringify(perfil);
+  const intervalo = setInterval(async ()=>{
+    intentos++;
+    if(usuaria){ await cargarPerfil(); actualizarUI(); }
+    const cambio = JSON.stringify(perfil) !== antes;
+    if(cambio || intentos >= 8){
+      clearInterval(intervalo);
+      const titulo = document.getElementById('pagoOkTitulo');
+      if(titulo && nombresPlan[plan]) titulo.textContent = nombresPlan[plan];
+      const texto = document.getElementById('pagoOkTexto');
+      if(texto){
+        texto.textContent = cambio
+          ? 'Tu pago se acreditó correctamente.'
+          : 'Tu pago está siendo confirmado — puede tardar unos segundos más en reflejarse. Si no ves el crédito en un minuto, escribinos por Contacto.';
+      }
+      window.abrirModal('modalPagoOk');
+    }
+  }, 1500);
+}
 
 window.guardarNuevaClave = async function(){
   const pass1 = document.getElementById('nueva-pass').value;
