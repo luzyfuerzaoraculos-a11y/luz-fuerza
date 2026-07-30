@@ -999,7 +999,15 @@ async function elegirCartaDia(carta,el,rot){
     inner.style.animation='none';
     inner.offsetHeight;
     inner.style.animation='voltear 1s ease forwards';
-    document.getElementById('btnNuevaCarta').style.display='inline-block';
+    const btnNC=document.getElementById('btnNuevaCarta');
+    if(window.perfil && window.perfil.creditos > 0){
+      btnNC.textContent='✦ Quiero una consulta completa';
+      btnNC.onclick=function(){showTab('consulta', document.querySelectorAll('nav button')[0]);};
+    } else {
+      btnNC.textContent='✦ Ver planes';
+      btnNC.onclick=function(){showTab('planes', document.querySelectorAll('nav button')[4]);};
+    }
+    btnNC.style.display='inline-block';
     // Descontar crédito carta del día
     if(window.perfil && window.perfil.creditos_carta > 0){
       const nuevos = window.perfil.creditos_carta - 1;
