@@ -77,10 +77,15 @@ export async function onRequestPost(context) {
     return new Response("error registrando pago", { status: 500 });
   }
 
+  function diasDelMesActual() {
+    const ahora = new Date();
+    return new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0).getDate();
+  }
+
   const planes = {
     consulta: { creditos: 1, creditos_carta: 0 },
-    semanal:  { creditos: 7, creditos_carta: 7 },
-    mensual:  { creditos: 9999, creditos_carta: 9999 },
+    semanal:  { creditos: 7, creditos_carta: 0 },
+    mensual:  { creditos: 0, creditos_carta: diasDelMesActual() },
     consejo:  { creditos: 0, creditos_carta: 1 }
   };
   const add = planes[plan];
