@@ -268,8 +268,10 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <h1>LUZ <span class="amp">&</span> FUERZA</h1>
   <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
   <div class="user-bar" id="userBar">
-    <span class="user-avatar" id="userAvatar"></span>
-    <span class="user-nombre" id="userNombre"></span>
+    <span class="user-info-click" id="userInfoClick" onclick="verMiHistorial()" style="cursor:pointer;display:flex;align-items:center;gap:10px;" title="Ver mi historial">
+      <span class="user-avatar" id="userAvatar"></span>
+      <span class="user-nombre" id="userNombre"></span>
+    </span>
     <span class="user-creditos" id="userCreditos"></span>
     <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
   </div>
@@ -296,7 +298,6 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <button onclick="showTab('planes',this)">Planes</button>
   <button onclick="showTab('sobre',this)">Nosotras</button>
   <button onclick="showTab('contacto',this)">Contacto</button>
-  <button onclick="irAHistorial(this)">Mi Historial</button>
 </nav>
 
 <main style="position:relative;z-index:2;">
@@ -742,7 +743,7 @@ function showTab(t,el){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   document.getElementById("tab-"+t).classList.add("active");
-  el.classList.add("active");
+  if(el) el.classList.add("active");
   if(t==='cartadia'){
     setTimeout(function(){
       if(typeof cartaDiaElegida !== 'undefined'){
@@ -852,7 +853,7 @@ async function revelar(){
     if(fEl) fEl.textContent=frasesIntriga[fraseIdx];
   },1300);
 
-  await new Promise(function(r){ setTimeout(r, 3000); });
+  await new Promise(function(r){ setTimeout(r, 5000); });
   clearInterval(intervaloIntriga);
 
   const tres=[...mazo].sort(()=>Math.random()-.5).slice(0,3);
@@ -1230,12 +1231,12 @@ window.cargarHistorial = async function(){
   }).join('');
 }
 
-window.irAHistorial = function(el){
+window.verMiHistorial = function(){
   if(!window.usuaria){
     window.abrirModal('modalLogin');
     return;
   }
-  showTab('historial', el);
+  showTab('historial');
 }
 
 function actualizarUI() {
