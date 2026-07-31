@@ -73,6 +73,10 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 .btn-sm:hover{background:rgba(22,32,53,0.9);}
 
 .cartas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
+.intriga{grid-column:1/-1;text-align:center;font-family:'Marcellus',serif;font-style:italic;font-size:15px;color:rgba(200,180,255,0.85);padding:3rem 1rem;letter-spacing:0.5px;animation:pulseIntriga 1.8s ease-in-out infinite;}
+@keyframes pulseIntriga{0%,100%{opacity:0.55;}50%{opacity:1;}}
+@keyframes cartaIn{from{opacity:0;transform:translateY(16px) scale(0.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+.carta-in{animation:cartaIn 0.6s ease forwards;opacity:0;}
 .carta{background:rgba(8,5,20,0.92);border:1px solid rgba(150,100,255,0.4);border-radius:12px;padding:1.25rem 0.75rem;text-align:center;}
 .cpos{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;margin-bottom:12px;padding:4px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(130,70,255,0.95),rgba(80,30,200,0.95));box-shadow:0 0 12px rgba(120,60,255,0.45);}
 .cemoji{font-size:30px;margin-bottom:8px;}.cnombre{font-size:14px;color:#ffffff;margin-bottom:4px;font-weight:600;}
@@ -833,9 +837,28 @@ async function revelar(){
   if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:3}, '', '#consulta');
   const pMostrada=document.getElementById("preguntaMostrada");
   if(pMostrada){pMostrada.textContent='"'+preg+'"';pMostrada.style.display="block";}
+
+  const cartasDiv=document.getElementById("cartas");
+  const interpDiv=document.getElementById("interp");
+  interpDiv.classList.remove("loading");
+  interpDiv.textContent="";
+
+  const frasesIntriga=["El tarot está pensando en vos...","Mezclando las cartas con tu energía...","Concentrándose en tu pregunta...","Las cartas se están alineando para vos..."];
+  let fraseIdx=0;
+  cartasDiv.innerHTML='<div class="intriga">'+frasesIntriga[0]+'</div>';
+  const intervaloIntriga=setInterval(function(){
+    fraseIdx=(fraseIdx+1)%frasesIntriga.length;
+    const fEl=cartasDiv.querySelector('.intriga');
+    if(fEl) fEl.textContent=frasesIntriga[fraseIdx];
+  },1300);
+
+  await new Promise(function(r){ setTimeout(r, 3000); });
+  clearInterval(intervaloIntriga);
+
   const tres=[...mazo].sort(()=>Math.random()-.5).slice(0,3);
-  document.getElementById("cartas").innerHTML=tres.map((c,i)=>`<div class="carta"><div class="cpos">${posiciones[i].nombre}</div><img src="${c.img}" alt="${c.nombre}" style="width:100%;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display='none'"><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div></div>`).join("");
-  const interpDiv=document.getElementById("interp");interpDiv.classList.add("loading");interpDiv.textContent="El tarot está leyendo las cartas...";
+  cartasDiv.innerHTML=tres.map((c,i)=>`<div class="carta carta-in" style="animation-delay:${i*0.15}s"><div class="cpos">${posiciones[i].nombre}</div><img src="${c.img}" alt="${c.nombre}" style="width:100%;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display='none'"><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div></div>`).join("");
+
+  interpDiv.classList.add("loading");interpDiv.textContent="El tarot está leyendo las cartas...";
   const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
   try{const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});const d=await r.json();interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");if(window.descontarCredito)window.descontarCredito();if(d.respuesta&&window.guardarHistorial)window.guardarHistorial('consulta',area,ctx,tres.map(c=>({nombre:c.nombre,energia:c.energia})),d.respuesta);}
   catch(e){interpDiv.textContent="El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
