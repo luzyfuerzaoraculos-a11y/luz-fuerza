@@ -544,7 +544,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <div class="bienvenida-emoji">🧭</div>
     <div class="bienvenida-titulo" id="bienvenidaTitulo"></div>
     <div class="bienvenida-msg" id="bienvenidaMsg"></div>
-    <button class="bienvenida-btn" onclick="cerrarBienvenida()">Comenzar ✦</button>
+    <button class="bienvenida-btn" id="bienvenidaBtn" onclick="cerrarBienvenida()">Comenzar ✦</button>
   </div>
 </div>
 
@@ -1408,6 +1408,16 @@ function mostrarBienvenida(nombre, pronombre){
   const saludo = pronombres[pronombre] || 'Bienvenida';
   document.getElementById('bienvenidaTitulo').textContent = saludo + ', ' + nombre + ' ✦';
   document.getElementById('bienvenidaMsg').textContent = 'Listo, las cartas ya están disponibles para vos. La suerte está echada.';
+  const btnBv = document.getElementById('bienvenidaBtn');
+  if(btnBv) btnBv.textContent = 'Comenzar ✦';
+  document.getElementById('popupBienvenida').classList.add('active');
+}
+
+function mostrarDespedida(nombre){
+  document.getElementById('bienvenidaTitulo').textContent = 'Gracias por visitarnos' + (nombre ? ', ' + nombre : '') + ' ✦';
+  document.getElementById('bienvenidaMsg').textContent = 'Te esperamos pronto para tu próxima consulta. Las cartas van a estar ahí cuando las necesites.';
+  const btnDesp = document.getElementById('bienvenidaBtn');
+  if(btnDesp) btnDesp.textContent = 'Cerrar';
   document.getElementById('popupBienvenida').classList.add('active');
 }
 
@@ -1418,6 +1428,7 @@ function togglePass(id, btn){
 }
 
 window.cerrarSesion = async function() {
+  const nombreDespedida = (window.perfil && window.perfil.nombre) ? window.perfil.nombre : '';
   await supa.auth.signOut();
   usuaria = null;
   perfil = null;
@@ -1426,6 +1437,7 @@ window.cerrarSesion = async function() {
   const histCont = document.getElementById('historialLista');
   if(histCont) histCont.innerHTML = '';
   actualizarUI();
+  mostrarDespedida(nombreDespedida);
 }
 
 window.abrirModal = function(id) {
