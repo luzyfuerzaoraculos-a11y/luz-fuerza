@@ -1081,7 +1081,9 @@ function actualizarUI() {
   const ctaBox = document.querySelector('.cta-box');
   if (usuaria && perfil) {
     userBar.classList.add('visible');
-    document.getElementById('userNombre').textContent = perfil.nombre;
+    const iconosPronombre = {ella:'♀', el:'♂', elle:'⚧', ninguno:''};
+    const iconoPron = iconosPronombre[perfil.pronombre] || '';
+    document.getElementById('userNombre').textContent = perfil.nombre + (iconoPron ? ' ' + iconoPron : '');
     const avatarEl = document.getElementById('userAvatar');
     if(avatarEl) avatarEl.textContent = (perfil.nombre || '?').trim().charAt(0).toUpperCase();
     
