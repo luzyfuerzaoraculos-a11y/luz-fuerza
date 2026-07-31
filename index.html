@@ -435,6 +435,21 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <p>Combinamos la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte lecturas que realmente resuenen con tu momento único.</p>
     <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida. Tu <strong>luz interior</strong>, la respuesta.</p>
   </div>
+
+  <div style="background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:2rem;max-width:500px;margin:2rem auto 0;text-align:center;">
+    <div style="font-size:32px;margin-bottom:0.5rem;">✦</div>
+    <div style="font-family:'Marcellus',serif;font-size:16px;color:#fff;margin-bottom:0.5rem;">Somos 3 amigas, las 3 número 9 de arcano de vida</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(210,190,255,0.8);line-height:1.6;margin-bottom:1.25rem;">Dejanos tu fecha de nacimiento y descubrí tu número de guía.</div>
+    <input type="date" id="fechaGuia" style="width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.4);border-radius:8px;padding:10px 14px;color:#e8e0ff;font-family:'Montserrat',sans-serif;font-size:14px;margin-bottom:1rem;">
+    <br>
+    <button onclick="calcularNumeroGuia()" style="font-family:'Marcellus',serif;font-size:13px;padding:11px 28px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:0.5px;">Descubrir mi número de guía</button>
+    <div id="resultadoGuia" style="display:none;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(150,100,255,0.2);">
+      <div id="guiaEmoji" style="font-size:36px;margin-bottom:0.5rem;"></div>
+      <div id="guiaNombre" style="font-family:'Marcellus',serif;font-size:18px;color:#fff;margin-bottom:0.5rem;"></div>
+      <div id="guiaFrase" style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.85);line-height:1.6;margin-bottom:1.25rem;"></div>
+      <button onclick="cerrarModales();abrirModal('modalRegistro2')" class="modal-btn-primary" style="width:auto;padding:11px 28px;">Quiero mi lectura completa</button>
+    </div>
+  </div>
 </div>
 
 <div id="tab-contacto" class="tab">
@@ -1365,6 +1380,47 @@ function chequearPagoOk(){
       window.abrirModal('modalPagoOk');
     }
   }, 1500);
+}
+
+
+const arcanosGuia = {
+  1:  {emoji:'🪄', nombre:'El Mago',            frase:'La voluntad, la manifestación, el poder personal.'},
+  2:  {emoji:'📖', nombre:'La Sacerdotisa',      frase:'La intuición, el misterio, el conocimiento oculto.'},
+  3:  {emoji:'🌸', nombre:'La Emperatriz',       frase:'La abundancia, la fertilidad, la creatividad.'},
+  4:  {emoji:'👑', nombre:'El Emperador',        frase:'La autoridad, la estructura, el liderazgo.'},
+  5:  {emoji:'🏛️', nombre:'El Hierofante',       frase:'La tradición, la guía espiritual, la enseñanza.'},
+  6:  {emoji:'💫', nombre:'Los Enamorados',      frase:'Las elecciones del corazón, la unión, los valores.'},
+  7:  {emoji:'🏆', nombre:'El Carro',            frase:'La determinación, la victoria, el avance.'},
+  8:  {emoji:'🦁', nombre:'La Fuerza',           frase:'El coraje interior, la compasión, la paciencia.'},
+  9:  {emoji:'🕯️', nombre:'El Ermitaño',         frase:'La reflexión, la sabiduría interior, la soledad.'},
+  10: {emoji:'🎡', nombre:'La Rueda de la Fortuna', frase:'Los ciclos, el destino, los cambios inevitables.'},
+  11: {emoji:'⚖️', nombre:'La Justicia',         frase:'El equilibrio, la verdad, el karma.'},
+  12: {emoji:'🙃', nombre:'El Colgado',          frase:'La pausa, la entrega, la nueva perspectiva.'},
+  13: {emoji:'🦋', nombre:'La Muerte',           frase:'La transformación, los finales que liberan.'},
+  14: {emoji:'🌊', nombre:'La Templanza',        frase:'El equilibrio, la moderación, la paciencia.'},
+  15: {emoji:'⛓️', nombre:'El Diablo',           frase:'Los apegos, las sombras, la liberación.'},
+  16: {emoji:'⚡', nombre:'La Torre',            frase:'Los cambios profundos, la destrucción creadora.'},
+  17: {emoji:'✨', nombre:'La Estrella',         frase:'La esperanza, la guía, la renovación.'},
+  18: {emoji:'🌙', nombre:'La Luna',             frase:'La intuición, el misterio, lo oculto.'},
+  19: {emoji:'☀️', nombre:'El Sol',              frase:'La claridad, la alegría, el éxito.'},
+  20: {emoji:'🎺', nombre:'El Juicio',           frase:'El despertar, el llamado, la redención.'},
+  21: {emoji:'🌍', nombre:'El Mundo',            frase:'La completud, el logro, los ciclos que cierran.'},
+  22: {emoji:'🌟', nombre:'El Loco',             frase:'El inicio, la inocencia, los nuevos comienzos.'}
+};
+
+window.calcularNumeroGuia = function(){
+  const input = document.getElementById('fechaGuia');
+  if(!input.value){ input.focus(); return; }
+  const soloDigitos = input.value.replace(/-/g,'');
+  let suma = soloDigitos.split('').reduce((acc,d)=>acc+parseInt(d,10),0);
+  while(suma > 22){
+    suma = String(suma).split('').reduce((acc,d)=>acc+parseInt(d,10),0);
+  }
+  const arcano = arcanosGuia[suma] || arcanosGuia[22];
+  document.getElementById('guiaEmoji').textContent = arcano.emoji;
+  document.getElementById('guiaNombre').textContent = 'Tu número de guía: ' + arcano.nombre;
+  document.getElementById('guiaFrase').textContent = arcano.frase;
+  document.getElementById('resultadoGuia').style.display = 'block';
 }
 
 window.guardarNuevaClave = async function(){
