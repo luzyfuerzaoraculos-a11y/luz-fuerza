@@ -452,7 +452,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
       <div id="guiaEmoji" style="font-size:36px;margin-bottom:0.5rem;"></div>
       <div id="guiaNombre" style="font-family:'Marcellus',serif;font-size:18px;color:#fff;margin-bottom:0.5rem;"></div>
       <div id="guiaFrase" style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.85);line-height:1.6;margin-bottom:1.25rem;"></div>
-      <button onclick="cerrarModales();abrirModal('modalRegistro2')" class="modal-btn-primary" style="width:auto;padding:11px 28px;">Quiero mi lectura completa</button>
+      <button onclick="irALecturaDesdeGuia()" class="modal-btn-primary" style="width:auto;padding:11px 28px;">Quiero mi lectura completa</button>
     </div>
   </div>
 </div>
@@ -1475,6 +1475,16 @@ const arcanosGuia = {
   21: {emoji:'🌍', nombre:'El Mundo',            frase:'La completud, el logro, los ciclos que cierran.'},
   22: {emoji:'🌟', nombre:'El Loco',             frase:'El inicio, la inocencia, los nuevos comienzos.'}
 };
+
+window.irALecturaDesdeGuia = function(){
+  cerrarModales();
+  if(window.usuaria){
+    const btnConsulta = document.querySelector('nav button:nth-child(1)');
+    if(btnConsulta) showTab('consulta', btnConsulta);
+  } else {
+    abrirModal('modalRegistro2');
+  }
+}
 
 window.calcularNumeroGuia = function(){
   const input = document.getElementById('fechaGuia');
