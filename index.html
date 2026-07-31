@@ -293,11 +293,11 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
     </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="irOpcionHero('cartadia')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 26px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">🔮 Sacar mi carta del día</button>
+      <button onclick="irOpcionHero('consulta')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 26px;background:rgba(150,100,255,0.12);border:1px solid rgba(150,100,255,0.5);border-radius:30px;color:#e8dcff;cursor:pointer;letter-spacing:0.5px;">✨ Hacer una consulta completa</button>
+    </div>
     <div class="cta-box">
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <button onclick="destinoRegistro='cartadia';abrirModal('modalRegistro2')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 26px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">🔮 Sacar mi carta del día</button>
-        <button onclick="destinoRegistro='consulta';abrirModal('modalRegistro2')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 26px;background:rgba(150,100,255,0.12);border:1px solid rgba(150,100,255,0.5);border-radius:30px;color:#e8dcff;cursor:pointer;letter-spacing:0.5px;">✨ Hacer una consulta completa</button>
-      </div>
       <div class="auth-link" onclick="abrirModal('modalLogin')" style="margin-top:12px;">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
     </div>
     <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
@@ -560,12 +560,12 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <div class="auth-subtitulo">Las cartas te estaban esperando.</div>
     <div class="auth-campo">
       <label class="auth-label">Email</label>
-      <input class="auth-input" id="login-email" type="email" placeholder="tu@email.com">
+      <input class="auth-input" id="login-email" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')iniciarSesion()">
     </div>
     <div class="auth-campo">
       <label class="auth-label">Contraseña</label>
       <div class="pass-wrap">
-        <input class="auth-input" id="login-pass" type="password" placeholder="••••••••">
+        <input class="auth-input" id="login-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')iniciarSesion()">
         <button class="ojo-btn" type="button" onclick="togglePass('login-pass',this)">👁</button>
       </div>
     </div>
@@ -1445,6 +1445,17 @@ window.cerrarSesion = async function() {
   if(histCont) histCont.innerHTML = '';
   actualizarUI();
   mostrarDespedida(nombreDespedida);
+}
+
+window.irOpcionHero = function(destino){
+  if(window.usuaria){
+    const idx = destino === 'cartadia' ? 1 : 0;
+    const btn = document.querySelectorAll('nav button')[idx];
+    if(btn) showTab(destino, btn);
+  } else {
+    destinoRegistro = destino;
+    abrirModal('modalRegistro2');
+  }
 }
 
 window.abrirModal = function(id) {
