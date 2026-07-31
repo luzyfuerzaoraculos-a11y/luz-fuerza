@@ -69,6 +69,7 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 .btn{width:100%;padding:15px;background:rgba(15,22,40,0.8);border:0.5px solid #4a6fa5;border-radius:12px;color:#c8d8f0;font-size:15px;cursor:pointer;letter-spacing:1px;font-family:Georgia,serif;margin-top:1.5rem;transition:all 0.2s;}
 .btn:hover{background:rgba(22,32,53,0.9);box-shadow:0 4px 20px rgba(123,175,212,0.1);}
 .btn:disabled{opacity:0.4;cursor:not-allowed;}
+#btnVolverPregunta:disabled{opacity:0.35;cursor:not-allowed;}
 .btn-sm{display:inline-block;padding:10px 20px;background:none;border:0.5px solid #4a6fa5;border-radius:12px;color:#7bafd4;font-size:13px;cursor:pointer;font-family:Georgia,serif;margin-top:10px;}
 .btn-sm:hover{background:rgba(22,32,53,0.9);}
 
@@ -338,13 +339,13 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <button class="btn" id="btnRevelar" onclick="revelar()" disabled>✦ Revelar las cartas</button>
   </div>
   <div id="step3" style="display:none;">
-    <button onclick="volverAPregunta()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
+    <button id="btnVolverPregunta" onclick="volverAPregunta()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
     <div class="slabel"><div class="snum">3</div>Tu tirada</div>
     <div class="cartas" id="cartas"></div>
     <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div>Interpretación</div>
     <div id="preguntaMostrada" style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(180,160,255,0.7);font-style:italic;margin-bottom:10px;padding:10px 14px;background:rgba(150,100,255,0.08);border-radius:8px;border-left:2px solid rgba(150,100,255,0.3);display:none;"></div>
     <div class="interp loading" id="interp">El tarot está leyendo las cartas...</div>
-    <button class="btn" onclick="reset()">✦ Nueva consulta</button>
+    <button class="btn" id="btnNuevaConsultaStep3" onclick="reset()">✦ Nueva consulta</button>
   </div>
 </div>
 
@@ -742,6 +743,7 @@ const preguntas={amor:"¿Hay algo específico en esta relación que te genera du
 const hints={amor:"Contame sobre tu situación en el amor — ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",personal:"¿Qué querés transformar o entender de vos mismo?",decision:"Describí la situación — ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
 const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual."},{nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo — tu momento presente."},{nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren."}];
 let area="";
+let consultaEnCurso=false;
 
 const ordenTabs=['consulta','cartadia','como','historia','planes','sobre','contacto','historial'];
 let navegandoPorHistorial=false;
@@ -846,6 +848,14 @@ function validar(){const txt=document.getElementById("pregunta").value.trim();co
 
 
 async function revelar(){
+  if(consultaEnCurso) return;
+  consultaEnCurso=true;
+  const btnRev=document.getElementById('btnRevelar');
+  if(btnRev) btnRev.disabled=true;
+  const btnVolverPreg=document.getElementById('btnVolverPregunta');
+  const btnNuevaStep3=document.getElementById('btnNuevaConsultaStep3');
+  if(btnVolverPreg) btnVolverPreg.disabled=true;
+  if(btnNuevaStep3) btnNuevaStep3.disabled=true;
   const preg=document.getElementById("pregunta").value.trim();
   const ctx=preg;
   document.getElementById("step1").style.display="none";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="block";
@@ -877,9 +887,14 @@ async function revelar(){
   const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
   try{const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});const d=await r.json();interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");if(window.descontarCredito)window.descontarCredito();if(d.respuesta&&window.guardarHistorial)window.guardarHistorial('consulta',area,ctx,tres.map(c=>({nombre:c.nombre,energia:c.energia})),d.respuesta);}
   catch(e){interpDiv.textContent="El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
+  finally{
+    consultaEnCurso=false;
+    if(btnVolverPreg) btnVolverPreg.disabled=false;
+    if(btnNuevaStep3) btnNuevaStep3.disabled=false;
+  }
 }
 
-function reset(){document.getElementById("step1").style.display="block";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="none";document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));document.getElementById("pregunta").value="";document.getElementById("counter").textContent="Mínimo 8 palabras para una lectura precisa";document.getElementById("counter").classList.remove("ok");document.getElementById("btnRevelar").disabled=true;area="";}
+function reset(){document.getElementById("step1").style.display="block";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="none";document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));document.getElementById("pregunta").value="";document.getElementById("counter").textContent="Mínimo 8 palabras para una lectura precisa";document.getElementById("counter").classList.remove("ok");document.getElementById("btnRevelar").disabled=true;area="";consultaEnCurso=false;}
 </script>
 
 <script>
