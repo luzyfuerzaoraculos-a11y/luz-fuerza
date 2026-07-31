@@ -22,7 +22,31 @@ export async function onRequestPost(context) {
 
     const data = await response.json();
     const texto = data.content ? data.content.map(i => i.text || "").join("") : "Sin respuesta";
-    
+
+    // Registrar consumo de tokens para poder monitorear el gasto de la API
+    if (data.usage && env.SUPABASE_SERVICE_ROLE_KEY) {
+      try {
+        const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
+        await fetch(`${SUPA_URL}/rest/v1/uso_tokens`, {
+          method: "POST",
+          headers: {
+            "apikey": env.SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify({
+            input_tokens: data.usage.input_tokens || 0,
+            output_tokens: data.usage.output_tokens || 0,
+            modelo: "claude-haiku-4-5"
+          })
+        });
+      } catch (e) {
+        // No bloquear la respuesta al usuario si falla el registro de uso
+        console.error("No se pudo registrar el uso de tokens:", e.message);
+      }
+    }
+
     return new Response(JSON.stringify({ respuesta: texto }), {
       headers: { "Content-Type": "application/json" }
     });
