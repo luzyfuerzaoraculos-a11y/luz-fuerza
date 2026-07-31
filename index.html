@@ -761,7 +761,6 @@ function stepActualConsulta(){
 }
 
 function showTab(t,el){
-  window.scrollTo(0,0);
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   document.getElementById("tab-"+t).classList.add("active");
@@ -778,7 +777,11 @@ function showTab(t,el){
       const mesa=document.getElementById('mesaDia');
       if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
       if(typeof crearMesaDia==='function')crearMesaDia();
+      const navEl=document.querySelector('nav');
+      if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
     },100);
+  } else {
+    window.scrollTo(0,0);
   }
   if(t==='historial' && typeof window.cargarHistorial==='function'){
     window.cargarHistorial();
@@ -828,7 +831,12 @@ window.addEventListener('popstate', function(e){
   if(state.tab==='historial' && typeof window.cargarHistorial==='function'){
     window.cargarHistorial();
   }
-  window.scrollTo(0,0);
+  if(state.tab==='cartadia'){
+    const navEl=document.querySelector('nav');
+    if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
+  } else {
+    window.scrollTo(0,0);
+  }
   navegandoPorHistorial = false;
 });
 
