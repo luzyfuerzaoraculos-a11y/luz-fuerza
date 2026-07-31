@@ -172,6 +172,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .auth-input::placeholder{color:rgba(100,80,150,0.5);}
 .auth-select{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.3);border-radius:8px;padding:10px 14px;color:#c8d0f0;font-family:"Montserrat",sans-serif;font-size:15px;}
 .auth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.auth-row .auth-campo{min-width:0;}
+.auth-row .auth-input{min-width:0;}
 .auth-btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Marcellus",serif;font-size:13px;cursor:pointer;letter-spacing:1px;margin-top:1rem;box-shadow:0 0 20px rgba(120,60,255,0.3);}
 .auth-btn-primary:hover{box-shadow:0 0 30px rgba(150,80,255,0.5);}
 .auth-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Marcellus",serif;font-size:11px;cursor:pointer;margin-top:8px;letter-spacing:0.5px;}
@@ -1060,18 +1062,22 @@ function crearMesaDia(){
   const mesa=document.getElementById('mesaDia');
   if(!mesa)return;
   mesa.innerHTML='';
+  const esMovil = window.innerWidth < 480;
+  const anchoCarta = esMovil ? 40 : 65;
+  const altoCarta = esMovil ? 66 : 105;
+  const overlapCarta = esMovil ? -20 : -14;
   cartasDia.forEach((c,i)=>{
     const div=document.createElement('div');
     div.className='carta-boca-abajo';
     div.style.cssText=`
-      width:65px;height:105px;border-radius:10px;cursor:pointer;
+      width:${anchoCarta}px;height:${altoCarta}px;border-radius:10px;cursor:pointer;
       background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);
       border:1.5px solid rgba(150,100,255,0.5);
       display:inline-flex;align-items:center;justify-content:center;
       flex-shrink:0;
       transform:rotate(${angulos[i]}deg);
       z-index:${i+1};
-      margin-left:${i===0?'0':'-14px'};
+      margin-left:${i===0?'0':overlapCarta+'px'};
       transition:transform 0.3s ease;
       vertical-align:bottom;
     `;
@@ -1342,6 +1348,8 @@ window.registrarse = async function() {
     }).eq('id', data.user.id);
 
     usuaria = data.user;
+    const histContReg = document.getElementById('historialLista');
+    if(histContReg) histContReg.innerHTML = '';
     await cargarPerfil();
     actualizarUI();
   }
@@ -1363,6 +1371,8 @@ window.iniciarSesion = async function() {
   }
 
   usuaria = data.user;
+  const histContLogin = document.getElementById('historialLista');
+  if(histContLogin) histContLogin.innerHTML = '';
   await cargarPerfil();
   actualizarUI();
   cerrarModales();
@@ -1411,6 +1421,10 @@ window.cerrarSesion = async function() {
   await supa.auth.signOut();
   usuaria = null;
   perfil = null;
+  window.usuaria = null;
+  window.perfil = null;
+  const histCont = document.getElementById('historialLista');
+  if(histCont) histCont.innerHTML = '';
   actualizarUI();
 }
 
