@@ -294,7 +294,10 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
     </div>
     <div class="cta-box">
-      <button onclick="abrirModal('modalRegistro2')" style="font-family:'Marcellus',serif;font-size:14px;padding:14px 36px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">Crear cuenta y comenzar</button>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="destinoRegistro='cartadia';abrirModal('modalRegistro2')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 26px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">🔮 Sacar mi carta del día</button>
+        <button onclick="destinoRegistro='consulta';abrirModal('modalRegistro2')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 26px;background:rgba(150,100,255,0.12);border:1px solid rgba(150,100,255,0.5);border-radius:30px;color:#e8dcff;cursor:pointer;letter-spacing:0.5px;">✨ Hacer una consulta completa</button>
+      </div>
       <div class="auth-link" onclick="abrirModal('modalLogin')" style="margin-top:12px;">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
     </div>
     <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
@@ -302,8 +305,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 </header>
 
 <nav>
-  <button class="active" onclick="showTab('consulta',this)">Consulta</button>
-  <button onclick="showTab('cartadia',this)">Carta del día</button>
+  <button class="active" onclick="showTab('consulta',this)">✨ Consulta</button>
+  <button onclick="showTab('cartadia',this)">🔮 Carta del día</button>
   <button onclick="showTab('como',this)">¿Cómo funciona?</button>
   <button onclick="showTab('historia',this)">Historia y poder</button>
   <button onclick="showTab('planes',this)">Planes</button>
@@ -1179,6 +1182,7 @@ window.usuaria = null;
 window.perfil = null;
 let usuaria = null;
 let perfil = null;
+let destinoRegistro = 'consulta';
 
 // Inicializar sesión al cargar
 async function initAuth() {
@@ -1350,6 +1354,11 @@ window.registrarse = async function() {
     if(histContReg) histContReg.innerHTML = '';
     await cargarPerfil();
     actualizarUI();
+    if(destinoRegistro === 'cartadia'){
+      const btnCartaDia = document.querySelectorAll('nav button')[1];
+      if(btnCartaDia) showTab('cartadia', btnCartaDia);
+    }
+    destinoRegistro = 'consulta';
   }
 
   cerrarModales();
