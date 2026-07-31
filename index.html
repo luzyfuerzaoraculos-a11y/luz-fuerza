@@ -91,6 +91,13 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 
 .cfrow{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:2rem;}
 .cfcard{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem;}
+.histcard{background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem;text-align:left;}
+.histtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
+.histtipo{font-family:'Marcellus',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));padding:4px 12px;border-radius:20px;}
+.histfecha{font-family:'Montserrat',sans-serif;font-size:12px;color:rgba(180,160,255,0.6);}
+.histpregunta{font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(220,200,255,0.9);font-style:italic;margin-bottom:8px;}
+.histcartas{font-family:'Marcellus',serif;font-size:13px;color:rgba(200,180,255,0.85);margin-bottom:8px;}
+.histinterp{font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(200,190,230,0.85);line-height:1.6;border-top:0.5px solid rgba(150,100,255,0.2);padding-top:10px;}
 .cfcard h3{font-size:14px;color:#ffffff;font-weight:400;margin-bottom:8px;}.cfcard p{font-size:13px;color:#5a7aaa;line-height:1.7;}.cfcard .icon{font-size:24px;margin-bottom:10px;}
 .hblock{margin-bottom:2rem;}.hblock h3{font-size:16px;color:#ffffff;font-weight:400;margin-bottom:10px;border-bottom:0.5px solid #1e2a45;padding-bottom:8px;}.hblock p{font-size:14px;color:#5a7aaa;line-height:1.8;margin-bottom:10px;}
 .arcanos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1rem;}
@@ -285,6 +292,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <button onclick="showTab('planes',this)">Planes</button>
   <button onclick="showTab('sobre',this)">Nosotras</button>
   <button onclick="showTab('contacto',this)">Contacto</button>
+  <button onclick="irAHistorial(this)">Mi Historial</button>
 </nav>
 
 <main style="position:relative;z-index:2;">
@@ -474,6 +482,12 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     </a>
     <div style="font-family:'Montserrat',sans-serif;font-size:11px;color:rgba(150,120,255,0.4);margin-top:1.5rem;font-style:italic;">Respondemos en menos de 24 horas</div>
   </div>
+</div>
+
+<div id="tab-historial" class="tab">
+  <div class="slabel"><div class="snum">✦</div>Mi Historial</div>
+  <div class="hint" style="margin-bottom:1.5rem;">Todas tus consultas y cartas del día, en un solo lugar.</div>
+  <div id="historialLista"></div>
 </div>
 
 </div>
@@ -710,7 +724,7 @@ const hints={amor:"Contame sobre tu situación en el amor — ¿hay una persona 
 const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual."},{nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo — tu momento presente."},{nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren."}];
 let area="";
 
-const ordenTabs=['consulta','cartadia','como','historia','planes','sobre','contacto'];
+const ordenTabs=['consulta','cartadia','como','historia','planes','sobre','contacto','historial'];
 let navegandoPorHistorial=false;
 
 function stepActualConsulta(){
@@ -738,6 +752,9 @@ function showTab(t,el){
       if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
       if(typeof crearMesaDia==='function')crearMesaDia();
     },100);
+  }
+  if(t==='historial' && typeof window.cargarHistorial==='function'){
+    window.cargarHistorial();
   }
   if(!navegandoPorHistorial){
     history.pushState({tab:t, step:t==='consulta'?stepActualConsulta():1}, '', '#'+t);
@@ -781,6 +798,9 @@ window.addEventListener('popstate', function(e){
     if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
     if(typeof crearMesaDia==='function')crearMesaDia();
   }
+  if(state.tab==='historial' && typeof window.cargarHistorial==='function'){
+    window.cargarHistorial();
+  }
   window.scrollTo(0,0);
   navegandoPorHistorial = false;
 });
@@ -817,7 +837,7 @@ async function revelar(){
   document.getElementById("cartas").innerHTML=tres.map((c,i)=>`<div class="carta"><div class="cpos">${posiciones[i].nombre}</div><img src="${c.img}" alt="${c.nombre}" style="width:100%;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display='none'"><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div></div>`).join("");
   const interpDiv=document.getElementById("interp");interpDiv.classList.add("loading");interpDiv.textContent="El tarot está leyendo las cartas...";
   const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
-  try{const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});const d=await r.json();interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");if(window.descontarCredito)window.descontarCredito();}
+  try{const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});const d=await r.json();interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");if(window.descontarCredito)window.descontarCredito();if(d.respuesta&&window.guardarHistorial)window.guardarHistorial('consulta',area,ctx,tres.map(c=>({nombre:c.nombre,energia:c.energia})),d.respuesta);}
   catch(e){interpDiv.textContent="El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
 }
 
@@ -1089,6 +1109,9 @@ async function elegirCartaDia(carta,el,rot){
       perfil = window.perfil;
       actualizarUI();
     }
+    if(window.guardarHistorial){
+      window.guardarHistorial('carta_dia', null, null, [{nombre:carta.nombre, energia:carta.energia}], carta.consejo || null);
+    }
   },500);
 }
 
@@ -1136,6 +1159,60 @@ async function cargarPerfil() {
     .maybeSingle();
   if (data) { perfil = data; window.perfil = data; window.usuaria = usuaria; }
   if (error) console.log('Error perfil:', error.message);
+}
+
+window.guardarHistorial = async function(tipo, area, pregunta, cartas, interpretacion){
+  if(!window.usuaria) return;
+  const { error } = await supa.from('historial_consultas').insert({
+    user_id: window.usuaria.id,
+    tipo: tipo,
+    area: area || null,
+    pregunta: pregunta || null,
+    cartas: cartas,
+    interpretacion: interpretacion || null
+  });
+  if(error) console.error('No se pudo guardar el historial:', error.message);
+}
+
+window.cargarHistorial = async function(){
+  const cont = document.getElementById('historialLista');
+  if(!cont) return;
+  if(!window.usuaria){
+    cont.innerHTML = '<div class="hint">Iniciá sesión para ver tu historial.</div>';
+    return;
+  }
+  cont.innerHTML = '<div class="hint">Cargando tu historial...</div>';
+  const { data, error } = await supa
+    .from('historial_consultas')
+    .select('*')
+    .eq('user_id', window.usuaria.id)
+    .order('created_at', { ascending: false })
+    .limit(50);
+  if(error){
+    cont.innerHTML = '<div class="hint">No pudimos cargar tu historial. Probá de nuevo más tarde.</div>';
+    console.error('Error cargando historial:', error.message);
+    return;
+  }
+  if(!data || data.length === 0){
+    cont.innerHTML = '<div class="hint">Todavía no tenés consultas registradas. ¡Hacé tu primera consulta!</div>';
+    return;
+  }
+  cont.innerHTML = data.map(function(item){
+    const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const tipoLabel = item.tipo === 'carta_dia' ? 'Carta del día' : 'Consulta';
+    const cartasNombres = (item.cartas || []).map(function(c){ return c.nombre; }).join(' · ');
+    const preguntaHtml = item.pregunta ? ('<div class="histpregunta">"' + item.pregunta + '"</div>') : '';
+    const interpHtml = item.interpretacion ? ('<div class="histinterp">' + item.interpretacion + '</div>') : '';
+    return '<div class="histcard"><div class="histtop"><span class="histtipo">' + tipoLabel + '</span><span class="histfecha">' + fecha + '</span></div>' + preguntaHtml + '<div class="histcartas">' + cartasNombres + '</div>' + interpHtml + '</div>';
+  }).join('');
+}
+
+window.irAHistorial = function(el){
+  if(!window.usuaria){
+    window.abrirModal('modalLogin');
+    return;
+  }
+  showTab('historial', el);
 }
 
 function actualizarUI() {
