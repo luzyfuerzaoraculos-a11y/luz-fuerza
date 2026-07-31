@@ -262,15 +262,17 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <span class="user-creditos" id="userCreditos"></span>
     <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
   </div>
-  <div class="cta-box" style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
+  <div style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
     <div style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Hacé tu pregunta y descubrí el mensaje que las cartas tienen para vos.<br>Orientación disponible cuando la necesitás.</div>
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:1.25rem;">
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
     </div>
-    <button onclick="abrirModal('modalRegistro2')" style="font-family:'Marcellus',serif;font-size:14px;padding:14px 36px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">Crear cuenta y comenzar</button>
-    <div class="auth-link" onclick="abrirModal('modalLogin')" style="margin-top:12px;">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
+    <div class="cta-box">
+      <button onclick="abrirModal('modalRegistro2')" style="font-family:'Marcellus',serif;font-size:14px;padding:14px 36px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);">Crear cuenta y comenzar</button>
+      <div class="auth-link" onclick="abrirModal('modalLogin')" style="margin-top:12px;">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
+    </div>
     <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
   </div>
 </header>
