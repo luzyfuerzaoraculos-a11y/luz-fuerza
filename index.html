@@ -306,7 +306,7 @@ h1{letter-spacing:3px;}
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
     </div>
-    <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:12.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,rgba(255,175,70,0.95),rgba(220,120,35,0.95));padding:6px 18px;border-radius:20px;margin-bottom:16px;letter-spacing:0.3px;box-shadow:0 0 15px rgba(255,150,60,0.35);">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
+    <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,205,150,0.95);background:rgba(255,175,70,0.1);border:1px solid rgba(255,175,70,0.45);padding:5px 16px;border-radius:20px;margin-bottom:16px;letter-spacing:0.3px;">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
     <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;align-items:center;max-width:220px;">
         <button onclick="irOpcionHero('cartadia')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">🔮 Sacar mi carta del día</button>
@@ -598,7 +598,7 @@ h1{letter-spacing:3px;}
       </div>
     </div>
     <div class="auth-error" id="login-error"></div>
-    <button class="auth-btn-primary" onclick="iniciarSesion()">Entrar</button>
+    <button class="auth-btn-primary" id="btnLogin" onclick="iniciarSesion()">Entrar</button>
     <div class="auth-link" onclick="olvidoPassword()" style="margin-top:6px;font-size:12px;color:rgba(180,160,255,0.6);">¿Olvidaste tu contraseña? <span>Recuperar</span></div>
     <div class="auth-link" onclick="switchModal('login','registro')">¿No tenés cuenta? <span>Registrate gratis</span></div>
     <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
@@ -685,7 +685,7 @@ h1{letter-spacing:3px;}
       <input class="auth-input" id="reg-pais" type="text" placeholder="Argentina" value="Argentina">
     </div>
     <div class="auth-error" id="reg-error"></div>
-    <button class="auth-btn-primary" onclick="registrarse()">Crear cuenta y comenzar</button>
+    <button class="auth-btn-primary" id="btnRegistrar" onclick="registrarse()">Crear cuenta y comenzar</button>
     <div class="auth-link" onclick="switchModal('registro','login')">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
     <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
   </div>
@@ -1382,6 +1382,7 @@ window.registrarse = async function() {
   const ciudad = document.getElementById('reg-ciudad').value.trim();
   const pais = document.getElementById('reg-pais').value.trim() || 'Argentina';
   const errEl = document.getElementById('reg-error');
+  const btnReg = document.getElementById('btnRegistrar');
 
   if (!nombre || !email || !pass || !fecha || !ciudad) {
     errEl.textContent = 'Por favor completá todos los campos requeridos.';
@@ -1389,57 +1390,78 @@ window.registrarse = async function() {
     return;
   }
 
-  const { data, error } = await supa.auth.signUp({ email, password: pass,
-    options: { data: { nombre, pronombre, fecha_nacimiento: fecha, hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais } }
-  });
+  errEl.style.display = 'none';
+  if(btnReg){ btnReg.disabled = true; btnReg.textContent = 'Creando cuenta...'; }
 
-  if (error) {
-    errEl.textContent = error.message === 'User already registered' ? 'Ya existe una cuenta con ese email.' : 'Error: ' + error.message;
-    errEl.style.display = 'block';
-    return;
-  }
+  try {
+    const { data, error } = await supa.auth.signUp({ email, password: pass,
+      options: { data: { nombre, pronombre, fecha_nacimiento: fecha, hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais } }
+    });
 
-  // Actualizar perfil con datos completos
-  if (data.user) {
-    await supa.from('perfiles').update({
-      nombre, pronombre, fecha_nacimiento: fecha,
-      hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais
-    }).eq('id', data.user.id);
-
-    usuaria = data.user;
-    const histContReg = document.getElementById('historialLista');
-    if(histContReg) histContReg.innerHTML = '';
-    await cargarPerfil();
-    actualizarUI();
-    if(destinoRegistro === 'cartadia'){
-      const btnCartaDia = document.querySelectorAll('nav button')[1];
-      if(btnCartaDia) showTab('cartadia', btnCartaDia);
+    if (error) {
+      errEl.textContent = error.message === 'User already registered' ? 'Ya existe una cuenta con ese email.' : 'Error: ' + error.message;
+      errEl.style.display = 'block';
+      return;
     }
-    destinoRegistro = 'consulta';
-  }
 
-  cerrarModales();
+    // Actualizar perfil con datos completos
+    if (data.user) {
+      await supa.from('perfiles').update({
+        nombre, pronombre, fecha_nacimiento: fecha,
+        hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais
+      }).eq('id', data.user.id);
+
+      usuaria = data.user;
+      const histContReg = document.getElementById('historialLista');
+      if(histContReg) histContReg.innerHTML = '';
+      await cargarPerfil();
+      actualizarUI();
+      if(destinoRegistro === 'cartadia'){
+        const btnCartaDia = document.querySelectorAll('nav button')[1];
+        if(btnCartaDia) showTab('cartadia', btnCartaDia);
+      }
+      destinoRegistro = 'consulta';
+    }
+
+    cerrarModales();
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.';
+    errEl.style.display = 'block';
+  } finally {
+    if(btnReg){ btnReg.disabled = false; btnReg.textContent = 'Crear cuenta y comenzar'; }
+  }
 }
 
 window.iniciarSesion = async function() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
   const errEl = document.getElementById('login-error');
+  const btnLog = document.getElementById('btnLogin');
 
-  const { data, error } = await supa.auth.signInWithPassword({ email, password: pass });
+  errEl.style.display = 'none';
+  if(btnLog){ btnLog.disabled = true; btnLog.textContent = 'Entrando...'; }
 
-  if (error) {
-    errEl.textContent = 'Email o contraseña incorrectos.';
+  try {
+    const { data, error } = await supa.auth.signInWithPassword({ email, password: pass });
+
+    if (error) {
+      errEl.textContent = 'Email o contraseña incorrectos.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    usuaria = data.user;
+    const histContLogin = document.getElementById('historialLista');
+    if(histContLogin) histContLogin.innerHTML = '';
+    await cargarPerfil();
+    actualizarUI();
+    cerrarModales();
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.';
     errEl.style.display = 'block';
-    return;
+  } finally {
+    if(btnLog){ btnLog.disabled = false; btnLog.textContent = 'Entrar'; }
   }
-
-  usuaria = data.user;
-  const histContLogin = document.getElementById('historialLista');
-  if(histContLogin) histContLogin.innerHTML = '';
-  await cargarPerfil();
-  actualizarUI();
-  cerrarModales();
 }
 
 async function olvidoPassword(){
