@@ -805,7 +805,7 @@ function showTab(t,el){
     },100);
   } else if(t){
     const tabActual=document.getElementById('tab-'+t);
-    if(tabActual) tabActual.style.minHeight='60vh';
+    if(tabActual) tabActual.style.minHeight='100vh';
     setTimeout(function(){
       const navEl=document.querySelector('nav');
       if(navEl) navEl.scrollIntoView({block:'start'});
@@ -866,7 +866,7 @@ window.addEventListener('popstate', function(e){
   if(state.tab){
     if(state.tab!=='cartadia'){
       const tabActual=document.getElementById('tab-'+state.tab);
-      if(tabActual) tabActual.style.minHeight='60vh';
+      if(tabActual) tabActual.style.minHeight='100vh';
     }
     const navEl=document.querySelector('nav');
     if(navEl) navEl.scrollIntoView({block:'start'});
