@@ -294,6 +294,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
     </div>
+    <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:12.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,rgba(255,175,70,0.95),rgba(220,120,35,0.95));padding:6px 18px;border-radius:20px;margin-bottom:16px;letter-spacing:0.3px;box-shadow:0 0 15px rgba(255,150,60,0.35);">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
     <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;align-items:center;max-width:220px;">
         <button onclick="irOpcionHero('cartadia')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">🔮 Sacar mi carta del día</button>
@@ -1298,6 +1299,7 @@ window.verMiHistorial = function(){
 function actualizarUI() {
   const userBar = document.getElementById('userBar');
   const ctaBox = document.querySelector('.cta-box');
+  const heroGratis = document.getElementById('heroGratisBadge');
   if (usuaria && perfil) {
     userBar.classList.add('visible');
     document.getElementById('userNombre').textContent = perfil.nombre;
@@ -1346,9 +1348,11 @@ function actualizarUI() {
     }
     
     if (ctaBox) ctaBox.style.display = 'none';
+    if (heroGratis) heroGratis.style.display = 'none';
   } else {
     userBar.classList.remove('visible');
     if (ctaBox) ctaBox.style.display = 'block';
+    if (heroGratis) heroGratis.style.display = 'inline-block';
   }
 }
 
