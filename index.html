@@ -230,6 +230,18 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .modal-btn-secondary:hover{border-color:rgba(150,100,255,0.6);color:#c8b8ff;}
 .modal-sub{font-family:"Montserrat",sans-serif;font-size:12px;color:rgba(120,100,200,0.5);margin-top:12px;font-style:italic;}
 @media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:11px;}}
+@media(max-width:600px){
+.hero{padding:1.8rem 1.2rem 1.8rem;min-height:auto;}
+.hero-icon-wrap{margin-bottom:0.6rem!important;}
+.hero-icon-svg{width:56px!important;height:56px!important;}
+h1{letter-spacing:3px;}
+.tagline{font-size:11px;margin-top:6px;}
+.hero-subcopy{margin-top:0.9rem!important;}
+.hero-subcopy-text{font-size:14px!important;margin-bottom:0.7rem!important;line-height:1.5!important;}
+.hero-checklist{margin-bottom:0.7rem!important;gap:5px 12px!important;}
+.hero-checklist>div{font-size:10px!important;}
+#heroGratisBadge{font-size:11px!important;padding:5px 14px!important;margin-bottom:10px!important;}
+}
 </style>
 </head>
 <body>
@@ -242,8 +254,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
   <div class="aurora a3"></div>
   <div class="aurora a4"></div>
   <div class="hero-contenido">
-  <div style="margin-bottom:1.25rem;">
-    <svg width="90" height="90" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="hero-icon-wrap" style="margin-bottom:1.25rem;">
+    <svg class="hero-icon-svg" width="90" height="90" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="60" cy="60" r="55" stroke="url(#lg1)" stroke-width="2" fill="none"/>
       <circle cx="60" cy="60" r="48" stroke="rgba(255,180,50,0.15)" stroke-width="0.5" fill="none"/>
       <line x1="60" y1="3" x2="60" y2="14" stroke="rgba(180,140,255,0.9)" stroke-width="2"/>
@@ -287,9 +299,9 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
     <span class="user-creditos" id="userCreditos"></span>
     <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
   </div>
-  <div style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
-    <div style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Hacé tu pregunta y descubrí el mensaje que las cartas tienen para vos.<br>Orientación disponible cuando la necesitás.</div>
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:1.25rem;">
+  <div class="hero-subcopy" style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
+    <div class="hero-subcopy-text" style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Hacé tu pregunta y descubrí el mensaje que las cartas tienen para vos.<br>Orientación disponible cuando la necesitás.</div>
+    <div class="hero-checklist" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:1.25rem;">
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
