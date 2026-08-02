@@ -803,6 +803,13 @@ function showTab(t,el){
       const navEl=document.querySelector('nav');
       if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
     },100);
+  } else if(t){
+    const tabActual=document.getElementById('tab-'+t);
+    if(tabActual) tabActual.style.minHeight='60vh';
+    setTimeout(function(){
+      const navEl=document.querySelector('nav');
+      if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
+    },50);
   } else {
     window.scrollTo(0,0);
   }
@@ -856,7 +863,11 @@ window.addEventListener('popstate', function(e){
   if(state.tab==='historial' && typeof window.cargarHistorial==='function'){
     window.cargarHistorial();
   }
-  if(state.tab==='cartadia'){
+  if(state.tab){
+    if(state.tab!=='cartadia'){
+      const tabActual=document.getElementById('tab-'+state.tab);
+      if(tabActual) tabActual.style.minHeight='60vh';
+    }
     const navEl=document.querySelector('nav');
     if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
   } else {
