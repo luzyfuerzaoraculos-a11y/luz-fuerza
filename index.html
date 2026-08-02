@@ -1410,7 +1410,12 @@ window.registrarse = async function() {
     });
 
     if (error) {
-      errEl.textContent = error.message === 'User already registered' ? 'Ya existe una cuenta con ese email.' : 'Error: ' + error.message;
+      const msgRed = (error.message || '').toLowerCase();
+      if (msgRed.includes('fetch') || msgRed.includes('network')) {
+        errEl.textContent = 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.';
+      } else {
+        errEl.textContent = error.message === 'User already registered' ? 'Ya existe una cuenta con ese email.' : 'Error: ' + error.message;
+      }
       errEl.style.display = 'block';
       return;
     }
@@ -1456,7 +1461,10 @@ window.iniciarSesion = async function() {
     const { data, error } = await supa.auth.signInWithPassword({ email, password: pass });
 
     if (error) {
-      errEl.textContent = 'Email o contraseña incorrectos.';
+      const msgLog = (error.message || '').toLowerCase();
+      errEl.textContent = (msgLog.includes('fetch') || msgLog.includes('network'))
+        ? 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.'
+        : 'Email o contraseña incorrectos.';
       errEl.style.display = 'block';
       return;
     }
