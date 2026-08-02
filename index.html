@@ -775,6 +775,8 @@ function showTab(t,el){
   document.getElementById("tab-"+t).classList.add("active");
   if(el) el.classList.add("active");
   if(t==='cartadia'){
+    const tabCartadia=document.getElementById('tab-cartadia');
+    if(tabCartadia) tabCartadia.style.minHeight='100vh';
     setTimeout(function(){
       if(typeof cartaDiaElegida !== 'undefined'){
         cartaDiaElegida=false;
@@ -828,6 +830,8 @@ window.addEventListener('popstate', function(e){
     document.getElementById('step3').style.display = state.step===3?'block':'none';
   }
   if(state.tab==='cartadia'){
+    const tabCartadia=document.getElementById('tab-cartadia');
+    if(tabCartadia) tabCartadia.style.minHeight='100vh';
     if(typeof cartaDiaElegida !== 'undefined'){ cartaDiaElegida=false; }
     const instruccion=document.getElementById('instruccionDia');
     if(instruccion)instruccion.style.display='block';
