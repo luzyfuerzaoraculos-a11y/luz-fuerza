@@ -1422,10 +1422,19 @@ window.registrarse = async function() {
 
     // Actualizar perfil con datos completos
     if (data.user) {
-      await supa.from('perfiles').update({
+      const perfilCampos = {
         nombre, pronombre, fecha_nacimiento: fecha,
         hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais
-      }).eq('id', data.user.id);
+      };
+      const { data: filasActualizadas, error: errUpdate } = await supa.from('perfiles')
+        .update(perfilCampos).eq('id', data.user.id).select('id');
+
+      if (!errUpdate && (!filasActualizadas || filasActualizadas.length === 0)) {
+        // El trigger que crea la fila en perfiles no llego a tiempo o fallo: la creamos nosotros mismos
+        await supa.from('perfiles').insert({
+          id: data.user.id, ...perfilCampos, creditos: 1, creditos_carta: 1
+        });
+      }
 
       usuaria = data.user;
       const histContReg = document.getElementById('historialLista');
