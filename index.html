@@ -300,7 +300,7 @@ h1{letter-spacing:3px;}
     <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
   </div>
   <div class="hero-subcopy" style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
-    <div class="hero-subcopy-text" style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Hacé tu pregunta y descubrí el mensaje que las cartas tienen para vos.<br>Orientación disponible cuando la necesitás.</div>
+    <div class="hero-subcopy-text" style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Descubrí el mensaje que las cartas tienen para vos.</div>
     <div class="hero-checklist" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:1.25rem;">
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
       <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
@@ -801,14 +801,14 @@ function showTab(t,el){
       if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
       if(typeof crearMesaDia==='function')crearMesaDia();
       const navEl=document.querySelector('nav');
-      if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
+      if(navEl) navEl.scrollIntoView({block:'start'});
     },100);
   } else if(t){
     const tabActual=document.getElementById('tab-'+t);
     if(tabActual) tabActual.style.minHeight='60vh';
     setTimeout(function(){
       const navEl=document.querySelector('nav');
-      if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
+      if(navEl) navEl.scrollIntoView({block:'start'});
     },50);
   } else {
     window.scrollTo(0,0);
@@ -869,7 +869,7 @@ window.addEventListener('popstate', function(e){
       if(tabActual) tabActual.style.minHeight='60vh';
     }
     const navEl=document.querySelector('nav');
-    if(navEl) navEl.scrollIntoView({behavior:'smooth', block:'start'});
+    if(navEl) navEl.scrollIntoView({block:'start'});
   } else {
     window.scrollTo(0,0);
   }
