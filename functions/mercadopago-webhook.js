@@ -94,17 +94,29 @@ export async function onRequestPost(context) {
   const perfilResp = await fetch(`${SUPA_URL}/rest/v1/perfiles?id=eq.${userId}&select=creditos,creditos_carta`, {
     headers: headersAdmin
   });
+  if (!perfilResp.ok) {
+    console.error("Error leyendo perfil para acreditar pago", dataId, userId, perfilResp.status, await perfilResp.text());
+    return new Response("error leyendo perfil", { status: 500 });
+  }
   const perfilArr = await perfilResp.json();
-  const actual = perfilArr[0] || { creditos: 0, creditos_carta: 0 };
+  if (!Array.isArray(perfilArr) || perfilArr.length === 0) {
+    console.error("Perfil no encontrado para acreditar pago", dataId, userId);
+    return new Response("perfil no encontrado", { status: 500 });
+  }
+  const actual = perfilArr[0];
 
   const nuevosCreditos = (actual.creditos || 0) + add.creditos;
   const nuevosCreditosCarta = (actual.creditos_carta || 0) + add.creditos_carta;
 
-  await fetch(`${SUPA_URL}/rest/v1/perfiles?id=eq.${userId}`, {
+  const patchResp = await fetch(`${SUPA_URL}/rest/v1/perfiles?id=eq.${userId}`, {
     method: "PATCH",
     headers: headersAdmin,
     body: JSON.stringify({ creditos: nuevosCreditos, creditos_carta: nuevosCreditosCarta })
   });
+  if (!patchResp.ok) {
+    console.error("Error acreditando pago", dataId, userId, patchResp.status, await patchResp.text());
+    return new Response("error acreditando", { status: 500 });
+  }
 
   return new Response("ok", { status: 200 });
 }
