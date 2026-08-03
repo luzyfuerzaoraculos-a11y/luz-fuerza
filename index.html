@@ -360,7 +360,7 @@ h1{letter-spacing:3px;}
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
     <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
-    <button class="btn" id="btnRevelar" onclick="revelar()" disabled>🔀 Mezclar las cartas</button>
+    <button class="btn" id="btnRevelar" onclick="revelar()" disabled>🔀 Mezclar las cartas y consultar</button>
   </div>
   <div id="step3" style="display:none;">
     <button id="btnVolverPregunta" onclick="volverAPregunta()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
@@ -936,7 +936,7 @@ document.addEventListener('click', function(e){
   const modal = document.getElementById('modalRegistro');
   if(e.target === modal) modal.classList.remove('active');
 });
-function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés mezclar las cartas";cnt.classList.add("ok");btn.disabled=false;}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;}}
+function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés mezclar las cartas y consultar";cnt.classList.add("ok");btn.disabled=false;}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;}}
 
 
 async function revelar(){
