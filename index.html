@@ -301,11 +301,6 @@ h1{letter-spacing:3px;}
   </div>
   <div class="hero-subcopy" style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
     <div class="hero-subcopy-text" style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Descubrí el mensaje que las cartas tienen para vos.</div>
-    <div class="hero-checklist" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:1.25rem;">
-      <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
-      <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
-      <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
-    </div>
     <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,205,150,0.95);background:rgba(255,175,70,0.1);border:1px solid rgba(255,175,70,0.45);padding:5px 16px;border-radius:20px;margin-bottom:16px;letter-spacing:0.3px;">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
     <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;align-items:center;max-width:220px;">
@@ -324,11 +319,17 @@ h1{letter-spacing:3px;}
   </div>
 </header>
 
+<div class="hero-checklist" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;padding:14px 20px;">
+  <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
+  <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
+  <div style="font-family:'Marcellus',serif;font-size:11px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:6px;">✅ Consejos diarios según tu plan</div>
+</div>
+
 <nav>
-  <button onclick="showTab('consulta',this)">✨ Consulta</button>
   <button onclick="showTab('cartadia',this)">🔮 Carta del día</button>
+  <button onclick="showTab('consulta',this)">✨ Consulta</button>
   <button onclick="showTab('como',this)">¿Cómo funciona?</button>
-  <button onclick="showTab('historia',this)">Historia y poder</button>
+  <button onclick="showTab('historia',this)">Conocé las cartas</button>
   <button onclick="showTab('planes',this)">Planes</button>
   <button onclick="showTab('sobre',this)">Nosotras</button>
   <button onclick="showTab('contacto',this)">Contacto</button>
@@ -382,7 +383,7 @@ h1{letter-spacing:3px;}
     </div>
   </div>
   <div style="text-align:center;margin-top:1.5rem;">
-    <button class="btn-nueva-carta" id="btnNuevaCarta" onclick="showTab('consulta', document.querySelector('nav button'))" style="display:none;">✦ Quiero una consulta completa</button>
+    <button class="btn-nueva-carta" id="btnNuevaCarta" onclick="showTab('consulta', document.querySelectorAll('nav button')[1])" style="display:none;">✦ Quiero una consulta completa</button>
   </div>
 </div>
 
@@ -397,7 +398,6 @@ h1{letter-spacing:3px;}
 
 <div id="tab-historia" class="tab">
   <div class="hint" style="margin-bottom:1.5rem;">Miles de años de sabiduría, condensados en 78 cartas que todavía hoy ayudan a ver con más claridad lo que ya sabemos, pero no vemos.</div>
-  <div class="hblock"><h3>El origen del tarot</h3><p>El tarot nació en el norte de Italia en el siglo XV como un juego de cartas para la nobleza. Con el tiempo se transformó en una herramienta de adivinación y reflexión espiritual en Francia y Europa.</p><p>Las cartas que conocemos hoy tienen su base en el Tarot de Marsella (siglo XVII) y el Rider-Waite (1909), el más influyente de la historia moderna.</p></div>
   <div class="hblock"><h3>El poder del tarot</h3><p>El tarot ha acompañado a la humanidad desde el siglo XV, evolucionando de un juego de cartas a una herramienta profunda de autoconocimiento. No predice el futuro: es un espejo que refleja lo que ya sabemos pero no vemos con claridad.</p><p>Cada carta es una invitación a mirar más profundo, a conectar con tu intuición y a encontrar la claridad que necesitás para tomar decisiones importantes.</p></div>
   <div class="hblock"><h3>Los 22 arcanos mayores</h3><p>El viaje del Loco al Mundo es el viaje de toda alma humana.</p>
     <div class="arcanos-grid">
@@ -707,7 +707,7 @@ h1{letter-spacing:3px;}
     <div style="font-size:32px;margin-bottom:1rem;">✨</div>
     <div class="auth-titulo" id="pagoOkTitulo">¡Bárbaro! Ya podés usar tu consulta</div>
     <div class="auth-subtitulo" id="pagoOkTexto">Tu pago se acreditó correctamente.</div>
-    <button class="auth-btn-primary" id="pagoOkBtn" onclick="cerrarModales();showTab('consulta',document.querySelectorAll('nav button')[0])">Ir a mi consulta</button>
+    <button class="auth-btn-primary" id="pagoOkBtn" onclick="cerrarModales();showTab('consulta',document.querySelectorAll('nav button')[1])">Ir a mi consulta</button>
     <button class="auth-btn-secondary" onclick="cerrarModales()">Cerrar</button>
   </div>
 </div>
@@ -772,7 +772,7 @@ const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aq
 let area="";
 let consultaEnCurso=false;
 
-const ordenTabs=['consulta','cartadia','como','historia','planes','sobre','contacto','historial'];
+const ordenTabs=['cartadia','consulta','como','historia','planes','sobre','contacto','historial'];
 let navegandoPorHistorial=false;
 
 function stepActualConsulta(){
@@ -1199,7 +1199,7 @@ async function elegirCartaDia(carta,el,rot){
     const btnNC=document.getElementById('btnNuevaCarta');
     if(window.perfil && window.perfil.creditos > 0){
       btnNC.textContent='✦ Quiero una consulta completa';
-      btnNC.onclick=function(){showTab('consulta', document.querySelectorAll('nav button')[0]);};
+      btnNC.onclick=function(){showTab('consulta', document.querySelectorAll('nav button')[1]);};
     } else {
       btnNC.textContent='✦ Ver planes';
       btnNC.onclick=function(){showTab('planes', document.querySelectorAll('nav button')[4]);};
@@ -1366,7 +1366,7 @@ function actualizarUI() {
     if(c === 0 && cc === 0){
       credEl.style.cursor = 'pointer';
       credEl.onclick = () => {
-        const planesBtn = document.querySelector('nav button:nth-child(6)');
+        const planesBtn = document.querySelector('nav button:nth-child(5)');
         if(planesBtn) showTab('planes', planesBtn);
       };
     } else {
@@ -1442,7 +1442,7 @@ window.registrarse = async function() {
       await cargarPerfil();
       actualizarUI();
       if(destinoRegistro === 'cartadia'){
-        const btnCartaDia = document.querySelectorAll('nav button')[1];
+        const btnCartaDia = document.querySelectorAll('nav button')[0];
         if(btnCartaDia) showTab('cartadia', btnCartaDia);
       }
       destinoRegistro = 'consulta';
@@ -1556,7 +1556,7 @@ window.cerrarSesion = async function() {
 
 window.irOpcionHero = function(destino){
   if(window.usuaria){
-    const idx = destino === 'cartadia' ? 1 : 0;
+    const idx = destino === 'cartadia' ? 0 : 1;
     const btn = document.querySelectorAll('nav button')[idx];
     if(btn) showTab(destino, btn);
   } else {
@@ -1670,10 +1670,10 @@ window.pagar = async function(plan){
 }
 
 const nombresPlan = {
-  consulta: { titulo: '¡Bárbaro! Ya podés hacer tu consulta', tab: 'consulta', idx: 0, boton: 'Ir a mi consulta' },
-  semanal:  { titulo: '¡Bárbaro! Ya tenés tu Pack Semanal activo', tab: 'consulta', idx: 0, boton: 'Ir a mi consulta' },
-  mensual:  { titulo: '¡Bárbaro! Ya tenés tu carta del día del mes', tab: 'cartadia', idx: 1, boton: 'Ir a mi carta del día' },
-  consejo:  { titulo: '¡Bárbaro! Ya podés usar tu carta del día', tab: 'cartadia', idx: 1, boton: 'Ir a mi carta del día' }
+  consulta: { titulo: '¡Bárbaro! Ya podés hacer tu consulta', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  semanal:  { titulo: '¡Bárbaro! Ya tenés tu Pack Semanal activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  mensual:  { titulo: '¡Bárbaro! Ya tenés tu carta del día del mes', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
+  consejo:  { titulo: '¡Bárbaro! Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' }
 };
 
 function chequearPagoOk(){
@@ -1689,7 +1689,7 @@ function chequearPagoOk(){
     const cambio = JSON.stringify(perfil) !== antes;
     if(cambio || intentos >= 8){
       clearInterval(intervalo);
-      const info = nombresPlan[plan] || { titulo: '¡Bárbaro! Tu pago se acreditó', tab: 'consulta', idx: 0, boton: 'Ir a mi consulta' };
+      const info = nombresPlan[plan] || { titulo: '¡Bárbaro! Tu pago se acreditó', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' };
       const titulo = document.getElementById('pagoOkTitulo');
       if(titulo) titulo.textContent = info.titulo;
       const texto = document.getElementById('pagoOkTexto');
@@ -1740,7 +1740,7 @@ const arcanosGuia = {
 window.irALecturaDesdeGuia = function(){
   cerrarModales();
   if(window.usuaria){
-    const btnConsulta = document.querySelector('nav button:nth-child(1)');
+    const btnConsulta = document.querySelector('nav button:nth-child(2)');
     if(btnConsulta) showTab('consulta', btnConsulta);
   } else {
     abrirModal('modalRegistro2');
