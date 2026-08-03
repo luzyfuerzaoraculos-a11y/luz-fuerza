@@ -1,3 +1,23 @@
+async function alertarError(env, asunto, detalle) {
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: "Luz & Fuerza <no-reply@tarotluzyfuerza.com.ar>",
+        to: ["bravo.gabriela@gmail.com"],
+        subject: `⚠️ Webhook MercadoPago: ${asunto}`,
+        html: `<p>${detalle}</p>`
+      })
+    });
+  } catch (e) {
+    console.error("No se pudo enviar alerta de error por mail", e && e.message);
+  }
+}
+
 async function validarFirma(request, dataId, secret) {
   const xSignature = request.headers.get("x-signature");
   const xRequestId = request.headers.get("x-request-id");
@@ -75,6 +95,9 @@ export async function onRequestPost(context) {
     return new Response("ok", { status: 200 });
   }
   if (!regResp.ok) {
+    const detalleErr = await regResp.text();
+    console.error("Error registrando pago", dataId, userId, regResp.status, detalleErr);
+    await alertarError(env, "no se pudo registrar el pago", `Pago ${dataId} de usuario ${userId} (plan ${plan}) no se pudo guardar en pagos_procesados. Status ${regResp.status}: ${detalleErr}`);
     return new Response("error registrando pago", { status: 500 });
   }
 
@@ -96,12 +119,15 @@ export async function onRequestPost(context) {
     headers: headersAdmin
   });
   if (!perfilResp.ok) {
-    console.error("Error leyendo perfil para acreditar pago", dataId, userId, perfilResp.status, await perfilResp.text());
+    const detalleErr = await perfilResp.text();
+    console.error("Error leyendo perfil para acreditar pago", dataId, userId, perfilResp.status, detalleErr);
+    await alertarError(env, "no se pudo leer el perfil para acreditar", `Pago ${dataId} de usuario ${userId} (plan ${plan}) aprobado, pero no se pudo leer su perfil. Status ${perfilResp.status}: ${detalleErr}. Hay que acreditarlo a mano.`);
     return new Response("error leyendo perfil", { status: 500 });
   }
   const perfilArr = await perfilResp.json();
   if (!Array.isArray(perfilArr) || perfilArr.length === 0) {
     console.error("Perfil no encontrado para acreditar pago", dataId, userId);
+    await alertarError(env, "perfil no encontrado", `Pago ${dataId} de usuario ${userId} (plan ${plan}) aprobado, pero no existe fila en perfiles. Hay que acreditarlo a mano.`);
     return new Response("perfil no encontrado", { status: 500 });
   }
   const actual = perfilArr[0];
@@ -115,7 +141,9 @@ export async function onRequestPost(context) {
     body: JSON.stringify({ creditos: nuevosCreditos, creditos_carta: nuevosCreditosCarta })
   });
   if (!patchResp.ok) {
-    console.error("Error acreditando pago", dataId, userId, patchResp.status, await patchResp.text());
+    const detalleErr = await patchResp.text();
+    console.error("Error acreditando pago", dataId, userId, patchResp.status, detalleErr);
+    await alertarError(env, "no se pudo acreditar el pago", `Pago ${dataId} de usuario ${userId} (plan ${plan}) aprobado, pero fallo el PATCH de creditos. Status ${patchResp.status}: ${detalleErr}. Hay que acreditarlo a mano.`);
     return new Response("error acreditando", { status: 500 });
   }
 
@@ -123,6 +151,7 @@ export async function onRequestPost(context) {
 
   } catch (e) {
     console.error('Excepcion no atrapada en webhook MP', e && e.message, e && e.stack);
+    await alertarError(env, "excepcion no atrapada", `El webhook tiro una excepcion inesperada: ${(e && e.message) || String(e)}. Revisar los logs de Cloudflare para mas detalle.`);
     return new Response('error interno', { status: 500 });
   }
 }
