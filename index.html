@@ -444,7 +444,7 @@ h1{letter-spacing:3px;}
   <div class="planes">
     <div class="plan">
       <div class="pbadge">Consulta</div>
-      <div class="pprecio">$3.500 <span>ARS</span></div>
+      <div class="pprecio">$2.500 <span>ARS</span></div>
       <ul class="pitems">
         <li>1 tirada completa</li>
         <li>Interpretación personalizada</li>
@@ -454,21 +454,21 @@ h1{letter-spacing:3px;}
     </div>
     <div class="plan pop">
       <div class="pbadge">✦ Más elegido</div>
-      <div class="pprecio">$9.000 <span>ARS/semana</span></div>
+      <div class="pprecio">$6.000 <span>ARS/semana</span></div>
       <ul class="pitems">
         <li>7 consultas de tarot, una por día</li>
         <li>Interpretación personalizada en cada una</li>
-        <li>Ideal para una semana de decisiones importantes</li>
+        <li>Resumen con la tendencia de la semana (por mail)</li>
       </ul>
       <button onclick="pagar('semanal')" class="btn-mp btn-mp-pop">Pagar con MercadoPago</button>
     </div>
     <div class="plan">
       <div class="pbadge">Mensual</div>
-      <div class="pprecio">$18.000 <span>ARS/mes</span></div>
+      <div class="pprecio">$9.000 <span>ARS/mes</span></div>
       <ul class="pitems">
-        <li>Carta del día, todos los días del mes calendario</li>
-        <li>Mensaje personalizado cada día</li>
-        <li>Ideal para acompañar tu rutina diaria</li>
+        <li>30 consultas completas, una por día durante 30 días</li>
+        <li>Interpretación personalizada en cada una</li>
+        <li>Resumen con la tendencia del mes (por mail)</li>
       </ul>
       <button onclick="pagar('mensual')" class="btn-mp">Pagar con MercadoPago</button>
     </div>
@@ -485,6 +485,20 @@ h1{letter-spacing:3px;}
         <li>Qué hacer y qué evitar</li>
       </ul>
       <button onclick="pagar('consejo')" class="btn-mp">Pagar con MercadoPago</button>
+    </div>
+  </div>
+
+  <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Combo promocional</div>
+  <div class="planes" style="grid-template-columns:1fr;">
+    <div class="plan">
+      <div class="pbadge">Consulta + Carta del día</div>
+      <div class="pprecio">$3.000 <span>ARS</span></div>
+      <ul class="pitems">
+        <li>1 consulta completa (pasado, presente, futuro)</li>
+        <li>1 carta del día</li>
+        <li>Interpretación personalizada de las dos</li>
+      </ul>
+      <button onclick="pagar('combo')" class="btn-mp">Pagar con MercadoPago</button>
     </div>
   </div>
 
@@ -710,6 +724,16 @@ h1{letter-spacing:3px;}
     <div class="auth-subtitulo">Ya usaste tu consulta gratuita. Elegí un plan para seguir consultando.</div>
     <button class="auth-btn-primary" onclick="cerrarModales();showTab('planes',document.querySelectorAll('nav button')[4])">Ver planes</button>
     <button class="auth-btn-secondary" onclick="cerrarModales()">Cerrar</button>
+  </div>
+</div>
+
+<!-- MODAL YA CONSULTASTE HOY -->
+<div class="auth-overlay" id="modalConsultaDiaria">
+  <div class="auth-box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:1rem;">🌙</div>
+    <div class="auth-titulo">Ya hiciste tu consulta de hoy</div>
+    <div class="auth-subtitulo">Tus consultas se liberan una por día, para que puedas ir viviendo el camino paso a paso. Volvé mañana para la siguiente.</div>
+    <button class="auth-btn-primary" onclick="cerrarModales()">Entendido</button>
   </div>
 </div>
 
@@ -1657,6 +1681,21 @@ window.verificarCreditos = async function() {
     window.abrirModal('modalSinCreditos');
     return false;
   }
+  // Limite de 1 consulta completa por dia, para que los packs de varias tiradas
+  // (semanal / mensual) no se puedan gastar todos de una sola vez.
+  const inicioHoy = new Date();
+  inicioHoy.setHours(0,0,0,0);
+  const { data: consultasHoy } = await supa
+    .from('historial_consultas')
+    .select('id')
+    .eq('user_id', usuaria.id)
+    .eq('tipo', 'consulta')
+    .gte('created_at', inicioHoy.toISOString())
+    .limit(1);
+  if (consultasHoy && consultasHoy.length > 0) {
+    window.abrirModal('modalConsultaDiaria');
+    return false;
+  }
   return true;
 }
 
@@ -1728,8 +1767,9 @@ window.pagar = async function(plan){
 const nombresPlan = {
   consulta: { titulo: '¡Bárbaro! Ya podés hacer tu consulta', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
   semanal:  { titulo: '¡Bárbaro! Ya tenés tu Pack Semanal activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
-  mensual:  { titulo: '¡Bárbaro! Ya tenés tu carta del día del mes', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
-  consejo:  { titulo: '¡Bárbaro! Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' }
+  mensual:  { titulo: '¡Bárbaro! Ya tenés tu Plan Mensual activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  consejo:  { titulo: '¡Bárbaro! Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
+  combo:    { titulo: '¡Bárbaro! Ya podés usar tu consulta y tu carta del día', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' }
 };
 
 function chequearPagoOk(){

@@ -40,7 +40,8 @@ export async function onRequestPost(context) {
     }
 
     // 3. Traer las tiradas de ese periodo (desde que se compro el plan hasta ahora)
-    const tipoBuscado = pago.plan === "semanal" ? "consulta" : "carta_dia";
+    // Tanto el plan semanal como el mensual entregan consultas completas (3 cartas), una por dia
+    const tipoBuscado = "consulta";
     const histResp = await fetch(
       `${SUPA_URL}/rest/v1/historial_consultas?user_id=eq.${userId}&tipo=eq.${tipoBuscado}&created_at=gte.${encodeURIComponent(pago.created_at)}&select=created_at,area,pregunta,cartas,interpretacion&order=created_at.asc`,
       { headers: headersAdmin }
@@ -58,10 +59,7 @@ export async function onRequestPost(context) {
     const detalle = historial.map((item, i) => {
       const fecha = new Date(item.created_at).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit" });
       const cartasNombres = (item.cartas || []).map(c => c.nombre).filter(Boolean).join(", ");
-      if (pago.plan === "semanal") {
-        return `Día ${i + 1} (${fecha}) - Área: ${item.area || "general"} - Cartas: ${cartasNombres} - Pregunta: "${(item.pregunta || "").slice(0, 80)}"`;
-      }
-      return `Día ${i + 1} (${fecha}) - Carta: ${cartasNombres}`;
+      return `Día ${i + 1} (${fecha}) - Área: ${item.area || "general"} - Cartas: ${cartasNombres} - Pregunta: "${(item.pregunta || "").slice(0, 80)}"`;
     }).join("\n");
 
     const nombrePlan = pago.plan === "semanal" ? "Pack Semanal (7 consultas)" : "Plan Mensual (carta del día)";

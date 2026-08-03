@@ -10,10 +10,11 @@ export async function onRequestPost(context) {
   const { plan, access_token } = body;
 
   const planes = {
-    consulta: { titulo: "Consulta de tarot · 3 cartas", precio: 3500 },
-    semanal:  { titulo: "Pack Semanal - Luz y Fuerza", precio: 9000 },
-    mensual:  { titulo: "Plan Mensual - Luz y Fuerza", precio: 18000 },
-    consejo:  { titulo: "Consejo del día", precio: 2000 }
+    consulta: { titulo: "Consulta de tarot · 3 cartas", precio: 2500 },
+    semanal:  { titulo: "Pack Semanal - Luz y Fuerza", precio: 6000 },
+    mensual:  { titulo: "Plan Mensual - Luz y Fuerza", precio: 9000 },
+    consejo:  { titulo: "Consejo del día", precio: 2000 },
+    combo:    { titulo: "Combo Consulta + Carta del día", precio: 3000 }
   };
   const elegido = planes[plan];
   if (!elegido) {
