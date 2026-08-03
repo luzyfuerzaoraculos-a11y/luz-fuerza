@@ -563,6 +563,7 @@ h1{letter-spacing:3px;}
 <div id="tab-historial" class="tab">
   <div class="slabel"><div class="snum">✦</div>Mi Historial</div>
   <div class="hint" style="margin-bottom:1.5rem;">Todas tus consultas y cartas del día, en un solo lugar.</div>
+  <div id="misPlanesLista"></div>
   <div id="miCaminoLista"></div>
   <div id="historialLista"></div>
 </div>
@@ -856,6 +857,7 @@ function showTab(t,el){
   if(t==='historial' && typeof window.cargarHistorial==='function'){
     window.cargarHistorial();
     if(typeof window.cargarMiCamino==='function') window.cargarMiCamino();
+    if(typeof window.cargarMisPlanes==='function') window.cargarMisPlanes();
   }
   if(!navegandoPorHistorial){
     history.pushState({tab:t, step:t==='consulta'?stepActualConsulta():1}, '', '#'+t);
@@ -904,6 +906,7 @@ window.addEventListener('popstate', function(e){
   if(state.tab==='historial' && typeof window.cargarHistorial==='function'){
     window.cargarHistorial();
     if(typeof window.cargarMiCamino==='function') window.cargarMiCamino();
+    if(typeof window.cargarMisPlanes==='function') window.cargarMisPlanes();
   }
   if(state.tab){
     if(state.tab!=='cartadia'){
@@ -1361,6 +1364,33 @@ window.guardarHistorial = async function(tipo, area, pregunta, cartas, interpret
     interpretacion: interpretacion || null
   });
   if(error) console.error('No se pudo guardar el historial:', error.message);
+}
+
+const etiquetasPlan = {
+  consulta: { nombre: 'Consulta Individual', detalle: '1 consulta completa' },
+  semanal:  { nombre: 'Pack Semanal', detalle: '7 consultas completas' },
+  mensual:  { nombre: 'Plan Mensual', detalle: '30 consultas completas' },
+  consejo:  { nombre: 'Consejo del día', detalle: '1 carta del día' },
+  combo:    { nombre: 'Combo Consulta + Carta del día', detalle: '1 consulta completa + 1 carta del día' }
+};
+
+window.cargarMisPlanes = async function(){
+  const cont = document.getElementById('misPlanesLista');
+  if(!cont || !window.usuaria) { if(cont) cont.innerHTML=''; return; }
+  const { data, error } = await supa
+    .from('pagos_procesados')
+    .select('plan, created_at')
+    .eq('user_id', window.usuaria.id)
+    .order('created_at', { ascending: false })
+    .limit(20);
+  if(error || !data || data.length === 0){ cont.innerHTML = ''; return; }
+  cont.innerHTML = '<div class="slabel" style="margin-bottom:0.75rem;"><div class="snum">💳</div>Mis planes</div>' +
+    data.map(function(item){
+      const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const info = etiquetasPlan[item.plan] || { nombre: item.plan, detalle: '' };
+      return '<div class="histcard" style="margin-bottom:14px;"><div class="histtop"><span class="histtipo">✦ ' + info.nombre + '</span><span class="histfecha">' + fecha + '</span></div><div class="histcartas">' + info.detalle + '</div></div>';
+    }).join('') +
+    '<div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
 }
 
 window.cargarMiCamino = async function(){
