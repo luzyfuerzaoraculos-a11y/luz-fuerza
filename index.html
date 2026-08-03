@@ -737,7 +737,7 @@ h1{letter-spacing:3px;}
   <div class="auth-box" style="text-align:center;">
     <div style="font-size:32px;margin-bottom:1rem;">🌙</div>
     <div class="auth-titulo">Ya hiciste tu consulta de hoy</div>
-    <div class="auth-subtitulo">Tus consultas se liberan una por día, para que puedas ir viviendo el camino paso a paso. Volvé mañana para la siguiente.</div>
+    <div class="auth-subtitulo" id="textoConsultaDiaria">Tus consultas se liberan una por día, para que puedas ir viviendo el camino paso a paso. Volvé mañana para la siguiente.</div>
     <button class="auth-btn-primary" onclick="cerrarModales()">Entendido</button>
   </div>
 </div>
@@ -1716,6 +1716,13 @@ window.verificarCreditos = async function() {
     .gte('created_at', inicioHoy.toISOString())
     .limit(1);
   if (consultasHoy && consultasHoy.length > 0) {
+    const txtModal = document.getElementById('textoConsultaDiaria');
+    if (txtModal) {
+      const saldo = perfil.creditos;
+      txtModal.textContent = saldo > 0
+        ? `Todavía tenés ${saldo} consulta${saldo === 1 ? '' : 's'} guardada${saldo === 1 ? '' : 's'} — se liberan una por día para que vayas viviendo el camino paso a paso. Mañana tenés la siguiente.`
+        : 'Tus consultas se liberan una por día, para que puedas ir viviendo el camino paso a paso. Volvé mañana para la siguiente.';
+    }
     window.abrirModal('modalConsultaDiaria');
     return false;
   }
