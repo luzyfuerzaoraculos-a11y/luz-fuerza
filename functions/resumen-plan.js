@@ -42,7 +42,7 @@ export async function onRequestPost(context) {
     // 3. Traer las tiradas de ese periodo (desde que se compro el plan hasta ahora)
     const tipoBuscado = pago.plan === "semanal" ? "consulta" : "carta_dia";
     const histResp = await fetch(
-      `${SUPA_URL}/rest/v1/historial_consultas?user_id=eq.${userId}&tipo=eq.${tipoBuscado}&created_at=gte.${pago.created_at}&select=created_at,area,pregunta,cartas,interpretacion&order=created_at.asc`,
+      `${SUPA_URL}/rest/v1/historial_consultas?user_id=eq.${userId}&tipo=eq.${tipoBuscado}&created_at=gte.${encodeURIComponent(pago.created_at)}&select=created_at,area,pregunta,cartas,interpretacion&order=created_at.asc`,
       { headers: headersAdmin }
     );
     if (!histResp.ok) {
