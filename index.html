@@ -1704,18 +1704,34 @@ window.verificarCreditos = async function() {
     window.abrirModal('modalSinCreditos');
     return false;
   }
-  // Limite de 1 consulta completa por dia, para que los packs de varias tiradas
-  // (semanal / mensual) no se puedan gastar todos de una sola vez.
+  // Limite de 1 consulta completa por dia, pero SOLO si la ultima compra fue un
+  // plan de varias tiradas (semanal/mensual): asi no se gastan todas de una vez.
+  // Si compro una consulta individual suelta, esa se puede usar al toque.
+  let aplicaLimiteDiario = false;
+  try {
+    const { data: ultimaCompra } = await supa
+      .from('pagos_procesados')
+      .select('plan')
+      .eq('user_id', usuaria.id)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (ultimaCompra && ultimaCompra[0] && (ultimaCompra[0].plan === 'semanal' || ultimaCompra[0].plan === 'mensual')) {
+      aplicaLimiteDiario = true;
+    }
+  } catch (e) {
+    aplicaLimiteDiario = false; // si no se puede leer, no bloqueamos a la clienta
+  }
+
   const inicioHoy = new Date();
   inicioHoy.setHours(0,0,0,0);
-  const { data: consultasHoy } = await supa
+  const { data: consultasHoy } = aplicaLimiteDiario ? await supa
     .from('historial_consultas')
     .select('id')
     .eq('user_id', usuaria.id)
     .eq('tipo', 'consulta')
     .gte('created_at', inicioHoy.toISOString())
-    .limit(1);
-  if (consultasHoy && consultasHoy.length > 0) {
+    .limit(1) : { data: [] };
+  if (aplicaLimiteDiario && consultasHoy && consultasHoy.length > 0) {
     const txtModal = document.getElementById('textoConsultaDiaria');
     if (txtModal) {
       const saldo = perfil.creditos;
