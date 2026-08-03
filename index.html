@@ -544,6 +544,7 @@ h1{letter-spacing:3px;}
 <div id="tab-historial" class="tab">
   <div class="slabel"><div class="snum">✦</div>Mi Historial</div>
   <div class="hint" style="margin-bottom:1.5rem;">Todas tus consultas y cartas del día, en un solo lugar.</div>
+  <div id="miCaminoLista"></div>
   <div id="historialLista"></div>
 </div>
 
@@ -825,6 +826,7 @@ function showTab(t,el){
   }
   if(t==='historial' && typeof window.cargarHistorial==='function'){
     window.cargarHistorial();
+    if(typeof window.cargarMiCamino==='function') window.cargarMiCamino();
   }
   if(!navegandoPorHistorial){
     history.pushState({tab:t, step:t==='consulta'?stepActualConsulta():1}, '', '#'+t);
@@ -872,6 +874,7 @@ window.addEventListener('popstate', function(e){
   }
   if(state.tab==='historial' && typeof window.cargarHistorial==='function'){
     window.cargarHistorial();
+    if(typeof window.cargarMiCamino==='function') window.cargarMiCamino();
   }
   if(state.tab){
     if(state.tab!=='cartadia'){
@@ -1225,6 +1228,9 @@ async function elegirCartaDia(carta,el,rot){
       window.perfil.creditos_carta = nuevos;
       perfil = window.perfil;
       actualizarUI();
+      if(nuevos === 0 && window.usuaria){
+        fetch('/resumen-plan', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: window.usuaria.id }) }).catch(function(){});
+      }
     }
     if(window.guardarHistorial){
       window.guardarHistorial('carta_dia', null, null, [{nombre:carta.nombre, energia:carta.energia}], carta.consejo || null);
@@ -1290,6 +1296,25 @@ window.guardarHistorial = async function(tipo, area, pregunta, cartas, interpret
     interpretacion: interpretacion || null
   });
   if(error) console.error('No se pudo guardar el historial:', error.message);
+}
+
+window.cargarMiCamino = async function(){
+  const cont = document.getElementById('miCaminoLista');
+  if(!cont || !window.usuaria) { if(cont) cont.innerHTML=''; return; }
+  const { data, error } = await supa
+    .from('resumenes_plan')
+    .select('*')
+    .eq('user_id', window.usuaria.id)
+    .order('created_at', { ascending: false })
+    .limit(10);
+  if(error || !data || data.length === 0){ cont.innerHTML = ''; return; }
+  cont.innerHTML = '<div class="slabel" style="margin-bottom:0.75rem;"><div class="snum">🧭</div>Mi camino</div>' +
+    data.map(function(item){
+      const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+      const planLabel = item.plan === 'semanal' ? 'Pack Semanal' : 'Plan Mensual';
+      return '<div class="histcard" style="border-color:rgba(180,140,255,0.35);background:rgba(120,70,220,0.08);margin-bottom:14px;"><div class="histtop"><span class="histtipo">✦ Resumen · ' + planLabel + '</span><span class="histfecha">' + fecha + '</span></div><div class="histinterp">' + item.resumen + '</div></div>';
+    }).join('') +
+    '<div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
 }
 
 window.cargarHistorial = async function(){
@@ -1624,6 +1649,9 @@ window.descontarCredito = async function() {
   await supa.from('perfiles').update({ creditos: nuevos }).eq('id', usuaria.id);
   perfil.creditos = nuevos;
   actualizarUI();
+  if(nuevos === 0 && usuaria){
+    fetch('/resumen-plan', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: usuaria.id }) }).catch(function(){});
+  }
 }
 
 // Inicializar al cargar
