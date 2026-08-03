@@ -65,7 +65,7 @@ export async function onRequestPost(context) {
     }).join("\n");
 
     const nombrePlan = pago.plan === "semanal" ? "Pack Semanal (7 consultas)" : "Plan Mensual (carta del día)";
-    const prompt = `Tarot Luz & Fuerza. Resumen de tendencia de un ${nombrePlan} ya finalizado. Esta es la secuencia cronológica de tiradas del período:\n${detalle}\n\nBasándote en esta secuencia, escribí un resumen narrativo (no lista, no markdown) de cómo fue variando la energía o el camino a lo largo del período, qué patrón o tendencia general se puede leer, y cerralo con un mensaje motivador de cara a lo que sigue. Tono cálido, directo, de vos a vos. Máximo 160 palabras.`;
+    const prompt = `Tarot Luz & Fuerza. Resumen de tendencia de un ${nombrePlan} ya finalizado. Esta es la secuencia cronológica de tiradas del período:\n${detalle}\n\nBasándote en esta secuencia, escribí un resumen narrativo de cómo fue variando la energía o el camino a lo largo del período, qué patrón o tendencia general se puede leer, y cerralo con un mensaje motivador de cara a lo que sigue. Tono cálido, directo, de vos a vos. Máximo 160 palabras. IMPORTANTE: texto corrido en párrafos nada más, sin título, sin encabezados, sin uso de #, sin asteriscos, sin listas ni viñetas, sin ningún tipo de formato markdown.`;
 
     const claudeResp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -81,7 +81,13 @@ export async function onRequestPost(context) {
       })
     });
     const claudeData = await claudeResp.json();
-    const resumenTexto = claudeData.content ? claudeData.content.map(i => i.text || "").join("") : null;
+    let resumenTexto = claudeData.content ? claudeData.content.map(i => i.text || "").join("") : null;
+    if (resumenTexto) {
+      resumenTexto = resumenTexto
+        .replace(/^#+\s*.*\n+/, "")
+        .replace(/\*\*(.*?)\*\*/g, "$1")
+        .replace(/^\s+|\s+$/g, "");
+    }
     if (!resumenTexto) {
       return new Response(JSON.stringify({ ok: false, motivo: "no se pudo generar el resumen" }), { headers: { "Content-Type": "application/json" } });
     }
