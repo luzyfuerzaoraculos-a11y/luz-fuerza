@@ -134,7 +134,11 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 @keyframes voltear{0%{transform:rotateY(180deg);}100%{transform:rotateY(0deg);}}
 
 /* CARTA DEL DIA */
-.mesa-cartas{display:flex;justify-content:center;align-items:flex-end;min-height:160px;padding:2rem 1rem 1.5rem;flex-wrap:nowrap;overflow:visible;}
+.mesa-cartas{display:flex;justify-content:center;align-items:flex-end;min-height:160px;padding:2rem 1rem 1.5rem;flex-wrap:nowrap;overflow:visible;transition:opacity 0.35s ease, transform 0.35s ease;}
+.mesa-cartas.mezclando{opacity:0;transform:scale(0.92) translateY(6px);}
+.btn-mezclar-dia{margin-bottom:0.5rem;padding:9px 22px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.8);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
+.btn-mezclar-dia:hover{border-color:#8855ff;color:#c8b8ff;}
+.btn-mezclar-dia:disabled{opacity:0.5;cursor:default;}
 @media(max-width:480px){.carta-boca-abajo{width:55px;height:90px;}.carta-boca-abajo::after{font-size:14px;}}
 .carta-boca-abajo::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}.carta-boca-abajo::after{content:"✦";font-size:18px;color:rgba(150,100,255,0.35);}
 .carta-boca-abajo::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}
@@ -374,6 +378,7 @@ h1{letter-spacing:3px;}
     <div style="font-family:'Marcellus',serif;font-size:11px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
     <div style="font-family:'Montserrat',sans-serif;font-size:13.5px;color:rgba(200,185,235,0.8);max-width:480px;margin:0 auto 14px;line-height:1.7;">Una tirada simple: te da un mensaje de orientación para tu momento actual. Mirá las cartas y elegí la que sientas que es para vos.</div>
     <div style="font-family:'Montserrat',sans-serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:8px;line-height:1.6;" id="instruccionDia">Tocá la carta que sentís que es para vos...</div>
+    <button class="btn-mezclar-dia" id="btnMezclarDia" onclick="mezclarCartasDia()">🔀 Mezclar las cartas</button>
     <div id="mesaDia" class="mesa-cartas"></div>
     <div class="flip-container" id="flipContainer">
       <div class="flip-inner" id="flipInner" style="position:relative;height:auto;min-height:380px;">
@@ -1232,6 +1237,8 @@ async function elegirCartaDia(carta,el,rot){
   el.style.boxShadow='0 15px 40px rgba(150,100,255,0.7)';
   el.style.zIndex=20;
   document.getElementById('instruccionDia').style.display='none';
+  const btnMezclarOcultar=document.getElementById('btnMezclarDia');
+  if(btnMezclarOcultar) btnMezclarOcultar.style.display='none';
   setTimeout(async ()=>{
     document.getElementById('mesaDia').style.display='none';
     const frente=document.getElementById('flipFrente');
@@ -1290,7 +1297,23 @@ function nuevaCarta(){
   if(flip)flip.style.display='none';
   const btn=document.getElementById('btnNuevaCarta');
   if(btn)btn.style.display='none';
+  const btnMezclarMostrar=document.getElementById('btnMezclarDia');
+  if(btnMezclarMostrar)btnMezclarMostrar.style.display='inline-block';
   crearMesaDia();
+}
+
+async function mezclarCartasDia(){
+  if(cartaDiaElegida)return;
+  const mesa=document.getElementById('mesaDia');
+  const btnMezclar=document.getElementById('btnMezclarDia');
+  if(!mesa)return;
+  if(btnMezclar)btnMezclar.disabled=true;
+  mesa.classList.add('mezclando');
+  await new Promise(r=>setTimeout(r,350));
+  crearMesaDia();
+  mesa.classList.remove('mezclando');
+  await new Promise(r=>setTimeout(r,350));
+  if(btnMezclar)btnMezclar.disabled=false;
 }
 
 // Inicializar mesa manejado en showTab principal
