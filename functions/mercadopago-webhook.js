@@ -122,7 +122,7 @@ export async function onRequestPost(context) {
   return new Response("ok", { status: 200 });
 
   } catch (e) {
-    console.error('EXCEPCION NO ATRAPADA en webhook MP', e && e.message, e && e.stack);
-    return new Response(JSON.stringify({ error: 'excepcion', message: (e && e.message) || String(e) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    console.error('Excepcion no atrapada en webhook MP', e && e.message, e && e.stack);
+    return new Response('error interno', { status: 500 });
   }
 }
