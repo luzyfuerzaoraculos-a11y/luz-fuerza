@@ -26,6 +26,7 @@ async function validarFirma(request, dataId, secret) {
 export async function onRequestPost(context) {
   const { request, env } = context;
   const url = new URL(request.url);
+  try {
 
   let body = {};
   try { body = await request.json(); } catch (e) { /* algunas notificaciones no traen body */ }
@@ -119,4 +120,9 @@ export async function onRequestPost(context) {
   }
 
   return new Response("ok", { status: 200 });
+
+  } catch (e) {
+    console.error('EXCEPCION NO ATRAPADA en webhook MP', e && e.message, e && e.stack);
+    return new Response(JSON.stringify({ error: 'excepcion', message: (e && e.message) || String(e) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  }
 }
