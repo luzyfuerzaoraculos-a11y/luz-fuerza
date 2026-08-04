@@ -359,6 +359,7 @@ h1{letter-spacing:3px;}
     <div class="slabel"><div class="snum">2</div>Tu pregunta</div>
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
+    <div id="tipPregunta" style="font-size:11.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:8px 0 0;"></div>
     <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
     <button class="btn" id="btnRevelar" onclick="revelar()" disabled>🔀 Mezclar las cartas y consultar</button>
   </div>
@@ -825,7 +826,15 @@ function spawnHero(){
 }
 for(let i=0;i<4;i++)setTimeout(spawnHero,i*800);
 
-const preguntas={amor:"¿Hay algo específico en esta relación que te genera duda?",trabajo:"¿Qué es lo que más te preocupa en esta situación laboral?",dinero:"¿Buscás orientación sobre una decisión económica específica?",personal:"¿Qué aspecto de vos mismo querés transformar o entender?",decision:"¿Cuáles son las opciones que estás considerando?",otro:"¿Podés contarme qué te trajo a consultar hoy?"};
+const preguntas={amor:"¿Cómo voy a estar en el amor este mes?",trabajo:"¿Cómo voy a estar en el trabajo?",dinero:"¿Cómo va a estar mi economía durante los próximos 3 meses?",personal:"¿Es un buen momento para emprender el viaje a…?",decision:"¿Es momento de cambiar de…? o ¿Cómo me va a ir si decido…?",otro:"Estoy evaluando la posibilidad de… ¿Cómo me va a ir si lo realizo?"};
+const tips={
+  amor:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar a…?" · Ejemplo ok: "¿Voy a continuar mi relación con…?"',
+  trabajo:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar de…?" · Ejemplo ok: "¿Voy a conseguir el puesto de…?"',
+  dinero:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder con…?" · Ejemplo ok: "¿Voy a ganar con…?" o "¿cómo me va a ir con…?"',
+  personal:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿no voy a hacer el viaje?" · Ejemplo ok: "¿Voy a conseguir viajar a…?"',
+  decision:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder si…?" · Ejemplo ok: "¿Va a ser positivo para realizar la…?"',
+  otro:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿me va a ir mal si…?" · Ejemplo ok: "¿Cómo me va a ir si…?"'
+};
 const hints={amor:"Contame sobre tu situación en el amor — ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",personal:"¿Qué querés transformar o entender de vos mismo?",decision:"Describí la situación — ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
 const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual."},{nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo — tu momento presente."},{nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren."}];
 let area="";
@@ -949,6 +958,8 @@ async function selArea(el,a){
   el.classList.add("sel");area=a;
   document.getElementById("step2").style.display="block";
   document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;
+  document.getElementById("pregunta").placeholder=preguntas[a]||preguntas.otro;
+  document.getElementById("tipPregunta").innerHTML=tips[a]||tips.otro;
   if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:2}, '', '#consulta');
 }
 
