@@ -444,6 +444,10 @@ h1{letter-spacing:3px;}
 
 <div id="tab-planes" class="tab">
   <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
+  <div style="font-family:'Montserrat',sans-serif;font-size:12.5px;color:rgba(210,195,240,0.85);line-height:1.6;background:rgba(120,70,220,0.1);border:1px solid rgba(150,100,255,0.25);border-radius:12px;padding:14px 16px;margin-bottom:1.5rem;">
+    <strong style="color:#fff;">Importante:</strong> esto es tarot exprés — una carta del día y/o preguntas específicas. Si necesitás profundizar, te recomendamos agendar una sesión por videollamada con nuestra tarotista Pato Escobar.
+    <a href="https://patoescobar.com/" target="_blank" style="color:#b28dff;font-weight:600;text-decoration:underline;">Agendar con Pato →</a>
+  </div>
   
   <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:12px;">Consulta de tarot · 3 cartas</div>
   <div class="planes">
@@ -459,11 +463,11 @@ h1{letter-spacing:3px;}
     </div>
     <div class="plan pop">
       <div class="pbadge">✦ Más elegido</div>
-      <div class="pprecio">$6.000 <span>ARS/semana</span></div>
+      <div class="pprecio">$6.000 <span>ARS/mes</span></div>
       <ul class="pitems">
-        <li>7 consultas de tarot completas, una por día</li>
+        <li>4 consultas de tarot específicas, se habilita 1 por semana</li>
         <li>Interpretación personalizada en cada una</li>
-        <li>Resumen con la tendencia de la semana (por mail)</li>
+        <li>Resumen con la tendencia del mes (por mail)</li>
       </ul>
       <button onclick="pagar('semanal')" class="btn-mp btn-mp-pop">Pagar con MercadoPago</button>
     </div>
@@ -471,7 +475,8 @@ h1{letter-spacing:3px;}
       <div class="pbadge">Mensual</div>
       <div class="pprecio">$9.000 <span>ARS/mes</span></div>
       <ul class="pitems">
-        <li>30 consultas de tarot completas, una por día durante 30 días</li>
+        <li>8 consultas de tarot específicas, se habilitan 2 por semana</li>
+        <li>+ carta del día todos los días del mes</li>
         <li>Interpretación personalizada en cada una</li>
         <li>Resumen con la tendencia del mes (por mail)</li>
       </ul>
@@ -1234,6 +1239,29 @@ async function elegirCartaDia(carta,el,rot){
     window.abrirModal('modalSinCreditos');
     return;
   }
+  // Maximo 1 carta del dia por dia, aunque tenga creditos disponibles: en tarot no
+  // conviene sacar mas de una carta de consejo el mismo dia.
+  try {
+    const inicioHoyCarta = new Date();
+    inicioHoyCarta.setHours(0,0,0,0);
+    const { data: cartaHoy } = await supa
+      .from('historial_consultas')
+      .select('id')
+      .eq('user_id', window.usuaria.id)
+      .eq('tipo', 'carta_dia')
+      .gte('created_at', inicioHoyCarta.toISOString())
+      .limit(1);
+    if (cartaHoy && cartaHoy.length > 0) {
+      const txtModal = document.getElementById('textoConsultaDiaria');
+      if (txtModal) {
+        txtModal.textContent = 'Ya sacaste tu carta del día de hoy. Se libera una por día para que la energía tenga tiempo de asentarse — volvé mañana por la siguiente.';
+      }
+      window.abrirModal('modalConsultaDiaria');
+      return;
+    }
+  } catch (e) {
+    // si falla la lectura, no bloqueamos a la clienta
+  }
   cartaDiaElegida=true;
   el.style.transform=`rotate(${rot}deg) translateY(-30px) scale(1.1)`;
   el.style.boxShadow='0 15px 40px rgba(150,100,255,0.7)';
@@ -1367,8 +1395,8 @@ window.guardarHistorial = async function(tipo, area, pregunta, cartas, interpret
 
 const etiquetasPlan = {
   consulta: { nombre: 'Consulta Individual', detalle: '1 consulta de tarot completa' },
-  semanal:  { nombre: 'Pack Semanal', detalle: '7 consultas de tarot completas' },
-  mensual:  { nombre: 'Plan Mensual', detalle: '30 consultas de tarot completas' },
+  semanal:  { nombre: 'Pack Semanal', detalle: '4 consultas específicas, 1 por semana' },
+  mensual:  { nombre: 'Plan Mensual', detalle: '8 consultas específicas (2 por semana) + carta del día' },
   consejo:  { nombre: 'Carta del día', detalle: '1 carta del día' },
   combo:    { nombre: 'Combo Consulta + Carta del día', detalle: '1 consulta de tarot completa + 1 carta del día' }
 };
@@ -1752,43 +1780,52 @@ window.verificarCreditos = async function() {
     window.abrirModal('modalSinCreditos');
     return false;
   }
-  // Limite de 1 consulta completa por dia, pero SOLO si la ultima compra fue un
-  // plan de varias tiradas (semanal/mensual): asi no se gastan todas de una vez.
+  // Los planes de varias tiradas (semanal/mensual) liberan las consultas de a poco
+  // en vez de todas juntas, porque en tarot no conviene consultar todos los dias.
+  // Semanal: 1 consulta nueva por semana. Mensual: 2 consultas nuevas por semana.
   // Si compro una consulta individual suelta, esa se puede usar al toque.
-  let aplicaLimiteDiario = false;
+  let cuotaPorSemana = 0;
+  let fechaCompra = null;
   try {
     const { data: ultimaCompra } = await supa
       .from('pagos_procesados')
-      .select('plan')
+      .select('plan, created_at')
       .eq('user_id', usuaria.id)
       .order('created_at', { ascending: false })
       .limit(1);
-    if (ultimaCompra && ultimaCompra[0] && (ultimaCompra[0].plan === 'semanal' || ultimaCompra[0].plan === 'mensual')) {
-      aplicaLimiteDiario = true;
+    if (ultimaCompra && ultimaCompra[0]) {
+      if (ultimaCompra[0].plan === 'semanal') { cuotaPorSemana = 1; fechaCompra = ultimaCompra[0].created_at; }
+      else if (ultimaCompra[0].plan === 'mensual') { cuotaPorSemana = 2; fechaCompra = ultimaCompra[0].created_at; }
     }
   } catch (e) {
-    aplicaLimiteDiario = false; // si no se puede leer, no bloqueamos a la clienta
+    cuotaPorSemana = 0; // si no se puede leer, no bloqueamos a la clienta
   }
 
-  const inicioHoy = new Date();
-  inicioHoy.setHours(0,0,0,0);
-  const { data: consultasHoy } = aplicaLimiteDiario ? await supa
-    .from('historial_consultas')
-    .select('id')
-    .eq('user_id', usuaria.id)
-    .eq('tipo', 'consulta')
-    .gte('created_at', inicioHoy.toISOString())
-    .limit(1) : { data: [] };
-  if (aplicaLimiteDiario && consultasHoy && consultasHoy.length > 0) {
-    const txtModal = document.getElementById('textoConsultaDiaria');
-    if (txtModal) {
-      const saldo = perfil.creditos;
-      txtModal.textContent = saldo > 0
-        ? `Todavía tenés ${saldo} consulta${saldo === 1 ? '' : 's'} guardada${saldo === 1 ? '' : 's'} — se liberan una por día para que vayas viviendo el camino paso a paso. Mañana tenés la siguiente.`
-        : 'Tus consultas se liberan una por día, para que puedas ir viviendo el camino paso a paso. Volvé mañana para la siguiente.';
+  if (cuotaPorSemana > 0 && fechaCompra) {
+    try {
+      const msPorDia = 24 * 60 * 60 * 1000;
+      const diasTranscurridos = Math.max(0, Math.floor((Date.now() - new Date(fechaCompra).getTime()) / msPorDia));
+      const semanaActual = Math.floor(diasTranscurridos / 7); // 0-indexed
+      const cupoDisponible = (semanaActual + 1) * cuotaPorSemana;
+      const { data: usadasDesdeCompra } = await supa
+        .from('historial_consultas')
+        .select('id')
+        .eq('user_id', usuaria.id)
+        .eq('tipo', 'consulta')
+        .gte('created_at', fechaCompra);
+      const usadas = usadasDesdeCompra ? usadasDesdeCompra.length : 0;
+      if (usadas >= cupoDisponible) {
+        const txtModal = document.getElementById('textoConsultaDiaria');
+        if (txtModal) {
+          const diasParaProxima = 7 - (diasTranscurridos % 7);
+          txtModal.textContent = `Ya usaste tus consultas disponibles de esta semana. Se liberan ${cuotaPorSemana === 1 ? '1 consulta nueva' : '2 consultas nuevas'} cada semana, para que vayas viviendo el camino paso a paso — en tarot no conviene consultar todos los días. La próxima se habilita en ${diasParaProxima} día${diasParaProxima === 1 ? '' : 's'}.`;
+        }
+        window.abrirModal('modalConsultaDiaria');
+        return false;
+      }
+    } catch (e) {
+      // si falla la lectura del historial, no bloqueamos a la clienta
     }
-    window.abrirModal('modalConsultaDiaria');
-    return false;
   }
   return true;
 }
