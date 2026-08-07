@@ -14,7 +14,13 @@ export async function onRequestPost(context) {
     semanal:  { titulo: "Pack Semanal - Luz y Fuerza", precio: 6000 },
     mensual:  { titulo: "Plan Mensual - Luz y Fuerza", precio: 9000 },
     consejo:  { titulo: "Carta del día", precio: 2000 },
-    combo:    { titulo: "Combo Consulta + Carta del día", precio: 3000 }
+    combo:    { titulo: "Combo Consulta + Carta del día", precio: 3000 },
+    // Planes espejo de prueba: mismas caracteristicas, precio simbolico para testear el flujo sin gastar.
+    consulta_test: { titulo: "[PRUEBA] Consulta de tarot · 3 cartas", precio: 50 },
+    semanal_test:  { titulo: "[PRUEBA] Pack Semanal - Luz y Fuerza", precio: 50 },
+    mensual_test:  { titulo: "[PRUEBA] Plan Mensual - Luz y Fuerza", precio: 50 },
+    consejo_test:  { titulo: "[PRUEBA] Carta del día", precio: 50 },
+    combo_test:    { titulo: "[PRUEBA] Combo Consulta + Carta del día", precio: 50 }
   };
   const elegido = planes[plan];
   if (!elegido) {

@@ -16,7 +16,7 @@ export async function onRequestPost(context) {
  
     // 1. Buscar la ultima compra de plan semanal o mensual de este usuario
     const pagoResp = await fetch(
-      `${SUPA_URL}/rest/v1/pagos_procesados?user_id=eq.${userId}&plan=in.(semanal,mensual)&select=payment_id,plan,created_at&order=created_at.desc&limit=1`,
+      `${SUPA_URL}/rest/v1/pagos_procesados?user_id=eq.${userId}&plan=in.(semanal,mensual,semanal_test,mensual_test)&select=payment_id,plan,created_at&order=created_at.desc&limit=1`,
       { headers: headersAdmin }
     );
     if (!pagoResp.ok) {
@@ -62,7 +62,7 @@ export async function onRequestPost(context) {
       return `Día ${i + 1} (${fecha}) - Área: ${item.area || "general"} - Cartas: ${cartasNombres} - Pregunta: "${(item.pregunta || "").slice(0, 80)}"`;
     }).join("\n");
  
-    const nombrePlan = pago.plan === "semanal" ? "Pack Semanal (4 consultas)" : "Plan Mensual (8 consultas + carta del día)";
+    const nombrePlan = pago.plan.startsWith("semanal") ? "Pack Semanal (4 consultas)" : "Plan Mensual (8 consultas + carta del día)";
     const prompt = `Tarot Luz & Fuerza. Resumen de tendencia de un ${nombrePlan} ya finalizado. Esta es la secuencia cronológica de tiradas del período:\n${detalle}\n\nBasándote en esta secuencia, escribí un resumen narrativo de cómo fue variando la energía o el camino a lo largo del período, qué patrón o tendencia general se puede leer, y cerralo con un mensaje motivador de cara a lo que sigue. Tono cálido, directo, de vos a vos. Máximo 160 palabras. IMPORTANTE: texto corrido en párrafos nada más, sin título, sin encabezados, sin uso de #, sin asteriscos, sin listas ni viñetas, sin ningún tipo de formato markdown.`;
  
     const claudeResp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -122,7 +122,7 @@ export async function onRequestPost(context) {
             body: JSON.stringify({
               from: "Luz & Fuerza <no-reply@tarotluzyfuerza.com.ar>",
               to: [email],
-              subject: `Tu camino de este ${pago.plan === "semanal" ? "pack semanal" : "mes"} ✦`,
+              subject: `Tu camino de este ${pago.plan.startsWith("semanal") ? "pack semanal" : "mes"} ✦`,
               html
             })
           });

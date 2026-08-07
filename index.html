@@ -529,6 +529,42 @@ h1{letter-spacing:3px;}
   </div>
 
   <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.8);text-align:center;margin-top:1.5rem;font-style:italic;">Primera consulta gratis con tu registro · Cancelá cuando quieras</div>
+
+  <div id="bloquePlanesPrueba" style="display:none;margin-top:2.5rem;">
+    <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(255,180,120,0.9);text-transform:uppercase;margin-bottom:12px;">⚠ Modo prueba — mismos planes, precio simbólico</div>
+    <div class="planes">
+      <div class="plan">
+        <div class="pbadge">Consulta (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>1 consulta de tarot completa</li></ul>
+        <button onclick="pagar('consulta_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Semanal (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>4 consultas específicas, 1 por semana</li></ul>
+        <button onclick="pagar('semanal_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Mensual (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>8 consultas específicas (2 por semana) + carta del día</li></ul>
+        <button onclick="pagar('mensual_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Carta del día (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>1 carta del día</li></ul>
+        <button onclick="pagar('consejo_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Combo (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>1 consulta completa + 1 carta del día</li></ul>
+        <button onclick="pagar('combo_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="tab-sobre" class="tab">
@@ -1424,7 +1460,12 @@ const etiquetasPlan = {
   semanal:  { nombre: 'Pack Semanal', detalle: '4 consultas específicas, 1 por semana' },
   mensual:  { nombre: 'Plan Mensual', detalle: '8 consultas específicas (2 por semana) + carta del día' },
   consejo:  { nombre: 'Carta del día', detalle: '1 carta del día' },
-  combo:    { nombre: 'Combo Consulta + Carta del día', detalle: '1 consulta de tarot completa + 1 carta del día' }
+  combo:    { nombre: 'Combo Consulta + Carta del día', detalle: '1 consulta de tarot completa + 1 carta del día' },
+  consulta_test: { nombre: 'Consulta Individual (prueba)', detalle: '1 consulta de tarot completa' },
+  semanal_test:  { nombre: 'Pack Semanal (prueba)', detalle: '4 consultas específicas, 1 por semana' },
+  mensual_test:  { nombre: 'Plan Mensual (prueba)', detalle: '8 consultas específicas (2 por semana) + carta del día' },
+  consejo_test:  { nombre: 'Carta del día (prueba)', detalle: '1 carta del día' },
+  combo_test:    { nombre: 'Combo Consulta + Carta del día (prueba)', detalle: '1 consulta de tarot completa + 1 carta del día' }
 };
 
 window.toggleMisPlanes = function(){
@@ -1478,7 +1519,7 @@ window.cargarMiCamino = async function(){
   cont.innerHTML = '<div class="slabel" style="margin-bottom:0.75rem;"><div class="snum">🧭</div>Mi camino</div>' +
     data.map(function(item){
       const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
-      const planLabel = item.plan === 'semanal' ? 'Pack Semanal' : 'Plan Mensual';
+      const planLabel = item.plan.startsWith('semanal') ? 'Pack Semanal' : 'Plan Mensual';
       return '<div class="histcard" style="border-color:rgba(180,140,255,0.35);background:rgba(120,70,220,0.08);margin-bottom:14px;"><div class="histtop"><span class="histtipo">✦ Resumen · ' + planLabel + '</span><span class="histfecha">' + fecha + '</span></div><div class="histinterp">' + item.resumen + '</div></div>';
     }).join('') +
     '<div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
@@ -1820,8 +1861,8 @@ window.verificarCreditos = async function() {
       .order('created_at', { ascending: false })
       .limit(1);
     if (ultimaCompra && ultimaCompra[0]) {
-      if (ultimaCompra[0].plan === 'semanal') { cuotaPorSemana = 1; fechaCompra = ultimaCompra[0].created_at; }
-      else if (ultimaCompra[0].plan === 'mensual') { cuotaPorSemana = 2; fechaCompra = ultimaCompra[0].created_at; }
+      if (ultimaCompra[0].plan === 'semanal' || ultimaCompra[0].plan === 'semanal_test') { cuotaPorSemana = 1; fechaCompra = ultimaCompra[0].created_at; }
+      else if (ultimaCompra[0].plan === 'mensual' || ultimaCompra[0].plan === 'mensual_test') { cuotaPorSemana = 2; fechaCompra = ultimaCompra[0].created_at; }
     }
   } catch (e) {
     cuotaPorSemana = 0; // si no se puede leer, no bloqueamos a la clienta
@@ -1926,8 +1967,28 @@ const nombresPlan = {
   semanal:  { titulo: '¡Bárbaro! Ya tenés tu Pack Semanal activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
   mensual:  { titulo: '¡Bárbaro! Ya tenés tu Plan Mensual activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
   consejo:  { titulo: '¡Bárbaro! Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
-  combo:    { titulo: '¡Bárbaro! Ya podés usar tu consulta y tu carta del día', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' }
+  combo:    { titulo: '¡Bárbaro! Ya podés usar tu consulta y tu carta del día', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  consulta_test: { titulo: '[PRUEBA] Ya podés hacer tu consulta', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  semanal_test:  { titulo: '[PRUEBA] Ya tenés tu Pack Semanal activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  mensual_test:  { titulo: '[PRUEBA] Ya tenés tu Plan Mensual activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  consejo_test:  { titulo: '[PRUEBA] Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
+  combo_test:    { titulo: '[PRUEBA] Ya podés usar tu consulta y tu carta del día', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' }
 };
+
+// Modo prueba: revela los planes espejo de precio simbolico solo con el link secreto ?modotest=1
+(function(){
+  try {
+    if (new URLSearchParams(window.location.search).get('modotest') === '1') {
+      localStorage.setItem('lf_modotest', '1');
+    }
+    if (localStorage.getItem('lf_modotest') === '1') {
+      document.addEventListener('DOMContentLoaded', function(){
+        const bloque = document.getElementById('bloquePlanesPrueba');
+        if (bloque) bloque.style.display = 'block';
+      });
+    }
+  } catch(e) {}
+})();
 
 function chequearPagoOk(){
   const params = new URLSearchParams(window.location.search);

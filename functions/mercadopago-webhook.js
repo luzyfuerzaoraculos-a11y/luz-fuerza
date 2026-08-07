@@ -106,7 +106,13 @@ export async function onRequestPost(context) {
     semanal:  { creditos: 4, creditos_carta: 0 },
     mensual:  { creditos: 8, creditos_carta: 30 },
     consejo:  { creditos: 0, creditos_carta: 1 },
-    combo:    { creditos: 1, creditos_carta: 1 }
+    combo:    { creditos: 1, creditos_carta: 1 },
+    // Planes espejo de prueba (precio simbolico), mismos creditos que su version real.
+    consulta_test: { creditos: 1, creditos_carta: 0 },
+    semanal_test:  { creditos: 4, creditos_carta: 0 },
+    mensual_test:  { creditos: 8, creditos_carta: 30 },
+    consejo_test:  { creditos: 0, creditos_carta: 1 },
+    combo_test:    { creditos: 1, creditos_carta: 1 }
   };
   const add = planes[plan];
   if (!add) return new Response("ok", { status: 200 });
