@@ -198,7 +198,8 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .btn-historial{font-family:"Marcellus",serif;font-size:11px;color:rgba(200,220,255,0.9);background:rgba(90,60,220,0.18);border:0.5px solid rgba(150,130,255,0.45);border-radius:20px;padding:4px 12px;cursor:pointer;letter-spacing:0.3px;white-space:nowrap;}
 .btn-historial:hover{color:#fff;border-color:rgba(150,130,255,0.75);background:rgba(120,80,255,0.3);}
 .btn-logout:hover{color:#fff;border-color:rgba(150,100,255,0.7);background:rgba(150,100,255,0.25);}
-.btn-mp{background:none;border:none;padding:0;margin:0;font:inherit;color:#0000EE;text-decoration:underline;cursor:pointer;}
+.btn-mp{display:block;width:100%;padding:12px 24px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:'Marcellus',serif;font-size:13px;text-align:center;text-decoration:none;letter-spacing:0.5px;cursor:pointer;margin-top:14px;box-sizing:border-box;transition:all 0.2s;}
+.btn-mp-pop{box-shadow:0 0 22px rgba(120,60,255,0.5);}
 .btn-mp:disabled{opacity:0.5;cursor:default;}
 @media(max-width:520px){.user-bar{flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;padding:10px 14px;}.user-creditos{max-width:88vw;white-space:normal;overflow:visible;text-overflow:clip;text-align:center;line-height:1.4;}.user-nombre{text-align:center;}}
 
@@ -318,7 +319,7 @@ h1{letter-spacing:3px;}
     <div class="cta-box">
       <div class="auth-link" onclick="abrirModal('modalLogin')" style="margin-top:12px;">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
     </div>
-    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos.</div>
     <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,205,150,0.95);background:rgba(255,175,70,0.1);border:1px solid rgba(255,175,70,0.45);padding:5px 16px;border-radius:20px;margin-top:16px;letter-spacing:0.3px;">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
   </div>
 </header>
@@ -528,38 +529,38 @@ h1{letter-spacing:3px;}
     </div>
   </div>
 
-  <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.8);text-align:center;margin-top:1.5rem;font-style:italic;">Primera consulta gratis con tu registro · Cancelá cuando quieras</div>
+  <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.8);text-align:center;margin-top:1.5rem;font-style:italic;">Primera consulta gratis con tu registro</div>
 
   <div id="bloquePlanesPrueba" style="margin-top:2.5rem;">
     <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(255,180,120,0.9);text-transform:uppercase;margin-bottom:12px;">⚠ Modo prueba — mismos planes, precio simbólico</div>
     <div class="planes">
       <div class="plan">
         <div class="pbadge">Consulta (prueba)</div>
-        <div class="pprecio">$50 <span>ARS</span></div>
+        <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>1 consulta de tarot completa</li></ul>
         <button onclick="pagar('consulta_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Semanal (prueba)</div>
-        <div class="pprecio">$50 <span>ARS</span></div>
+        <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>4 consultas específicas, 1 por semana</li></ul>
         <button onclick="pagar('semanal_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Mensual (prueba)</div>
-        <div class="pprecio">$50 <span>ARS</span></div>
+        <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>8 consultas específicas (2 por semana) + carta del día</li></ul>
         <button onclick="pagar('mensual_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Carta del día (prueba)</div>
-        <div class="pprecio">$50 <span>ARS</span></div>
+        <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>1 carta del día</li></ul>
         <button onclick="pagar('consejo_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Combo (prueba)</div>
-        <div class="pprecio">$50 <span>ARS</span></div>
+        <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>1 consulta completa + 1 carta del día</li></ul>
         <button onclick="pagar('combo_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
@@ -610,7 +611,7 @@ h1{letter-spacing:3px;}
     <a href="mailto:contacto@tarotluzyfuerza.com.ar" style="display:block;padding:12px 24px;background:rgba(100,60,180,0.3);border:1px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(220,200,255,0.9);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;margin-bottom:12px;">
       ✉ contacto@tarotluzyfuerza.com.ar
     </a>
-    <a href="https://wa.me/5491134790627" target="_blank" style="display:block;padding:12px 24px;background:rgba(0,100,50,0.2);border:1px solid rgba(0,180,80,0.3);border-radius:30px;color:rgba(0,220,100,0.8);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;">
+    <a href="https://wa.me/5491128295352" target="_blank" style="display:block;padding:12px 24px;background:rgba(0,100,50,0.2);border:1px solid rgba(0,180,80,0.3);border-radius:30px;color:rgba(0,220,100,0.8);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;">
       💬 Escribinos por WhatsApp
     </a>
     <div style="font-family:'Montserrat',sans-serif;font-size:11px;color:rgba(150,120,255,0.4);margin-top:1.5rem;font-style:italic;">Respondemos en menos de 24 horas</div>
@@ -823,7 +824,7 @@ h1{letter-spacing:3px;}
     </div>
     <button class="modal-btn-primary" onclick="cerrarModales();abrirModal('modalRegistro2')">Crear cuenta y comenzar</button>
     <button class="modal-btn-secondary" onclick="cerrarModales();abrirModal('modalLogin')">Ya tengo cuenta — Iniciar sesión</button>
-    <div class="modal-sub">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
+    <div class="modal-sub">Elegí el plan que mejor se adapte a vos.</div>
   </div>
 </div>
 
