@@ -530,36 +530,36 @@ h1{letter-spacing:3px;}
 
   <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.8);text-align:center;margin-top:1.5rem;font-style:italic;">Primera consulta gratis con tu registro · Cancelá cuando quieras</div>
 
-  <div id="bloquePlanesPrueba" style="display:none;margin-top:2.5rem;">
+  <div id="bloquePlanesPrueba" style="margin-top:2.5rem;">
     <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(255,180,120,0.9);text-transform:uppercase;margin-bottom:12px;">⚠ Modo prueba — mismos planes, precio simbólico</div>
     <div class="planes">
       <div class="plan">
         <div class="pbadge">Consulta (prueba)</div>
-        <div class="pprecio">$100 <span>ARS</span></div>
+        <div class="pprecio">$50 <span>ARS</span></div>
         <ul class="pitems"><li>1 consulta de tarot completa</li></ul>
         <button onclick="pagar('consulta_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Semanal (prueba)</div>
-        <div class="pprecio">$100 <span>ARS</span></div>
+        <div class="pprecio">$50 <span>ARS</span></div>
         <ul class="pitems"><li>4 consultas específicas, 1 por semana</li></ul>
         <button onclick="pagar('semanal_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Mensual (prueba)</div>
-        <div class="pprecio">$100 <span>ARS</span></div>
+        <div class="pprecio">$50 <span>ARS</span></div>
         <ul class="pitems"><li>8 consultas específicas (2 por semana) + carta del día</li></ul>
         <button onclick="pagar('mensual_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Carta del día (prueba)</div>
-        <div class="pprecio">$100 <span>ARS</span></div>
+        <div class="pprecio">$50 <span>ARS</span></div>
         <ul class="pitems"><li>1 carta del día</li></ul>
         <button onclick="pagar('consejo_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
       <div class="plan">
         <div class="pbadge">Combo (prueba)</div>
-        <div class="pprecio">$100 <span>ARS</span></div>
+        <div class="pprecio">$50 <span>ARS</span></div>
         <ul class="pitems"><li>1 consulta completa + 1 carta del día</li></ul>
         <button onclick="pagar('combo_test')" class="btn-mp">Pagar con MercadoPago</button>
       </div>
@@ -1974,21 +1974,6 @@ const nombresPlan = {
   consejo_test:  { titulo: '[PRUEBA] Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
   combo_test:    { titulo: '[PRUEBA] Ya podés usar tu consulta y tu carta del día', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' }
 };
-
-// Modo prueba: revela los planes espejo de precio simbolico solo con el link secreto ?modotest=1
-(function(){
-  try {
-    if (new URLSearchParams(window.location.search).get('modotest') === '1') {
-      localStorage.setItem('lf_modotest', '1');
-    }
-    if (localStorage.getItem('lf_modotest') === '1') {
-      document.addEventListener('DOMContentLoaded', function(){
-        const bloque = document.getElementById('bloquePlanesPrueba');
-        if (bloque) bloque.style.display = 'block';
-      });
-    }
-  } catch(e) {}
-})();
 
 function chequearPagoOk(){
   const params = new URLSearchParams(window.location.search);
