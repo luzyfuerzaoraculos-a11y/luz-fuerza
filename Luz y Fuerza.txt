@@ -1,0 +1,16 @@
+﻿# Luz y Fuerza - secretos y referencias
+
+Este archivo ha sido saneado para eliminar valores sensibles. No almacenes credenciales reales en el repositorio.
+
+Referencias de variables de entorno:
+- GITHUB_PAT=env.GITHUB_PAT
+- RESEND_API_KEY=env.RESEND_API_KEY
+- ANTHROPIC_API_KEY=env.ANTHROPIC_API_KEY
+- SUPABASE_SERVICE_ROLE_KEY=env.SUPABASE_SERVICE_ROLE_KEY
+- MERCADOPAGO_PUBLIC_KEY=env.MERCADOPAGO_PUBLIC_KEY
+- MERCADOPAGO_ACCESS_TOKEN=env.MERCADOPAGO_ACCESS_TOKEN
+- MERCADOPAGO_WEBHOOK_SECRET=env.MERCADOPAGO_WEBHOOK_SECRET
+- VERCEL_RECOVERY_CODES=guardado_seguro
+
+Usa siempre un gestor de secretos o la configuración de CI/CD para estos valores.
+Si necesitas ejecutar el proyecto localmente, define estas variables en un archivo `.env` que no esté en control de versiones y/o en el servicio de despliegue.

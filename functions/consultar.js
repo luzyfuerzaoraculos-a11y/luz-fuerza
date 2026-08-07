@@ -4,7 +4,13 @@ export async function onRequestPost(context) {
   try {
     const { pregunta, cartas, area } = await request.json();
 
-    const prompt = `Tarot Luz & Fuerza. Área: ${area||"vida"}. Pregunta: "${pregunta}". Cartas: ${cartas}. Interpretación en 3 párrafos: situación actual, mensaje del tarot, acción concreta. Tono cálido, directo. De vos a vos. Sin markdown. Máximo 100 palabras.`;
+    const prompt = `Tarot Luz & Fuerza. Área: ${area||"vida"}. Pregunta de la consultante: "${pregunta}". Cartas (pasado, presente, futuro): ${cartas}.
+
+Escribí una interpretación en 3 párrafos: situación actual, mensaje del tarot, acción concreta.
+
+Muy importante: la respuesta tiene que estar anclada a lo que la persona preguntó literalmente. No cambies el sentido de las palabras clave de la pregunta ni te vayas a un mensaje genérico desconectado del tema real (por ejemplo, si pregunta por la libertad de alguien que está preso, hablá de esa situación concreta — no derives "libertad" hacia un consejo de crecimiento personal abstracto). Si el tema es delicado (una situación legal, de salud, una pérdida, una crisis familiar), respondé con más sensibilidad y cuidado, sin minimizar ni banalizar lo que la persona está viviendo.
+
+Tono cálido, directo. De vos a vos. Sin markdown. Máximo 100 palabras.`;
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",

@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luz & Fuerza · Tarot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060810;color:#c8d8f0;font-family:"Montserrat",Georgia,serif;min-height:100vh;}
+
+.nebulosa{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;
+background:radial-gradient(ellipse at 20% 30%,rgba(80,20,120,0.4) 0%,transparent 50%),
+radial-gradient(ellipse at 80% 70%,rgba(20,60,120,0.5) 0%,transparent 50%),
+radial-gradient(ellipse at 50% 50%,rgba(40,10,80,0.3) 0%,transparent 60%),
+radial-gradient(ellipse at 10% 80%,rgba(100,30,60,0.25) 0%,transparent 40%),
+radial-gradient(ellipse at 90% 10%,rgba(20,80,100,0.3) 0%,transparent 40%),#060810;}
+.nebulosa::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+background-image:radial-gradient(circle,rgba(255,255,255,0.8) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.4) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,0.2) 1px,transparent 1px);
+background-size:150px 150px,90px 90px,60px 60px;background-position:20px 20px,55px 45px,10px 70px;}
+
+
+.hero{background:
+    radial-gradient(ellipse at 40% 0%,rgba(200,150,255,0.35) 0%,transparent 45%),
+    radial-gradient(ellipse at 80% 30%,rgba(100,180,255,0.25) 0%,transparent 40%),
+    radial-gradient(ellipse at 20% 70%,rgba(120,0,220,0.4) 0%,transparent 45%),
+    radial-gradient(ellipse at 60% 100%,rgba(0,80,200,0.2) 0%,transparent 35%),
+    linear-gradient(160deg,#0d0025 0%,#1a0050 40%,#100035 100%);
+padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(150,100,255,0.3);position:relative;overflow:hidden;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
+.aurora{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;animation:auroraFloat ease-in-out infinite;}
+.a1{width:400px;height:250px;top:-80px;left:5%;background:rgba(120,60,220,0.25);animation-duration:7s;}
+.a2{width:300px;height:200px;top:30px;right:0%;background:rgba(0,100,220,0.2);animation-duration:9s;animation-delay:2s;}
+.a3{width:350px;height:180px;bottom:-60px;left:25%;background:rgba(80,0,180,0.2);animation-duration:11s;animation-delay:1s;}
+.a4{width:200px;height:200px;top:10px;left:40%;background:rgba(160,80,255,0.12);animation-duration:8s;animation-delay:3s;}
+@keyframes auroraFloat{0%,100%{transform:translate(0,0) scale(1);opacity:0.6;}33%{transform:translate(20px,-15px) scale(1.05);opacity:1;}66%{transform:translate(-15px,10px) scale(0.95);opacity:0.7;}}
+#heroCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.hero-contenido{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
+h1{font-family:"Marcellus",serif;font-size:36px;font-weight:600;color:#fff;letter-spacing:5px;position:relative;z-index:2;text-shadow:0 0 30px rgba(180,130,255,1),0 0 60px rgba(120,60,255,0.7);}
+.amp{color:#cc99ff;}
+.tagline{font-family:"Marcellus",serif;font-size:13px;color:rgba(230,210,255,0.95);letter-spacing:1.5px;margin-top:10px;position:relative;z-index:2;}
+
+nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(8,4,20,0.92);border-bottom:0.5px solid rgba(150,100,255,0.2);position:relative;z-index:1;backdrop-filter:blur(10px);}
+nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(220,200,255,0.9);font-size:12px;font-family:"Marcellus",serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
+nav button.active{color:#ffffff;border-bottom:2px solid #cc99ff;}
+
+main{max-width:700px;margin:0 auto;padding:1rem 1.5rem;background:rgba(10,14,26,0.85);min-height:60vh;position:relative;z-index:1;backdrop-filter:blur(8px);}
+.tab{display:none;}.tab.active{display:block;}
+
+.slabel{font-size:11px;letter-spacing:2.5px;color:#4a6fa5;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.snum{width:20px;height:20px;border-radius:50%;border:0.5px solid #4a6fa5;font-size:11px;color:#4a6fa5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hint{font-size:14px;color:#8baad4;margin-bottom:18px;line-height:1.6;}
+
+.chips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+.chip-card{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:14px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all 0.25s ease;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.chip-card:hover,.chip-card.sel{border-color:#cc99ff;background:rgba(40,20,70,0.9);transform:translateY(-2px);box-shadow:0 4px 20px rgba(150,100,255,0.25);}
+.chip-icon{font-size:36px;transition:transform 0.25s ease;line-height:1;}
+.chip-card:hover .chip-icon,.chip-card.sel .chip-icon{transform:scale(1.2);}
+.chip-label{font-size:12px;color:#7bafd4;letter-spacing:0.5px;font-family:Georgia,serif;}
+.chip-card.sel .chip-label{color:#ffffff;}
+
+textarea{width:100%;background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:16px;color:#c8d8f0;font-size:15px;resize:none;line-height:1.7;font-family:Georgia,serif;}
+textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4a6fa5;}
+.counter{font-size:12px;color:rgba(180,160,255,0.7);text-align:right;margin-top:6px;}.counter.ok{color:#4a6fa5;}
+.bprofunda{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+.bprofunda p{font-size:14px;color:#8baad4;font-style:italic;line-height:1.7;}
+
+.btn{width:100%;padding:15px;background:rgba(15,22,40,0.8);border:0.5px solid #4a6fa5;border-radius:12px;color:#c8d8f0;font-size:15px;cursor:pointer;letter-spacing:1px;font-family:Georgia,serif;margin-top:1.5rem;transition:all 0.2s;}
+.btn:hover{background:rgba(22,32,53,0.9);box-shadow:0 4px 20px rgba(123,175,212,0.1);}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
+#btnVolverPregunta:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-sm{display:inline-block;padding:10px 20px;background:none;border:0.5px solid #4a6fa5;border-radius:12px;color:#7bafd4;font-size:13px;cursor:pointer;font-family:Georgia,serif;margin-top:10px;}
+.btn-sm:hover{background:rgba(22,32,53,0.9);}
+
+.cartas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
+.intriga{grid-column:1/-1;text-align:center;font-family:'Marcellus',serif;font-style:italic;font-size:15px;color:rgba(200,180,255,0.85);padding:1rem 1rem 2.5rem;letter-spacing:0.5px;animation:pulseIntriga 1.8s ease-in-out infinite;}
+@keyframes pulseIntriga{0%,100%{opacity:0.55;}50%{opacity:1;}}
+.mazo-shuffle{grid-column:1/-1;position:relative;height:170px;width:100px;margin:2.5rem auto 0;}
+.carta-mazo{position:absolute;top:0;left:0;width:88px;height:126px;border-radius:10px;background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.55);display:flex;align-items:center;justify-content:center;font-size:26px;color:rgba(190,150,255,0.85);box-shadow:0 8px 24px rgba(80,30,180,0.55);}
+.cm1{z-index:1;animation:shuffle1 1s ease-in-out infinite;}
+.cm2{z-index:2;animation:shuffle2 1s ease-in-out infinite;animation-delay:0.12s;}
+.cm3{z-index:3;animation:shuffle3 1s ease-in-out infinite;animation-delay:0.24s;}
+@keyframes shuffle1{0%,100%{transform:translateX(-24px) rotate(-13deg) scale(1);}50%{transform:translateX(12px) rotate(8deg) scale(1.04);}}
+@keyframes shuffle2{0%,100%{transform:translateX(0) rotate(0deg) scale(1);}50%{transform:translateX(-16px) rotate(-7deg) scale(1.04);}}
+@keyframes shuffle3{0%,100%{transform:translateX(24px) rotate(13deg) scale(1);}50%{transform:translateX(-10px) rotate(-6deg) scale(1.04);}}
+@keyframes cartaIn{from{opacity:0;transform:translateY(16px) scale(0.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+.carta-in{animation:cartaIn 0.6s ease forwards;opacity:0;}
+.carta{background:rgba(8,5,20,0.92);border:1px solid rgba(150,100,255,0.4);border-radius:12px;padding:1.25rem 0.75rem;text-align:center;}
+.cpos{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;margin-bottom:12px;padding:4px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(130,70,255,0.95),rgba(80,30,200,0.95));box-shadow:0 0 12px rgba(120,60,255,0.45);}
+.cemoji{font-size:30px;margin-bottom:8px;}.cnombre{font-size:14px;color:#ffffff;margin-bottom:4px;font-weight:600;}
+.cpalo{font-size:10px;color:rgba(180,160,255,0.8);margin-bottom:6px;letter-spacing:1px;}
+.cenergia{font-size:12px;color:rgba(220,200,255,1);font-style:italic;margin-bottom:10px;line-height:1.4;}
+.cdesc{font-size:12px;color:rgba(220,210,255,0.95);line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.3);padding-top:10px;}
+.interp{background:rgba(15,22,40,0.85);border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.5rem;font-size:15px;line-height:1.9;color:#8baad4;font-style:italic;}
+
+.planes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.plan{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.5rem 1rem;text-align:center;}
+.plan.pop{border-color:#7bafd4;}
+.pbadge{font-size:12px;background:rgba(100,60,180,0.3);color:rgba(220,200,255,1);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;}
+.plan.pop .pbadge{background:#1e3055;color:#c8d8f0;}
+.pprecio{font-size:26px;color:#ffffff;margin-bottom:4px;}.pprecio span{font-size:14px;color:rgba(180,160,255,0.8);}
+.pitems{list-style:none;margin-top:12px;}.pitems li{font-size:12px;color:#5a7aaa;padding:5px 0;border-top:0.5px solid #1e2a45;}
+
+.cfrow{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:2rem;}
+.cfcard{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem;}
+.histcard{background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem;text-align:left;}
+.histtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
+.histtipo{font-family:'Marcellus',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));padding:4px 12px;border-radius:20px;}
+.histfecha{font-family:'Montserrat',sans-serif;font-size:12px;color:rgba(180,160,255,0.6);}
+.histpregunta{font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(220,200,255,0.9);font-style:italic;margin-bottom:8px;}
+.histcartas{font-family:'Marcellus',serif;font-size:13px;color:rgba(200,180,255,0.85);margin-bottom:8px;}
+.histinterp{font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(200,190,230,0.85);line-height:1.6;border-top:0.5px solid rgba(150,100,255,0.2);padding-top:10px;}
+.cfcard h3{font-size:14px;color:#ffffff;font-weight:400;margin-bottom:8px;}.cfcard p{font-size:13px;color:#5a7aaa;line-height:1.7;}.cfcard .icon{font-size:24px;margin-bottom:10px;}
+.hblock{margin-bottom:2rem;}.hblock h3{font-size:16px;color:#ffffff;font-weight:400;margin-bottom:10px;border-bottom:0.5px solid #1e2a45;padding-bottom:8px;}.hblock p{font-size:14px;color:#5a7aaa;line-height:1.8;margin-bottom:10px;}
+.arcanos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1rem;}
+.arcano-card{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:10px;padding:1rem;display:flex;gap:10px;align-items:flex-start;}
+.arcano-emoji{font-size:20px;flex-shrink:0;}.arcano-info h4{font-size:12px;color:rgba(210,185,255,0.95);margin-bottom:4px;}.arcano-info p{font-size:11px;color:#4a6fa5;line-height:1.5;}
+.sobre{color:#5a7aaa;font-size:15px;line-height:1.9;}.sobre p{margin-bottom:1.25rem;}.sobre strong{color:rgba(210,185,255,0.95);font-weight:400;}
+
+footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0.5px solid #1e2a45;font-size:11px;color:#1e2a45;letter-spacing:1px;position:relative;z-index:1;}
+
+/* LAYOUT CON COSTADOS */
+
+
+.carta-float{position:absolute;width:65px;height:105px;border:1px solid rgba(255,180,50,0.2);border-radius:8px;background:rgba(255,150,0,0.03);animation:cartaFlota linear infinite;pointer-events:none;}
+.carta-float::before{content:'';position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:0.5px solid rgba(255,180,50,0.1);border-radius:4px;}
+@keyframes cartaFlota{0%{opacity:0;transform:translateY(30px) rotate(var(--r));}15%{opacity:0.9;}75%{opacity:0.5;}100%{opacity:0;transform:translateY(-80px) rotate(calc(var(--r)+6deg));}}
+
+
+
+.loading{animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+@keyframes voltear{0%{transform:rotateY(180deg);}100%{transform:rotateY(0deg);}}
+
+/* CARTA DEL DIA */
+.mesa-cartas{display:flex;justify-content:center;align-items:flex-end;min-height:160px;padding:2rem 1rem 1.5rem;flex-wrap:nowrap;overflow:visible;transition:opacity 0.35s ease, transform 0.35s ease;}
+.mesa-cartas.mezclando{opacity:0;transform:scale(0.92) translateY(6px);}
+.btn-mezclar-dia{margin-bottom:0.5rem;padding:9px 22px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.8);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
+.btn-mezclar-dia:hover{border-color:#8855ff;color:#c8b8ff;}
+.btn-mezclar-dia:disabled{opacity:0.5;cursor:default;}
+@media(max-width:480px){.carta-boca-abajo{width:55px;height:90px;}.carta-boca-abajo::after{font-size:14px;}}
+.carta-boca-abajo::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}.carta-boca-abajo::after{content:"✦";font-size:18px;color:rgba(150,100,255,0.35);}
+.carta-boca-abajo::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:0.5px solid rgba(150,100,255,0.2);border-radius:6px;}
+.carta-boca-abajo::after{content:'✦';font-size:20px;color:rgba(150,100,255,0.35);}
+.flip-container{perspective:900px;width:100%;max-width:320px;margin:0 auto 1rem;display:none;}
+.flip-inner{width:100%;transform-style:preserve-3d;position:relative;animation:voltear 1s ease forwards;}
+.flip-frente,.flip-dorso{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;}
+.flip-frente{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(35,15,70,0.98));border:1.5px solid rgba(150,100,255,0.5);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1.25rem;text-align:center;box-shadow:0 0 40px rgba(100,50,200,0.3);position:relative;width:100%;border-radius:14px;}
+.flip-dorso{background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);border:1.5px solid rgba(150,100,255,0.3);transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(150,100,255,0.3);position:absolute;top:0;left:0;right:0;bottom:0;border-radius:14px;backface-visibility:hidden;}
+.cf-img{width:120px;border-radius:10px;margin-bottom:10px;display:block;}
+.cf-nombre{font-family:'Marcellus',serif;font-size:16px;color:#ffffff;margin-bottom:4px;}
+.cf-palo{font-family:'Marcellus',serif;font-size:9px;color:rgba(200,180,255,0.9);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.cf-energia{font-size:13px;color:rgba(220,200,255,0.95);font-style:italic;margin-bottom:12px;line-height:1.5;}
+.cf-desc{font-size:12px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
+.cf-consejo{font-size:13px;color:rgba(230,215,255,0.98);font-style:italic;line-height:1.7;margin-bottom:12px;border-top:0.5px solid rgba(150,100,255,0.3);padding-top:10px;}
+.cf-bloque{margin-top:10px;text-align:left;}
+.cf-label{display:block;font-family:'Marcellus',serif;font-size:9px;letter-spacing:1.5px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:4px;}
+.cf-texto{display:block;font-size:12px;color:rgba(220,210,255,0.95);line-height:1.6;}
+.btn-nueva-carta{margin-top:1rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
+.btn-nueva-carta:hover{border-color:#8855ff;color:#c8b8ff;}
+
+/* AUTH MODALES */
+.auth-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.9);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.auth-overlay.active{display:flex;}
+.auth-box{background:linear-gradient(160deg,rgba(15,8,30,0.99),rgba(25,12,50,0.99));border:1px solid rgba(150,100,255,0.4);border-radius:16px;padding:2rem;width:90%;max-width:440px;max-height:90vh;overflow-y:auto;}
+.auth-titulo{font-family:"Marcellus",serif;font-size:18px;color:#fff;letter-spacing:2px;margin-bottom:0.5rem;text-align:center;text-shadow:0 0 20px rgba(150,100,255,0.8);}
+.auth-subtitulo{font-family:"Montserrat",sans-serif;font-size:15px;color:rgba(235,220,255,0.98);text-align:center;margin-bottom:1.5rem;line-height:1.6;}
+.auth-campo{margin-bottom:1rem;}
+.auth-label{font-family:"Marcellus",serif;font-size:10px;letter-spacing:1.5px;color:rgba(200,170,255,0.9);text-transform:uppercase;display:block;margin-bottom:6px;}
+.auth-input{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.4);border-radius:8px;padding:10px 14px;color:#e8e0ff;font-family:"Montserrat",sans-serif;font-size:15px;}
+.auth-input:focus{outline:none;border-color:rgba(150,100,255,0.6);}
+.pass-wrap{position:relative;}
+.pass-wrap .auth-input{padding-right:40px;}
+.ojo-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(150,100,255,0.5);font-size:16px;padding:0;}
+.ojo-btn:hover{color:rgba(200,180,255,0.9);}
+.auth-input::placeholder{color:rgba(100,80,150,0.5);}
+.auth-select{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.3);border-radius:8px;padding:10px 14px;color:#c8d0f0;font-family:"Montserrat",sans-serif;font-size:15px;}
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.auth-row .auth-campo{min-width:0;}
+.auth-row .auth-input{min-width:0;}
+.auth-btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Marcellus",serif;font-size:13px;cursor:pointer;letter-spacing:1px;margin-top:1rem;box-shadow:0 0 20px rgba(120,60,255,0.3);}
+.auth-btn-primary:hover{box-shadow:0 0 30px rgba(150,80,255,0.5);}
+.auth-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Marcellus",serif;font-size:11px;cursor:pointer;margin-top:8px;letter-spacing:0.5px;}
+.auth-btn-secondary:hover{border-color:rgba(150,100,255,0.6);color:#c8b8ff;}
+.auth-error{font-family:"Montserrat",sans-serif;font-size:13px;color:rgba(255,100,100,0.8);text-align:center;margin-top:8px;display:none;}
+.auth-link{font-family:"Montserrat",sans-serif;font-size:13px;color:rgba(200,180,255,0.9);text-align:center;margin-top:1rem;cursor:pointer;}
+.auth-link span{color:#c8b8ff;text-decoration:underline;}
+.auth-optional{font-family:"Marcellus",serif;font-size:9px;color:rgba(100,80,150,0.5);letter-spacing:1px;margin-left:6px;}
+
+/* HEADER USUARIO LOGUEADO */
+.user-bar{position:relative;z-index:2;display:none;align-items:center;gap:10px;margin-top:14px;background:rgba(20,10,45,0.55);border:0.5px solid rgba(150,100,255,0.25);border-radius:30px;padding:6px 16px 6px 6px;}
+.user-bar.visible{display:flex;}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,rgba(150,100,255,1),rgba(90,40,210,1));color:#fff;font-family:"Marcellus",serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(150,100,255,0.5);flex-shrink:0;}
+.user-nombre{font-family:"Marcellus",serif;font-size:14px;color:#fff;letter-spacing:0.5px;font-weight:600;}
+.user-creditos{font-family:"Montserrat",sans-serif;font-size:11px;color:rgba(150,220,150,0.9);background:rgba(0,100,50,0.15);border:0.5px solid rgba(0,150,80,0.35);border-radius:20px;padding:4px 12px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.btn-logout{font-family:"Marcellus",serif;font-size:11px;color:rgba(210,190,255,0.85);background:rgba(150,100,255,0.12);border:0.5px solid rgba(150,100,255,0.4);border-radius:20px;padding:4px 12px;cursor:pointer;letter-spacing:0.5px;}
+.btn-historial{font-family:"Marcellus",serif;font-size:11px;color:rgba(200,220,255,0.9);background:rgba(90,60,220,0.18);border:0.5px solid rgba(150,130,255,0.45);border-radius:20px;padding:4px 12px;cursor:pointer;letter-spacing:0.3px;white-space:nowrap;}
+.btn-historial:hover{color:#fff;border-color:rgba(150,130,255,0.75);background:rgba(120,80,255,0.3);}
+.btn-logout:hover{color:#fff;border-color:rgba(150,100,255,0.7);background:rgba(150,100,255,0.25);}
+.btn-mp{background:none;border:none;padding:0;margin:0;font:inherit;color:#0000EE;text-decoration:underline;cursor:pointer;}
+.btn-mp:disabled{opacity:0.5;cursor:default;}
+@media(max-width:520px){.user-bar{flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;padding:10px 14px;}.user-creditos{max-width:88vw;white-space:normal;overflow:visible;text-overflow:clip;text-align:center;line-height:1.4;}.user-nombre{text-align:center;}}
+
+/* MODAL SIN CRÉDITOS */
+.modal-sin-creditos{display:none;}
+
+/* MODAL NUEVA CONTRASEÑA */
+.reset-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.9);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.reset-overlay.active{display:flex;}
+
+/* POPUP BIENVENIDA */
+.bienvenida-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.85);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.bienvenida-overlay.active{display:flex;}
+.bienvenida-box{background:linear-gradient(160deg,rgba(15,8,30,0.99),rgba(25,12,50,0.99));border:1px solid rgba(150,100,255,0.5);border-radius:20px;padding:2.5rem 2rem;max-width:400px;width:90%;text-align:center;box-shadow:0 0 60px rgba(100,50,200,0.4);}
+.bienvenida-emoji{font-size:48px;margin-bottom:1rem;animation:giraBrillo 2s ease-in-out infinite;}
+@keyframes giraBrillo{0%,100%{transform:scale(1);filter:brightness(1);}50%{transform:scale(1.1);filter:brightness(1.3);}}
+.bienvenida-titulo{font-family:"Marcellus",serif;font-size:22px;color:#fff;margin-bottom:0.75rem;text-shadow:0 0 20px rgba(150,100,255,0.8);}
+.bienvenida-msg{font-family:"Montserrat",sans-serif;font-size:15px;color:rgba(220,205,255,0.95);line-height:1.7;margin-bottom:1.5rem;}
+.bienvenida-btn{padding:13px 32px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Marcellus",serif;font-size:14px;cursor:pointer;letter-spacing:1px;box-shadow:0 0 20px rgba(120,60,255,0.3);}
+
+/* MODAL REGISTRO */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,2,12,0.85);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+.modal-overlay.active{display:flex;}
+.modal-box{background:linear-gradient(160deg,rgba(20,10,40,0.98),rgba(30,15,60,0.98));border:1px solid rgba(150,100,255,0.4);border-radius:16px;padding:2.5rem 2rem;max-width:420px;width:90%;text-align:center;box-shadow:0 0 60px rgba(100,50,200,0.3);}
+.modal-brujula{font-size:40px;margin-bottom:1rem;}
+.modal-titulo{font-family:"Marcellus",serif;font-size:20px;color:#fff;letter-spacing:2px;margin-bottom:0.75rem;text-shadow:0 0 20px rgba(150,100,255,0.8);}
+.modal-desc{font-family:"Montserrat",sans-serif;font-size:16px;color:rgba(200,180,255,0.8);line-height:1.7;margin-bottom:1.5rem;}
+.modal-checks{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;text-align:left;}
+.modal-check{font-family:"Montserrat",sans-serif;font-size:14px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:8px;}
+.modal-btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Marcellus",serif;font-size:14px;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4);margin-bottom:10px;}
+.modal-btn-primary:hover{box-shadow:0 0 35px rgba(150,80,255,0.6);transform:translateY(-1px);}
+.modal-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Marcellus",serif;font-size:12px;cursor:pointer;letter-spacing:0.5px;}
+.modal-btn-secondary:hover{border-color:rgba(150,100,255,0.6);color:#c8b8ff;}
+.modal-sub{font-family:"Montserrat",sans-serif;font-size:12px;color:rgba(120,100,200,0.5);margin-top:12px;font-style:italic;}
+@media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:11px;}}
+@media(max-width:600px){
+.hero{padding:1.8rem 1.2rem 1.8rem;min-height:auto;}
+.hero-icon-wrap{margin-bottom:0.6rem!important;}
+.hero-icon-svg{width:56px!important;height:56px!important;}
+h1{letter-spacing:3px;}
+.tagline{font-size:11px;margin-top:6px;}
+.hero-subcopy{margin-top:0.9rem!important;}
+.hero-subcopy-text{font-size:14px!important;margin-bottom:0.7rem!important;line-height:1.5!important;}
+.hero-checklist{margin-bottom:0.7rem!important;gap:5px 12px!important;}
+.hero-checklist>div{font-size:11px!important;color:rgba(225,215,255,0.95)!important;}
+#heroGratisBadge{font-size:11px!important;padding:5px 14px!important;margin-bottom:10px!important;}
+}
+</style>
+</head>
+<body>
+<div class="nebulosa"></div>
+
+<header class="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <div class="aurora a4"></div>
+  <div class="hero-contenido">
+  <div class="hero-icon-wrap" style="margin-bottom:1.25rem;">
+    <svg class="hero-icon-svg" width="90" height="90" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="55" stroke="url(#lg1)" stroke-width="2" fill="none"/>
+      <circle cx="60" cy="60" r="48" stroke="rgba(255,180,50,0.15)" stroke-width="0.5" fill="none"/>
+      <line x1="60" y1="3" x2="60" y2="14" stroke="rgba(180,140,255,0.9)" stroke-width="2"/>
+      <line x1="60" y1="106" x2="60" y2="117" stroke="rgba(180,140,255,0.5)" stroke-width="1.5"/>
+      <line x1="3" y1="60" x2="14" y2="60" stroke="rgba(180,140,255,0.5)" stroke-width="1.5"/>
+      <line x1="106" y1="60" x2="117" y2="60" stroke="rgba(180,140,255,0.5)" stroke-width="1.5"/>
+      <line x1="19" y1="19" x2="27" y2="27" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <line x1="101" y1="19" x2="93" y2="27" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <line x1="19" y1="101" x2="27" y2="93" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <line x1="101" y1="101" x2="93" y2="93" stroke="rgba(180,140,255,0.3)" stroke-width="1"/>
+      <circle cx="60" cy="60" r="36" stroke="rgba(150,100,255,0.2)" stroke-width="0.8" fill="none"/>
+      <polygon points="60,16 65,58 60,48 55,58" fill="url(#lg2)"/>
+      <polygon points="60,104 65,62 60,72 55,62" fill="rgba(80,40,150,0.6)"/>
+      <path d="M60 14 Q54 7 60 2 Q69 7 60 14Z" fill="rgba(180,140,255,0.7)"/>
+      <circle cx="60" cy="60" r="7" fill="url(#lg2)" opacity="0.95"/>
+      <circle cx="60" cy="60" r="3" fill="white" opacity="0.8"/>
+      <circle cx="60" cy="18" r="2" fill="rgba(200,160,255,0.8)"/>
+      <circle cx="60" cy="102" r="1.5" fill="rgba(255,180,50,0.5)"/>
+      <circle cx="18" cy="60" r="1.5" fill="rgba(255,180,50,0.5)"/>
+      <circle cx="102" cy="60" r="1.5" fill="rgba(255,180,50,0.5)"/>
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="rgba(200,160,255,0.9)"/>
+          <stop offset="50%" stop-color="rgba(120,80,255,0.7)"/>
+          <stop offset="100%" stop-color="rgba(80,40,200,0.5)"/>
+        </linearGradient>
+        <linearGradient id="lg2" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="30%" stop-color="#cc99ff"/>
+          <stop offset="100%" stop-color="#6600cc"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <h1>LUZ <span class="amp">&</span> FUERZA</h1>
+  <div class="tagline">Tu luz interior · La fuerza que impulsa tu camino</div>
+  <div class="user-bar" id="userBar">
+    <span class="user-avatar" id="userAvatar"></span>
+    <span class="user-nombre" id="userNombre"></span>
+    <button class="btn-historial" onclick="verMiHistorial()" title="Ver mis consultas y cartas anteriores">📜 Mis consultas</button>
+    <span class="user-creditos" id="userCreditos"></span>
+    <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+  </div>
+  <div class="hero-subcopy" style="position:relative;z-index:2;margin-top:1.5rem;max-width:500px;text-align:center;">
+    <div class="hero-subcopy-text" style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Descubrí el mensaje que las cartas tienen para vos.</div>
+    <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;max-width:220px;">
+        <button onclick="irOpcionHero('cartadia')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">🔮 Sacar mi carta del día</button>
+        <div style="font-family:'Montserrat',sans-serif;font-size:11.5px;color:rgba(190,175,230,0.7);margin-top:8px;line-height:1.4;min-height:32px;display:flex;align-items:flex-start;justify-content:center;text-align:center;">Tu carta del día, en un click.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;max-width:220px;">
+        <button onclick="irOpcionHero('consulta')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">✨ Hacer una consulta</button>
+        <div style="font-family:'Montserrat',sans-serif;font-size:11.5px;color:rgba(190,175,230,0.7);margin-top:8px;line-height:1.4;min-height:32px;display:flex;align-items:flex-start;justify-content:center;text-align:center;">Una lectura de 3 cartas sobre tu pregunta.</div>
+      </div>
+    </div>
+    <div class="cta-box">
+      <div class="auth-link" onclick="abrirModal('modalLogin')" style="margin-top:12px;">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
+    </div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
+    <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,205,150,0.95);background:rgba(255,175,70,0.1);border:1px solid rgba(255,175,70,0.45);padding:5px 16px;border-radius:20px;margin-top:16px;letter-spacing:0.3px;">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
+  </div>
+</header>
+
+<div class="hero-checklist" style="position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 24px;padding:16px 20px;background:rgba(120,70,220,0.12);border-top:1px solid rgba(180,140,255,0.2);border-bottom:1px solid rgba(180,140,255,0.2);">
+  <div style="font-family:'Marcellus',serif;font-size:13px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
+  <div style="font-family:'Marcellus',serif;font-size:13px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
+  <div style="font-family:'Marcellus',serif;font-size:13px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Carta del día según tu plan</div>
+</div>
+
+<nav>
+  <button onclick="showTab('cartadia',this)">🔮 Carta del día</button>
+  <button onclick="showTab('consulta',this)">✨ Consulta</button>
+  <button onclick="showTab('como',this)">¿Cómo funciona?</button>
+  <button onclick="showTab('historia',this)">Conocé las cartas</button>
+  <button onclick="showTab('planes',this)">Planes</button>
+  <button onclick="showTab('sobre',this)">Nosotras</button>
+  <button onclick="showTab('contacto',this)">Contacto</button>
+</nav>
+
+<main style="position:relative;z-index:2;">
+
+<div id="tab-consulta" class="tab">
+  <div id="step1">
+    <div class="slabel"><div class="snum">1</div>Área de consulta</div>
+    <div class="hint">¿Sobre qué área de tu vida querés consultar hoy?</div>
+    <div class="chips-grid">
+      <div class="chip-card" onclick="selArea(this,'amor')"><div class="chip-icon">❤️</div><div class="chip-label">Amor y vínculos</div></div>
+      <div class="chip-card" onclick="selArea(this,'trabajo')"><div class="chip-icon">💼</div><div class="chip-label">Trabajo y proyectos</div></div>
+      <div class="chip-card" onclick="selArea(this,'dinero')"><div class="chip-icon">✨</div><div class="chip-label">Dinero y abundancia</div></div>
+      <div class="chip-card" onclick="selArea(this,'personal')"><div class="chip-icon">🌱</div><div class="chip-label">Crecimiento personal</div></div>
+      <div class="chip-card" onclick="selArea(this,'decision')"><div class="chip-icon">🔮</div><div class="chip-label">Una decisión difícil</div></div>
+      <div class="chip-card" onclick="selArea(this,'otro')"><div class="chip-icon">🌙</div><div class="chip-label">Otro</div></div>
+    </div>
+  </div>
+  <div id="step2" style="display:none;">
+    <button onclick="volverAArea()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver al área</button>
+    <div class="slabel"><div class="snum">2</div>Tu pregunta</div>
+    <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
+    <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
+    <div id="tipPregunta" style="font-size:11.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:8px 0 0;"></div>
+    <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
+    <button class="btn" id="btnRevelar" onclick="revelar()" disabled>🔀 Mezclar las cartas y consultar</button>
+  </div>
+  <div id="step3" style="display:none;">
+    <button id="btnVolverPregunta" onclick="volverAPregunta()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
+    <div class="slabel"><div class="snum">3</div>Tu tirada</div>
+    <div class="cartas" id="cartas"></div>
+    <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div>Interpretación</div>
+    <div id="preguntaMostrada" style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(180,160,255,0.7);font-style:italic;margin-bottom:10px;padding:10px 14px;background:rgba(150,100,255,0.08);border-radius:8px;border-left:2px solid rgba(150,100,255,0.3);display:none;"></div>
+    <div class="interp loading" id="interp">El tarot está leyendo las cartas...</div>
+    <button class="btn" id="btnNuevaConsultaStep3" onclick="reset()">✦ Nueva consulta</button>
+  </div>
+</div>
+
+<div id="tab-cartadia" class="tab">
+  <div style="text-align:center;padding:0.5rem 0 0;overflow:visible;">
+    <div style="font-family:'Marcellus',serif;font-size:11px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:13.5px;color:rgba(200,185,235,0.8);max-width:480px;margin:0 auto 14px;line-height:1.7;">Una tirada simple: te da un mensaje de orientación para tu momento actual. Mirá las cartas y elegí la que sientas que es para vos.</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:8px;line-height:1.6;" id="instruccionDia">Tocá la carta que sentís que es para vos...</div>
+    <button class="btn-mezclar-dia" id="btnMezclarDia" onclick="mezclarCartasDia()">🔀 Mezclar las cartas</button>
+    <div id="mesaDia" class="mesa-cartas"></div>
+    <div class="flip-container" id="flipContainer">
+      <div class="flip-inner" id="flipInner" style="position:relative;height:auto;min-height:380px;">
+        <div class="flip-frente" id="flipFrente"></div>
+        <div class="flip-dorso">✦</div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:1.5rem;">
+    <button class="btn-nueva-carta" id="btnNuevaCarta" onclick="showTab('consulta', document.querySelectorAll('nav button')[1])" style="display:none;">✦ Quiero una consulta completa</button>
+  </div>
+</div>
+
+<div id="tab-como" class="tab">
+  <div class="hint" style="margin-bottom:1.5rem;">El tarot de Luz & Fuerza combina la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte una experiencia de consulta disponible cuando la necesites.</div>
+  <div class="cfrow">
+    <div class="cfcard"><div class="icon">🃏</div><h3>Preguntá</h3><p>Realizá tu consulta.</p></div>
+    <div class="cfcard"><div class="icon">✨</div><h3>Recibí tu lectura</h3><p>Obtené una interpretación personalizada basada en el tarot.</p></div>
+    <div class="cfcard"><div class="icon">🔮</div><h3>Continuá explorando</h3><p>Accedé a nuevas consultas y beneficios desde tu cuenta.</p></div>
+  </div>
+  <div class="hblock" style="margin-top:0.5rem;">
+    <h3>¿Qué vas a encontrar en tu lectura?</h3>
+    <p style="margin-bottom:16px;"><strong style="color:#8fb3e0;font-weight:600;">El estado de situación en la línea del tiempo</strong></p>
+    <p><strong style="color:#c9a5ff;">Pasado:</strong> revela la base de la que venís, lo que construiste y los antecedentes que dieron forma a tu realidad actual.</p>
+    <p><strong style="color:#c9a5ff;">Presente:</strong> describe tu posición exacta hoy, tu nivel de claridad, tus recursos disponibles y la atmósfera que te rodea.</p>
+    <p style="margin-bottom:16px;"><strong style="color:#c9a5ff;">Futuro:</strong> proyecta la tendencia natural del camino, mostrando hacia dónde se dirigen tus planes si mantenés el rumbo actual.</p>
+    <p style="margin-bottom:16px;"><strong style="color:#8fb3e0;font-weight:600;">El fin y la misión desde esta perspectiva</strong></p>
+    <p><strong style="color:#c9a5ff;">El fin:</strong> brindarte un diagnóstico claro y un mapa detallado del escenario en el que te encontrás, para eliminar la incertidumbre.</p>
+    <p><strong style="color:#c9a5ff;">La misión:</strong> optimizar tus recursos actuales, ayudarte a reconocer tus fortalezas y permitirte planificar tus próximos pasos con total consciencia.</p>
+  </div>
+</div>
+
+<div id="tab-historia" class="tab">
+  <div class="hblock">
+    <h3>El viaje del héroe</h3>
+    <p>Les presentamos una síntesis del viaje del héroe a través de los 22 arcanos mayores del tarot, desde El Loco a El Mundo, que podríamos sintetizar así:</p>
+    <p style="margin-bottom:16px;">
+      <strong style="color:#c9a5ff;">Desde el amor</strong> a la alegría<br>
+      <strong style="color:#c9a5ff;">Desde el amanecer</strong> al anochecer<br>
+      <strong style="color:#c9a5ff;">Desde el inicio</strong> al fin<br>
+      <strong style="color:#c9a5ff;">Desde el todo</strong> y la nada<br>
+      <strong style="color:#c9a5ff;">Desde las frases</strong>
+    </p>
+    <p style="margin-bottom:16px;">Vivimos múltiples experiencias, momentos e instantes que nos proponen conectar con el aprendizaje interno y externo al mismo tiempo; y el tarot puede ser una guía para orientar tu danzar, tu camino de vida y tus decisiones conscientes.</p>
+    <p style="margin-bottom:16px;">¿Registrás tu manera de bailar?<br>¿Escuchás tu música?<br>¿Sentís el ritmo?<br>¿Expresás?</p>
+    <p style="font-style:italic;color:#8fb3e0;">"Sólo se vive de veras cuando se baila" (Isadora Duncan) — página 667 en Los Arcanos Mayores del Tarot, ed. Herder.</p>
+  </div>
+  <div class="hblock"><h3>Los 22 arcanos mayores</h3><p>El viaje del Loco al Mundo es el viaje de toda alma humana.</p>
+    <div class="arcanos-grid">
+      <div class="arcano-card"><div class="arcano-emoji">🌟</div><div class="arcano-info"><h4>El Loco</h4><p>El inicio, la inocencia, los nuevos comienzos.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🪄</div><div class="arcano-info"><h4>El Mago</h4><p>La voluntad, la manifestación, el poder personal.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">📖</div><div class="arcano-info"><h4>La Sacerdotisa</h4><p>La intuición, el misterio, el conocimiento oculto.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌸</div><div class="arcano-info"><h4>La Emperatriz</h4><p>La abundancia, la fertilidad, la creatividad.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">👑</div><div class="arcano-info"><h4>El Emperador</h4><p>La autoridad, la estructura, el liderazgo.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🏛️</div><div class="arcano-info"><h4>El Hierofante</h4><p>La tradición, la guía espiritual, la enseñanza.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">💫</div><div class="arcano-info"><h4>Los Enamorados</h4><p>Las elecciones del corazón, la unión, los valores.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🏆</div><div class="arcano-info"><h4>El Carro</h4><p>La determinación, la victoria, el avance.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🦁</div><div class="arcano-info"><h4>La Fuerza</h4><p>El coraje interior, la compasión, la paciencia.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🕯️</div><div class="arcano-info"><h4>El Ermitaño</h4><p>La reflexión, la sabiduría interior, la soledad.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🎡</div><div class="arcano-info"><h4>La Rueda de la Fortuna</h4><p>Los ciclos, el destino, los cambios inevitables.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">⚖️</div><div class="arcano-info"><h4>La Justicia</h4><p>El equilibrio, la verdad, el karma.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🙃</div><div class="arcano-info"><h4>El Colgado</h4><p>La pausa, la entrega, la nueva perspectiva.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🦋</div><div class="arcano-info"><h4>La Muerte</h4><p>La transformación, los finales que liberan.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌊</div><div class="arcano-info"><h4>La Templanza</h4><p>El equilibrio, la moderación, la paciencia.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">⛓️</div><div class="arcano-info"><h4>El Diablo</h4><p>Los apegos, las sombras, la liberación.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">⚡</div><div class="arcano-info"><h4>La Torre</h4><p>Los cambios profundos, la destrucción creadora.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">✨</div><div class="arcano-info"><h4>La Estrella</h4><p>La esperanza, la guía, la renovación.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌙</div><div class="arcano-info"><h4>La Luna</h4><p>La intuición, el misterio, lo oculto.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">☀️</div><div class="arcano-info"><h4>El Sol</h4><p>La claridad, la alegría, el éxito.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🎺</div><div class="arcano-info"><h4>El Juicio</h4><p>El despertar, el llamado, la redención.</p></div></div>
+      <div class="arcano-card"><div class="arcano-emoji">🌍</div><div class="arcano-info"><h4>El Mundo</h4><p>La completud, el logro, los ciclos que cierran.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-planes" class="tab">
+  <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
+  <div style="font-family:'Montserrat',sans-serif;font-size:12.5px;color:rgba(210,195,240,0.85);line-height:1.6;background:rgba(120,70,220,0.1);border:1px solid rgba(150,100,255,0.25);border-radius:12px;padding:14px 16px;margin-bottom:1.5rem;">
+    <strong style="color:#fff;">Importante:</strong> esto es tarot exprés — una carta del día y/o preguntas específicas. Si necesitás profundizar, te recomendamos agendar una sesión por videollamada con nuestra tarotista Pato Escobar.
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+      <a href="https://patoescobar.com/" target="_blank" style="color:#b28dff;font-weight:600;text-decoration:underline;">Te dejamos su sitio para que conozcas su trayectoria →</a>
+      <a href="https://wa.me/5491124525562" target="_blank" style="color:rgba(0,220,100,0.85);font-weight:600;text-decoration:underline;">💬 O escribile directo por WhatsApp →</a>
+    </div>
+  </div>
+  
+  <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:12px;">Consulta de tarot · 3 cartas</div>
+  <div class="planes">
+    <div class="plan">
+      <div class="pbadge">Consulta</div>
+      <div class="pprecio">$2.500 <span>ARS</span></div>
+      <ul class="pitems">
+        <li>1 consulta de tarot completa</li>
+        <li>Interpretación personalizada</li>
+        <li>Explicación de cada carta</li>
+      </ul>
+      <button onclick="pagar('consulta')" class="btn-mp">Pagar con MercadoPago</button>
+    </div>
+    <div class="plan pop">
+      <div class="pbadge">✦ Más elegido</div>
+      <div class="pprecio">$6.000 <span>ARS/mes</span></div>
+      <ul class="pitems">
+        <li>4 consultas de tarot específicas, se habilita 1 por semana</li>
+        <li>Interpretación personalizada en cada una</li>
+        <li>Resumen con la tendencia del mes (por mail)</li>
+      </ul>
+      <button onclick="pagar('semanal')" class="btn-mp btn-mp-pop">Pagar con MercadoPago</button>
+    </div>
+    <div class="plan">
+      <div class="pbadge">Mensual</div>
+      <div class="pprecio">$9.000 <span>ARS/mes</span></div>
+      <ul class="pitems">
+        <li>8 consultas de tarot específicas, se habilitan 2 por semana</li>
+        <li>+ carta del día todos los días del mes</li>
+        <li>Interpretación personalizada en cada una</li>
+        <li>Resumen con la tendencia del mes (por mail)</li>
+      </ul>
+      <button onclick="pagar('mensual')" class="btn-mp">Pagar con MercadoPago</button>
+    </div>
+  </div>
+
+  <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Carta del día · 1 carta</div>
+  <div class="planes" style="grid-template-columns:1fr;">
+    <div class="plan">
+      <div class="pbadge">Carta del día</div>
+      <div class="pprecio">$2.000 <span>ARS</span></div>
+      <ul class="pitems">
+        <li>1 carta del día, al toque</li>
+        <li>Mensaje personalizado</li>
+        <li>Qué hacer y qué evitar</li>
+      </ul>
+      <button onclick="pagar('consejo')" class="btn-mp">Pagar con MercadoPago</button>
+    </div>
+  </div>
+
+  <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Combo promocional</div>
+  <div class="planes" style="grid-template-columns:1fr;">
+    <div class="plan">
+      <div class="pbadge">Consulta + Carta del día</div>
+      <div class="pprecio">$3.000 <span>ARS</span></div>
+      <ul class="pitems">
+        <li>1 consulta de tarot completa (pasado, presente, futuro)</li>
+        <li>1 carta del día</li>
+        <li>Interpretación personalizada de las dos</li>
+      </ul>
+      <button onclick="pagar('combo')" class="btn-mp">Pagar con MercadoPago</button>
+    </div>
+  </div>
+
+  <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.8);text-align:center;margin-top:1.5rem;font-style:italic;">Primera consulta gratis con tu registro · Cancelá cuando quieras</div>
+
+  <div id="bloquePlanesPrueba" style="display:none;margin-top:2.5rem;">
+    <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(255,180,120,0.9);text-transform:uppercase;margin-bottom:12px;">⚠ Modo prueba — mismos planes, precio simbólico</div>
+    <div class="planes">
+      <div class="plan">
+        <div class="pbadge">Consulta (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>1 consulta de tarot completa</li></ul>
+        <button onclick="pagar('consulta_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Semanal (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>4 consultas específicas, 1 por semana</li></ul>
+        <button onclick="pagar('semanal_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Mensual (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>8 consultas específicas (2 por semana) + carta del día</li></ul>
+        <button onclick="pagar('mensual_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Carta del día (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>1 carta del día</li></ul>
+        <button onclick="pagar('consejo_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+      <div class="plan">
+        <div class="pbadge">Combo (prueba)</div>
+        <div class="pprecio">$50 <span>ARS</span></div>
+        <ul class="pitems"><li>1 consulta completa + 1 carta del día</li></ul>
+        <button onclick="pagar('combo_test')" class="btn-mp">Pagar con MercadoPago</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-sobre" class="tab">
+  <div class="sobre">
+    <p>Luz & Fuerza nació de la creencia de que cada persona lleva en su interior una <strong>sabiduría profunda</strong> esperando ser escuchada.</p>
+    <p>El tarot no predice el futuro — lo ilumina. Cada carta que aparece es un espejo de tu momento presente, la fuerza que impulsa tus próximos pasos.</p>
+    <p>Combinamos la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte lecturas que realmente resuenen con tu momento único.</p>
+    <p>Acá tu voz es sagrada. Tu pregunta, el punto de partida. Tu <strong>luz interior</strong>, la respuesta.</p>
+  </div>
+
+  <div style="background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:2rem;max-width:500px;margin:2rem auto 0;text-align:center;">
+    <div style="font-size:32px;margin-bottom:0.5rem;">🔮</div>
+    <div style="font-family:'Marcellus',serif;font-size:16px;color:#fff;margin-bottom:0.5rem;">Pato Escobar, nuestra tarotista de cabecera</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(210,190,255,0.8);line-height:1.6;margin-bottom:1.25rem;">La sabiduría detrás de estas lecturas también vive fuera de la pantalla. Pato es tarotista y astróloga, y acompaña procesos personales con sesiones 1:1.</div>
+    <a href="https://patoescobar.com/" target="_blank" style="display:inline-block;padding:11px 28px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:'Marcellus',serif;font-size:13px;text-decoration:none;letter-spacing:0.5px;">Conocé su trabajo</a>
+  </div>
+
+  <div style="background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:2rem;max-width:500px;margin:2rem auto 0;text-align:center;">
+    <div style="font-size:32px;margin-bottom:0.5rem;">✦</div>
+    <div style="font-family:'Marcellus',serif;font-size:16px;color:#fff;margin-bottom:0.5rem;">Somos 3 amigas, las 3 número 9 de arcano de vida</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(210,190,255,0.8);line-height:1.6;margin-bottom:1.25rem;">Dejanos tu fecha de nacimiento y descubrí tu número de guía.</div>
+    <input type="date" id="fechaGuia" style="width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.4);border-radius:8px;padding:10px 14px;color:#e8e0ff;font-family:'Montserrat',sans-serif;font-size:14px;margin-bottom:1rem;">
+    <br>
+    <button onclick="calcularNumeroGuia()" style="font-family:'Marcellus',serif;font-size:13px;padding:11px 28px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:0.5px;">Descubrir mi número de guía</button>
+    <div id="resultadoGuia" style="display:none;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(150,100,255,0.2);">
+      <div id="guiaEmoji" style="font-size:36px;margin-bottom:0.5rem;"></div>
+      <div id="guiaNombre" style="font-family:'Marcellus',serif;font-size:18px;color:#fff;margin-bottom:0.5rem;"></div>
+      <div id="guiaFrase" style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.85);line-height:1.6;margin-bottom:1.25rem;"></div>
+      <button onclick="irALecturaDesdeGuia()" class="modal-btn-primary" style="width:auto;padding:11px 28px;">Quiero mi lectura completa</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-contacto" class="tab">
+  <div class="slabel"><div class="snum">✦</div>Contacto</div>
+  <div class="hint" style="margin-bottom:1.5rem;">¿Tenés alguna consulta o problema con el sitio? Escribinos.</div>
+  <div style="background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:2rem;max-width:500px;margin:0 auto;text-align:center;">
+    <div style="font-size:40px;margin-bottom:1rem;">🧭</div>
+    <div style="font-family:'Marcellus',serif;font-size:16px;color:#fff;margin-bottom:1rem;">Estamos para ayudarte</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.9);line-height:1.7;margin-bottom:1.5rem;">
+      Si tenés dudas sobre tu cuenta, un pago o el funcionamiento del sitio, escribinos por email o por WhatsApp.
+    </div>
+    <a href="mailto:contacto@tarotluzyfuerza.com.ar" style="display:block;padding:12px 24px;background:rgba(100,60,180,0.3);border:1px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(220,200,255,0.9);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;margin-bottom:12px;">
+      ✉ contacto@tarotluzyfuerza.com.ar
+    </a>
+    <a href="https://wa.me/5491134790627" target="_blank" style="display:block;padding:12px 24px;background:rgba(0,100,50,0.2);border:1px solid rgba(0,180,80,0.3);border-radius:30px;color:rgba(0,220,100,0.8);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;">
+      💬 Escribinos por WhatsApp
+    </a>
+    <div style="font-family:'Montserrat',sans-serif;font-size:11px;color:rgba(150,120,255,0.4);margin-top:1.5rem;font-style:italic;">Respondemos en menos de 24 horas</div>
+  </div>
+</div>
+
+<div id="tab-historial" class="tab">
+  <div id="misPlanesLista"></div>
+  <div id="miCaminoLista"></div>
+  <div class="slabel" style="margin-bottom:0.75rem;"><div class="snum">📜</div>Historial de consultas</div>
+  <div class="hint" style="margin-bottom:1.5rem;">Todas tus consultas y cartas del día, en un solo lugar.</div>
+  <div id="historialLista"></div>
+</div>
+
+</div>
+
+</main>
+
+
+<footer>LUZ & FUERZA · Tu consulta es confidencial · ✦</footer>
+
+<!-- MODAL NUEVA CONTRASEÑA -->
+<div class="reset-overlay" id="modalNuevaClave">
+  <div class="auth-box">
+    <div style="font-size:32px;text-align:center;margin-bottom:1rem;">🔐</div>
+    <div class="auth-titulo">Nueva contraseña</div>
+    <div class="auth-subtitulo">Elegí tu nueva contraseña para ingresar al sitio.</div>
+    <div class="auth-campo">
+      <label class="auth-label">Nueva contraseña</label>
+      <div class="pass-wrap">
+        <input class="auth-input" id="nueva-pass" type="password" placeholder="Mínimo 6 caracteres">
+        <button class="ojo-btn" type="button" onclick="togglePass('nueva-pass',this)">👁</button>
+      </div>
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Repetir contraseña</label>
+      <div class="pass-wrap">
+        <input class="auth-input" id="nueva-pass2" type="password" placeholder="Repetí la contraseña">
+        <button class="ojo-btn" type="button" onclick="togglePass('nueva-pass2',this)">👁</button>
+      </div>
+    </div>
+    <div class="auth-error" id="nueva-pass-error"></div>
+    <button class="auth-btn-primary" onclick="guardarNuevaClave()">Guardar nueva contraseña</button>
+  </div>
+</div>
+
+<!-- POPUP BIENVENIDA -->
+<div class="bienvenida-overlay" id="popupBienvenida">
+  <div class="bienvenida-box">
+    <div class="bienvenida-emoji">🧭</div>
+    <div class="bienvenida-titulo" id="bienvenidaTitulo"></div>
+    <div class="bienvenida-msg" id="bienvenidaMsg"></div>
+    <button class="bienvenida-btn" id="bienvenidaBtn" onclick="cerrarBienvenida()">Comenzar ✦</button>
+  </div>
+</div>
+
+<!-- MODAL REGISTRO -->
+<!-- MODAL LOGIN -->
+<div class="auth-overlay" id="modalLogin">
+  <div class="auth-box">
+    <div style="font-size:32px;text-align:center;margin-bottom:1rem;">🧭</div>
+    <div class="auth-titulo">Bienvenida de vuelta</div>
+    <div class="auth-subtitulo">Las cartas te estaban esperando.</div>
+    <div class="auth-campo">
+      <label class="auth-label">Email</label>
+      <input class="auth-input" id="login-email" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')iniciarSesion()">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Contraseña</label>
+      <div class="pass-wrap">
+        <input class="auth-input" id="login-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')iniciarSesion()">
+        <button class="ojo-btn" type="button" onclick="togglePass('login-pass',this)">👁</button>
+      </div>
+    </div>
+    <div class="auth-error" id="login-error"></div>
+    <button class="auth-btn-primary" id="btnLogin" onclick="iniciarSesion()">Entrar</button>
+    <div class="auth-link" onclick="olvidoPassword()" style="margin-top:6px;font-size:12px;color:rgba(180,160,255,0.6);">¿Olvidaste tu contraseña? <span>Recuperar</span></div>
+    <div class="auth-link" onclick="switchModal('login','registro')">¿No tenés cuenta? <span>Registrate gratis</span></div>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL NUEVO REGISTRO -->
+<div class="auth-overlay" id="modalRegistro2">
+  <div class="auth-box">
+    <div style="font-size:32px;text-align:center;margin-bottom:1rem;">🧭</div>
+    <div class="auth-titulo">Tu primera consulta es gratis</div>
+    <div class="auth-subtitulo">Creá tu cuenta y comenzá tu camino.</div>
+    <div class="auth-campo">
+      <label class="auth-label">¿Cómo querés que te llamemos?</label>
+      <input class="auth-input" id="reg-nombre" type="text" placeholder="Tu nombre o apodo">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">¿Cómo te identificás?</label>
+      <select class="auth-select" id="reg-pronombre">
+        <option value="ella">Ella</option>
+        <option value="el">Él</option>
+        <option value="elle">Elle</option>
+        <option value="ninguno">Prefiero no decir</option>
+      </select>
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Email</label>
+      <input class="auth-input" id="reg-email" type="email" placeholder="tu@email.com">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Contraseña</label>
+      <div class="pass-wrap">
+        <input class="auth-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres">
+        <button class="ojo-btn" type="button" onclick="togglePass('reg-pass',this)">👁</button>
+      </div>
+    </div>
+    <div class="auth-row">
+      <div class="auth-campo">
+        <label class="auth-label">Fecha de nacimiento</label>
+        <input class="auth-input" id="reg-fecha" type="date">
+      </div>
+      <div class="auth-campo">
+        <label class="auth-label">Hora <span class="auth-optional">opcional</span></label>
+        <input class="auth-input" id="reg-hora" type="time">
+      </div>
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Ciudad de nacimiento</label>
+      <input class="auth-input" id="reg-ciudad" type="text" placeholder="Ej: Mar del Plata">
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">Provincia <span class="auth-optional">opcional</span></label>
+      <select class="auth-select" id="reg-provincia">
+        <option value="">Seleccioná tu provincia</option>
+        <option>Buenos Aires</option>
+        <option>CABA</option>
+        <option>Catamarca</option>
+        <option>Chaco</option>
+        <option>Chubut</option>
+        <option>Córdoba</option>
+        <option>Corrientes</option>
+        <option>Entre Ríos</option>
+        <option>Formosa</option>
+        <option>Jujuy</option>
+        <option>La Pampa</option>
+        <option>La Rioja</option>
+        <option>Mendoza</option>
+        <option>Misiones</option>
+        <option>Neuquén</option>
+        <option>Río Negro</option>
+        <option>Salta</option>
+        <option>San Juan</option>
+        <option>San Luis</option>
+        <option>Santa Cruz</option>
+        <option>Santa Fe</option>
+        <option>Santiago del Estero</option>
+        <option>Tierra del Fuego</option>
+        <option>Tucumán</option>
+        <option>Otro país</option>
+      </select>
+    </div>
+    <div class="auth-campo">
+      <label class="auth-label">País</label>
+      <input class="auth-input" id="reg-pais" type="text" placeholder="Argentina" value="Argentina">
+    </div>
+    <div class="auth-error" id="reg-error"></div>
+    <button class="auth-btn-primary" id="btnRegistrar" onclick="registrarse()">Crear cuenta y comenzar</button>
+    <div class="auth-link" onclick="switchModal('registro','login')">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL SIN CREDITOS -->
+<div class="auth-overlay" id="modalSinCreditos">
+  <div class="auth-box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:1rem;">🔮</div>
+    <div class="auth-titulo">Consultas agotadas</div>
+    <div class="auth-subtitulo">Ya usaste tu consulta gratuita. Elegí un plan para seguir consultando.</div>
+    <button class="auth-btn-primary" onclick="cerrarModales();showTab('planes',document.querySelectorAll('nav button')[4])">Ver planes</button>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cerrar</button>
+  </div>
+</div>
+
+<!-- MODAL YA CONSULTASTE HOY -->
+<div class="auth-overlay" id="modalConsultaDiaria">
+  <div class="auth-box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:1rem;">🌙</div>
+    <div class="auth-titulo">Ya hiciste tu consulta de hoy</div>
+    <div class="auth-subtitulo" id="textoConsultaDiaria">Tus consultas se liberan una por día, para que puedas ir viviendo el camino paso a paso. Volvé mañana para la siguiente.</div>
+    <button class="auth-btn-primary" onclick="cerrarModales()">Entendido</button>
+  </div>
+</div>
+
+<div class="auth-overlay" id="modalPagoOk">
+  <div class="auth-box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:1rem;">✨</div>
+    <div class="auth-titulo" id="pagoOkTitulo">¡Bárbaro! Ya podés usar tu consulta</div>
+    <div class="auth-subtitulo" id="pagoOkTexto">Tu pago se acreditó correctamente.</div>
+    <button class="auth-btn-primary" id="pagoOkBtn" onclick="cerrarModales();showTab('consulta',document.querySelectorAll('nav button')[1])">Ir a mi consulta</button>
+    <button class="auth-btn-secondary" onclick="cerrarModales()">Cerrar</button>
+  </div>
+</div>
+
+<!-- MODAL REGISTRO (viejo - ahora redirige al nuevo) -->
+<div class="modal-overlay" id="modalRegistro">
+  <div class="modal-box">
+    <div class="modal-brujula">🧭</div>
+    <div class="modal-titulo">Tu primera consulta es gratis</div>
+    <div class="modal-desc">Creá tu cuenta para empezar. Las cartas ya tienen un mensaje para vos.</div>
+    <div class="modal-checks">
+      <div class="modal-check">✅ Primera consulta sin costo</div>
+      <div class="modal-check">✅ Interpretación personalizada con IA</div>
+      <div class="modal-check">✅ Disponible las 24 horas</div>
+    </div>
+    <button class="modal-btn-primary" onclick="cerrarModales();abrirModal('modalRegistro2')">Crear cuenta y comenzar</button>
+    <button class="modal-btn-secondary" onclick="cerrarModales();abrirModal('modalLogin')">Ya tengo cuenta — Iniciar sesión</button>
+    <div class="modal-sub">Elegí el plan que mejor se adapte a vos. Cancelá cuando quieras.</div>
+  </div>
+</div>
+
+<script>
+const cc="rgba(130,80,255,0.35)",cl="rgba(100,60,220,0.18)";
+const svgs=[
+`<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><path d="M27 4 C14 4 4 14 4 27 C4 40 14 50 27 46 C40 50 50 40 50 27 C50 14 40 4 27 4Z" stroke="${cc}" stroke-width="1.2" fill="none"/><circle cx="19" cy="27" r="8" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="28" y1="6" x2="28" y2="50" stroke="${cl}" stroke-width="1"/><line x1="6" y1="28" x2="50" y2="28" stroke="${cl}" stroke-width="1"/><circle cx="28" cy="28" r="6" stroke="${cc}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="48" height="68" viewBox="0 0 48 68" fill="none"><line x1="24" y1="4" x2="24" y2="54" stroke="${cc}" stroke-width="1.5"/><path d="M24 4 L14 24 L24 18 L34 24 Z" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="14" y1="54" x2="34" y2="54" stroke="${cc}" stroke-width="1.5"/></svg>`,
+`<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><polygon points="29,4 35,21 53,21 39,32 44,49 29,39 14,49 19,32 5,21 23,21" stroke="${cc}" stroke-width="1.2" fill="none"/></svg>`,
+`<svg width="52" height="62" viewBox="0 0 52 62" fill="none"><ellipse cx="26" cy="28" rx="18" ry="23" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M26 5 Q38 17 26 28 Q14 17 26 5Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="58" height="58" viewBox="0 0 58 58" fill="none"><circle cx="29" cy="29" r="23" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M29 6 L29 52 M6 29 L52 29 M12 12 L46 46 M46 12 L12 46" stroke="${cl}" stroke-width="0.8"/></svg>`,
+`<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 L52 28 L28 52 L4 28 Z" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M28 14 L42 28 L28 42 L14 28 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="55" height="55" viewBox="0 0 55 55" fill="none"><circle cx="27" cy="27" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><circle cx="27" cy="27" r="14" stroke="${cl}" stroke-width="1" fill="none"/><circle cx="27" cy="27" r="5" stroke="${cc}" stroke-width="1" fill="none"/></svg>`,
+`<svg width="52" height="65" viewBox="0 0 52 65" fill="none"><path d="M26 4 L48 18 L48 47 L26 61 L4 47 L4 18 Z" stroke="${cc}" stroke-width="1.2" fill="none"/></svg>`,
+`<svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 4 C38 4 48 14 48 28 C48 42 38 52 28 52 C18 52 8 42 8 28 C8 14 18 4 28 4Z M28 4 C22 14 22 42 28 52 M28 4 C34 14 34 42 28 52 M8 28 C18 22 38 22 48 28 M8 28 C18 34 38 34 48 28" stroke="${cc}" stroke-width="0.9" fill="none"/></svg>`,
+`<svg width="60" height="45" viewBox="0 0 60 45" fill="none"><path d="M5 40 L30 5 L55 40 Z" stroke="${cc}" stroke-width="1.2" fill="none"/><line x1="30" y1="5" x2="30" y2="40" stroke="${cl}" stroke-width="0.8"/></svg>`,
+`<svg width="54" height="54" viewBox="0 0 54 54" fill="none"><circle cx="27" cy="27" r="22" stroke="${cc}" stroke-width="1.2" fill="none"/><path d="M27 5 L31 18 L44 18 L34 26 L38 39 L27 32 L16 39 L20 26 L10 18 L23 18 Z" stroke="${cl}" stroke-width="1" fill="none"/></svg>`
+];
+
+const zones=[];
+function zonaLibre(x,size){const m=size+15;for(const z of zones){if(Math.abs(z.x-x)<m)return false;}return true;}
+
+function spawnHero(){
+  const bg=document.getElementById('heroBg');if(!bg)return;
+  let left,att=0;
+  do{left=5+Math.random()*82;att++;}while(!zonaLibre(left,8)&&att<20);
+  zones.push({x:left});if(zones.length>4)zones.shift();
+  const w=document.createElement('div');w.className='sym';
+  w.innerHTML=svgs[Math.floor(Math.random()*svgs.length)];
+  const rot=(Math.random()-.5)*25,dur=12+Math.random()*8,scale=0.85+Math.random()*0.7;
+  const startY = 150 + Math.random()*50;
+  w.style.cssText=`left:${left}%;top:${startY}px;--r:${rot}deg;animation-duration:${dur}s;`;
+  w.querySelector('svg').style.transform=`scale(${scale})`;
+  bg.appendChild(w);setTimeout(()=>w.remove(),dur*1000);
+  setTimeout(spawnHero,2000+Math.random()*1500);
+}
+for(let i=0;i<4;i++)setTimeout(spawnHero,i*800);
+
+const preguntas={amor:"¿Cómo voy a estar en el amor este mes?",trabajo:"¿Cómo voy a estar en el trabajo?",dinero:"¿Cómo va a estar mi economía durante los próximos 3 meses?",personal:"¿Es un buen momento para emprender el viaje a…?",decision:"¿Es momento de cambiar de…? o ¿Cómo me va a ir si decido…?",otro:"Estoy evaluando la posibilidad de… ¿Cómo me va a ir si lo realizo?"};
+const tips={
+  amor:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar a…?" · Ejemplo ok: "¿Voy a continuar mi relación con…?"',
+  trabajo:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar de…?" · Ejemplo ok: "¿Voy a conseguir el puesto de…?"',
+  dinero:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder con…?" · Ejemplo ok: "¿Voy a ganar con…?" o "¿cómo me va a ir con…?"',
+  personal:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿no voy a hacer el viaje?" · Ejemplo ok: "¿Voy a conseguir viajar a…?"',
+  decision:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder si…?" · Ejemplo ok: "¿Va a ser positivo para realizar la…?"',
+  otro:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿me va a ir mal si…?" · Ejemplo ok: "¿Cómo me va a ir si…?"'
+};
+const hints={amor:"Contame sobre tu situación en el amor — ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",personal:"¿Qué querés transformar o entender de vos mismo?",decision:"Describí la situación — ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
+const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí — la raíz de tu situación actual."},{nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo — tu momento presente."},{nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía — posibilidades que se abren."}];
+let area="";
+let consultaEnCurso=false;
+
+const ordenTabs=['cartadia','consulta','como','historia','planes','sobre','contacto','historial'];
+let navegandoPorHistorial=false;
+
+function stepActualConsulta(){
+  if(document.getElementById('step3').style.display==='block') return 3;
+  if(document.getElementById('step2').style.display==='block') return 2;
+  return 1;
+}
+
+function showTab(t,el){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+  document.getElementById("tab-"+t).classList.add("active");
+  if(el) el.classList.add("active");
+  if(t==='cartadia'){
+    const tabCartadia=document.getElementById('tab-cartadia');
+    if(tabCartadia) tabCartadia.style.minHeight='100vh';
+    setTimeout(function(){
+      if(typeof cartaDiaElegida !== 'undefined'){
+        cartaDiaElegida=false;
+      }
+      const instruccion=document.getElementById('instruccionDia');
+      if(instruccion)instruccion.style.display='block';
+      const flip=document.getElementById('flipContainer');
+      if(flip)flip.style.display='none';
+      const mesa=document.getElementById('mesaDia');
+      if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
+      if(typeof crearMesaDia==='function')crearMesaDia();
+      const navEl=document.querySelector('nav');
+      if(navEl) navEl.scrollIntoView({block:'start'});
+    },100);
+  } else if(t){
+    const tabActual=document.getElementById('tab-'+t);
+    if(tabActual) tabActual.style.minHeight='100vh';
+    setTimeout(function(){
+      const navEl=document.querySelector('nav');
+      if(navEl) navEl.scrollIntoView({block:'start'});
+    },50);
+  } else {
+    window.scrollTo(0,0);
+  }
+  if(t==='historial' && typeof window.cargarHistorial==='function'){
+    window.cargarHistorial();
+    if(typeof window.cargarMiCamino==='function') window.cargarMiCamino();
+    if(typeof window.cargarMisPlanes==='function') window.cargarMisPlanes();
+  }
+  if(!navegandoPorHistorial){
+    history.pushState({tab:t, step:t==='consulta'?stepActualConsulta():1}, '', '#'+t);
+  }
+}
+
+function volverAArea(){
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step1').style.display='block';
+  if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:1}, '', '#consulta');
+}
+
+function volverAPregunta(){
+  document.getElementById('step3').style.display='none';
+  document.getElementById('step2').style.display='block';
+  if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:2}, '', '#consulta');
+}
+
+window.addEventListener('popstate', function(e){
+  const state = e.state || {tab:null, step:1};
+  navegandoPorHistorial = true;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+  const tabEl = document.getElementById('tab-'+state.tab);
+  if(tabEl) tabEl.classList.add('active');
+  const idx = ordenTabs.indexOf(state.tab);
+  const navBtns = document.querySelectorAll('nav button');
+  if(idx>=0 && navBtns[idx]) navBtns[idx].classList.add('active');
+  if(state.tab==='consulta'){
+    document.getElementById('step1').style.display = state.step===1?'block':'none';
+    document.getElementById('step2').style.display = state.step===2?'block':'none';
+    document.getElementById('step3').style.display = state.step===3?'block':'none';
+  }
+  if(state.tab==='cartadia'){
+    const tabCartadia=document.getElementById('tab-cartadia');
+    if(tabCartadia) tabCartadia.style.minHeight='100vh';
+    if(typeof cartaDiaElegida !== 'undefined'){ cartaDiaElegida=false; }
+    const instruccion=document.getElementById('instruccionDia');
+    if(instruccion)instruccion.style.display='block';
+    const flip=document.getElementById('flipContainer');
+    if(flip)flip.style.display='none';
+    const mesa=document.getElementById('mesaDia');
+    if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
+    if(typeof crearMesaDia==='function')crearMesaDia();
+  }
+  if(state.tab==='historial' && typeof window.cargarHistorial==='function'){
+    window.cargarHistorial();
+    if(typeof window.cargarMiCamino==='function') window.cargarMiCamino();
+    if(typeof window.cargarMisPlanes==='function') window.cargarMisPlanes();
+  }
+  if(state.tab){
+    if(state.tab!=='cartadia'){
+      const tabActual=document.getElementById('tab-'+state.tab);
+      if(tabActual) tabActual.style.minHeight='100vh';
+    }
+    const navEl=document.querySelector('nav');
+    if(navEl) navEl.scrollIntoView({block:'start'});
+  } else {
+    window.scrollTo(0,0);
+  }
+  navegandoPorHistorial = false;
+});
+
+if(!history.state){
+  history.replaceState({tab:null, step:1}, '', location.pathname + location.search);
+}
+async function selArea(el,a){
+  const ok = await (window.verificarCreditos ? window.verificarCreditos() : Promise.resolve(false));
+  if(!ok) return;
+  document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));
+  el.classList.add("sel");area=a;
+  document.getElementById("step2").style.display="block";
+  document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;
+  document.getElementById("pregunta").placeholder=preguntas[a]||preguntas.otro;
+  document.getElementById("tipPregunta").innerHTML=tips[a]||tips.otro;
+  if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:2}, '', '#consulta');
+}
+
+// Cerrar modal al hacer clic fuera
+document.addEventListener('click', function(e){
+  const modal = document.getElementById('modalRegistro');
+  if(e.target === modal) modal.classList.remove('active');
+});
+function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés mezclar las cartas y consultar";cnt.classList.add("ok");btn.disabled=false;}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;}}
+
+
+async function revelar(){
+  if(consultaEnCurso) return;
+  consultaEnCurso=true;
+  const btnRev=document.getElementById('btnRevelar');
+  if(btnRev) btnRev.disabled=true;
+  const btnVolverPreg=document.getElementById('btnVolverPregunta');
+  const btnNuevaStep3=document.getElementById('btnNuevaConsultaStep3');
+  if(btnVolverPreg) btnVolverPreg.disabled=true;
+  if(btnNuevaStep3) btnNuevaStep3.disabled=true;
+  const preg=document.getElementById("pregunta").value.trim();
+  const ctx=preg;
+  document.getElementById("step1").style.display="none";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="block";
+  if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:3}, '', '#consulta');
+  const pMostrada=document.getElementById("preguntaMostrada");
+  if(pMostrada){pMostrada.textContent='"'+preg+'"';pMostrada.style.display="block";}
+
+  const cartasDiv=document.getElementById("cartas");
+  const interpDiv=document.getElementById("interp");
+  interpDiv.classList.remove("loading");
+  interpDiv.textContent="";
+
+  const frasesIntriga=["Mezclando las cartas con tu energía...","El tarot está pensando en vos...","Concentrándose en tu pregunta...","Las cartas se están alineando para vos..."];
+  let fraseIdx=0;
+  cartasDiv.innerHTML='<div class="mazo-shuffle"><div class="carta-mazo cm1">✦</div><div class="carta-mazo cm2">✦</div><div class="carta-mazo cm3">✦</div></div><div class="intriga">'+frasesIntriga[0]+'</div>';
+  const intervaloIntriga=setInterval(function(){
+    fraseIdx=(fraseIdx+1)%frasesIntriga.length;
+    const fEl=cartasDiv.querySelector('.intriga');
+    if(fEl) fEl.textContent=frasesIntriga[fraseIdx];
+  },1300);
+
+  await new Promise(function(r){ setTimeout(r, 5000); });
+  clearInterval(intervaloIntriga);
+
+  const tres=[...mazo].sort(()=>Math.random()-.5).slice(0,3);
+  cartasDiv.innerHTML=tres.map((c,i)=>`<div class="carta carta-in" style="animation-delay:${i*0.15}s"><div class="cpos">${posiciones[i].nombre}</div><img src="${c.img}" alt="${c.nombre}" style="width:100%;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display='none'"><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div></div>`).join("");
+
+  interpDiv.classList.add("loading");interpDiv.textContent="El tarot está leyendo las cartas...";
+  const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
+  try{const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});const d=await r.json();interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");if(window.descontarCredito)window.descontarCredito();if(d.respuesta&&window.guardarHistorial)window.guardarHistorial('consulta',area,ctx,tres.map(c=>({nombre:c.nombre,energia:c.energia})),d.respuesta);}
+  catch(e){interpDiv.textContent="El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
+  finally{
+    consultaEnCurso=false;
+    if(btnVolverPreg) btnVolverPreg.disabled=false;
+    if(btnNuevaStep3) btnNuevaStep3.disabled=false;
+  }
+}
+
+function reset(){document.getElementById("step1").style.display="block";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="none";document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));document.getElementById("pregunta").value="";document.getElementById("counter").textContent="Mínimo 8 palabras para una lectura precisa";document.getElementById("counter").classList.remove("ok");document.getElementById("btnRevelar").disabled=true;area="";consultaEnCurso=false;}
+</script>
+
+<script>
+const mazo = [
+  {id:0,nombre:"El Loco",palo:"Arcano Mayor",img:"Imagenes/the-fool.png",energia:"nuevos comienzos y libertad",pasado:"Un salto de fe que tomaste sin saber bien a dónde ibas.",presente:"Estás en un momento de apertura total, sin ataduras.",futuro:"Se acerca una nueva etapa que te pedirá soltar el control."},
+  {id:1,nombre:"El Mago",palo:"Arcano Mayor",img:"Imagenes/the-magician.png",energia:"voluntad y manifestación",pasado:"Tuviste todo lo necesario para crear algo importante.",presente:"Tenés las herramientas — solo falta que las uses con intención.",futuro:"Lo que imagines con claridad, podés manifestarlo."},
+  {id:2,nombre:"La Sacerdotisa",palo:"Arcano Mayor",img:"Imagenes/the-high-priestess.png",energia:"intuición y misterio",pasado:"Hubo algo que sabías sin poder explicar, y tenías razón.",presente:"Tu intuición te habla — escuchala antes de actuar.",futuro:"La respuesta llegará desde adentro, no desde afuera."},
+  {id:3,nombre:"La Emperatriz",palo:"Arcano Mayor",img:"Imagenes/the-empress.png",energia:"abundancia y creación",pasado:"Hubo un período de florecimiento y nutrición en tu vida.",presente:"Tenés una fuerza creadora activa que espera ser expresada.",futuro:"La abundancia viene hacia vos cuando confíes en tu propio ritmo."},
+  {id:4,nombre:"El Emperador",palo:"Arcano Mayor",img:"Imagenes/the-emperor.png",energia:"autoridad y estructura",pasado:"Construiste algo sólido sobre bases firmes.",presente:"Es momento de poner orden y tomar el mando de tu situación.",futuro:"La estabilidad que buscás llega cuando establecés límites claros."},
+  {id:5,nombre:"El Hierofante",palo:"Arcano Mayor",img:"Imagenes/the-heirophant.png",energia:"tradición y guía espiritual",pasado:"Una enseñanza o guía fue importante en tu camino.",presente:"Buscás una verdad más profunda o una guía en quien confiar.",futuro:"Una enseñanza o mentor aparecerá para orientarte."},
+  {id:6,nombre:"Los Enamorados",palo:"Arcano Mayor",img:"Imagenes/the-lovers.png",energia:"elecciones del corazón y unión",pasado:"Una elección importante moldeó el camino que tomaste.",presente:"Estás frente a una decisión que involucra el corazón y los valores.",futuro:"Una conexión o elección importante se acerca — escuchá lo que tu corazón sabe."},
+  {id:7,nombre:"El Carro",palo:"Arcano Mayor",img:"Imagenes/the-chariot.png",energia:"determinación y voluntad",pasado:"Te pusiste en movimiento con una meta clara y nada te detuvo.",presente:"Tenés toda la energía para avanzar — el momento de actuar es ahora.",futuro:"Si mantenés el foco, llegás a donde querés llegar."},
+  {id:8,nombre:"La Fuerza",palo:"Arcano Mayor",img:"Imagenes/strength.png",energia:"coraje interior y compasión",pasado:"Enfrentaste algo difícil con más valentía de lo que creías tener.",presente:"Tu fuerza más poderosa ahora es la calma, no la imposición.",futuro:"La situación se resuelve con paciencia y amor propio."},
+  {id:9,nombre:"El Ermitaño",palo:"Arcano Mayor",img:"Imagenes/the-hermit.png",energia:"reflexión interior y sabiduría",pasado:"Atravesaste un retiro necesario para encontrarte a vos misma.",presente:"Tu respuesta está adentro — el silencio es tu mejor aliado ahora.",futuro:"La claridad llegará a través de la introspección, no de los demás."},
+  {id:10,nombre:"La Rueda de la Fortuna",palo:"Arcano Mayor",img:"Imagenes/wheel-of-fortune.png",energia:"ciclos y cambios del destino",pasado:"Un giro inesperado cambió el rumbo de las cosas.",presente:"Estás en un punto de inflexión — algo está por cambiar.",futuro:"Un ciclo nuevo comienza — prepárate para lo inesperado."},
+  {id:11,nombre:"La Justicia",palo:"Arcano Mayor",img:"Imagenes/justice.png",energia:"equilibrio, verdad y karma",pasado:"Una situación pidió que tomaras una decisión importante y justa.",presente:"Es momento de actuar con honestidad — lo que siembres, cosecharás.",futuro:"Lo que se debe equilibrar, se equilibrará."},
+  {id:12,nombre:"El Colgado",palo:"Arcano Mayor",img:"Imagenes/the-hanged-man.png",energia:"pausa, entrega y nueva perspectiva",pasado:"Una pausa forzada te dio una visión que no hubieras tenido de otra forma.",presente:"Soltar el control es el movimiento más poderoso que podés hacer ahora.",futuro:"Una pausa necesaria te dará la claridad que estás buscando."},
+  {id:13,nombre:"La Muerte",palo:"Arcano Mayor",img:"Imagenes/death.png",energia:"transformación y finales que liberan",pasado:"Algo terminó para dejar espacio a algo nuevo y mejor.",presente:"Estás en medio de una transformación profunda — dejá ir lo que ya no sirve.",futuro:"Un final necesario abre la puerta a una nueva versión de vos."},
+  {id:14,nombre:"La Templanza",palo:"Arcano Mayor",img:"Imagenes/temperance.png",energia:"equilibrio, paciencia y moderación",pasado:"Encontraste el equilibrio mezclando opuestos con sabiduría.",presente:"La paciencia y el fluir son tus aliados más poderosos ahora.",futuro:"La armonía llega cuando dejás de forzar y empezás a fluir."},
+  {id:15,nombre:"El Diablo",palo:"Arcano Mayor",img:"Imagenes/the-devil.png",energia:"apegos, sombras y liberación",pasado:"Algo te tuvo atado más tiempo del necesario.",presente:"Hay algo que te limita — y tenés el poder de soltarlo.",futuro:"La libertad llega cuando reconocés qué cadenas son tuyas y cuáles son ilusorias."},
+  {id:16,nombre:"La Torre",palo:"Arcano Mayor",img:"Imagenes/the-tower.png",energia:"cambios profundos e inevitables",pasado:"Algo se derrumbó para que pudieras construir sobre bases más sólidas.",presente:"Estás en medio de una transformación que no podés detener.",futuro:"Un cambio brusco viene a liberarte de algo que ya no te servía."},
+  {id:17,nombre:"La Estrella",palo:"Arcano Mayor",img:"Imagenes/the-star.png",energia:"esperanza, guía y renovación",pasado:"Después de una tormenta, encontraste tu propia luz de nuevo.",presente:"Hay una guía sutil que te orienta — prestale atención.",futuro:"La esperanza no es ilusión: el camino se ilumina hacia adelante."},
+  {id:18,nombre:"La Luna",palo:"Arcano Mayor",img:"Imagenes/the-moon.png",energia:"intuición y lo que está oculto",pasado:"Algo no se veía claramente — había ilusiones o miedos que distorsionaban.",presente:"Confiá en tu intuición aunque no tengas pruebas concretas todavía.",futuro:"Lo que está en las sombras saldrá a la luz en el momento justo."},
+  {id:19,nombre:"El Sol",palo:"Arcano Mayor",img:"Imagenes/the-sun.png",energia:"claridad, alegría y éxito",pasado:"Hubo un momento de gran claridad y vitalidad en tu camino.",presente:"Estás irradiando una energía que atrae lo que necesitás.",futuro:"Un período luminoso se abre ante vos — confiá en ese brillo."},
+  {id:20,nombre:"El Juicio",palo:"Arcano Mayor",img:"Imagenes/judgement.png",energia:"despertar, llamado y redención",pasado:"Respondiste a un llamado importante que cambió tu dirección.",presente:"Es momento de evaluar honestamente tu camino y hacer las paces con el pasado.",futuro:"Un despertar profundo te llevará a una versión renovada de vos."},
+  {id:21,nombre:"El Mundo",palo:"Arcano Mayor",img:"Imagenes/the-world.png",energia:"completud y ciclos que cierran",pasado:"Completaste algo importante — un ciclo llegó a su fin natural.",presente:"Estás cerca de alcanzar una meta o cerrar algo pendiente.",futuro:"Un ciclo se completa y te lleva a un nuevo nivel de experiencia."},
+  {id:22,nombre:"As de Copas",palo:"Copas",img:"Imagenes/ace-of-cups.png",energia:"nuevo amor y apertura emocional",pasado:"Un nuevo sentimiento o vínculo comenzó a florecer.",presente:"Tu corazón está abierto y listo para recibir amor o alegría.",futuro:"Una nueva conexión emocional o una etapa de plenitud se acerca."},
+  {id:23,nombre:"Dos de Copas",palo:"Copas",img:"Imagenes/two-of-cups.png",energia:"unión y conexión mutua",pasado:"Hubo una conexión especial que marcó ese momento.",presente:"Una relación equilibrada y recíproca está presente en tu vida.",futuro:"Una unión significativa o reconciliación se aproxima."},
+  {id:24,nombre:"Tres de Copas",palo:"Copas",img:"Imagenes/three-of-cups.png",energia:"celebración y amistad",pasado:"Un momento de alegría compartida con personas queridas.",presente:"Es tiempo de celebrar, conectar y disfrutar en comunidad.",futuro:"Una celebración o reunión especial está por venir."},
+  {id:25,nombre:"Cuatro de Copas",palo:"Copas",img:"Imagenes/four-of-cups.png",energia:"introspección y descontento",pasado:"Hubo un período de apatía donde no veías lo que tenías.",presente:"Estás ensimismada — quizás hay una oportunidad que no estás viendo.",futuro:"Una nueva perspectiva te sacará del estancamiento."},
+  {id:26,nombre:"Cinco de Copas",palo:"Copas",img:"Imagenes/five-of-cups.png",energia:"pérdida y duelo",pasado:"Una pérdida o decepción marcó ese tiempo.",presente:"Estás procesando una pérdida — está bien sentirlo.",futuro:"El dolor se transforma — lo que queda en pie vale más de lo que perdiste."},
+  {id:27,nombre:"Seis de Copas",palo:"Copas",img:"Imagenes/six-of-cups.png",energia:"nostalgia y recuerdos del pasado",pasado:"Momentos de inocencia y conexión pura definieron ese tiempo.",presente:"El pasado aparece — quizás hay algo allí que vale la pena rescatar.",futuro:"Una reconexión con el pasado o alguien de antes puede surgir."},
+  {id:28,nombre:"Siete de Copas",palo:"Copas",img:"Imagenes/seven-of-cups.png",energia:"ilusiones y fantasías",pasado:"Te perdiste en posibilidades sin concretar ninguna.",presente:"Hay demasiadas opciones — necesitás claridad para elegir.",futuro:"Distinguir lo real de lo ilusorio será clave para avanzar."},
+  {id:29,nombre:"Ocho de Copas",palo:"Copas",img:"Imagenes/eight-of-cups.png",energia:"dejar ir y seguir adelante",pasado:"Dejaste algo atrás aunque todavía funcionaba, porque ya no te llenaba.",presente:"Es momento de alejarte de algo que ya no te nutre.",futuro:"Un abandono necesario te llevará hacia algo más significativo."},
+  {id:30,nombre:"Nueve de Copas",palo:"Copas",img:"Imagenes/nine-of-cups.png",energia:"satisfacción y deseos cumplidos",pasado:"Alcanzaste algo que deseabas y te llenó de satisfacción.",presente:"Estás en un momento de bienestar — reconocelo y disfrutalo.",futuro:"Un deseo importante está por cumplirse."},
+  {id:31,nombre:"Diez de Copas",palo:"Copas",img:"Imagenes/ten-of-cups.png",energia:"felicidad familiar y plenitud",pasado:"Hubo armonía y plenitud en tus vínculos más cercanos.",presente:"La felicidad está en los vínculos que te rodean — valoralos.",futuro:"Una etapa de armonía y plenitud emocional se aproxima."},
+  {id:32,nombre:"Sota de Copas",palo:"Copas",img:"Imagenes/page-of-cups.png",energia:"mensajes emocionales y creatividad",pasado:"Un mensaje o noticia tocó tu corazón de forma inesperada.",presente:"Hay una invitación a explorar tus emociones con curiosidad.",futuro:"Una noticia o mensaje cargado de emoción está por llegar."},
+  {id:33,nombre:"Caballero de Copas",palo:"Copas",img:"Imagenes/knight-of-cups.png",energia:"romanticismo y propuestas",pasado:"Alguien llegó con gestos románticos o propuestas emotivas.",presente:"Tu corazón guía tus acciones — seguilo con moderación.",futuro:"Una propuesta emotiva o romántica puede materializarse."},
+  {id:34,nombre:"Reina de Copas",palo:"Copas",img:"Imagenes/queen-of-cups.png",energia:"empatía y sabiduría emocional",pasado:"La compasión y la intuición te guiaron en ese momento.",presente:"Tu capacidad de sentir profundamente es tu mayor fortaleza ahora.",futuro:"Una figura empática y sabia aparecerá para guiarte."},
+  {id:35,nombre:"Rey de Copas",palo:"Copas",img:"Imagenes/king-of-cups.png",energia:"madurez emocional y equilibrio",pasado:"Manejaste una situación emocional difícil con sabiduría.",presente:"Podés ser emocionalmente fuerte sin perder la sensibilidad.",futuro:"La madurez emocional que desarrollaste te dará estabilidad."},
+  {id:36,nombre:"As de Oros",palo:"Oros",img:"Imagenes/ace-of-pentacles.png",energia:"nueva oportunidad material",pasado:"Una oportunidad económica o material se abrió ante vos.",presente:"Hay una semilla de prosperidad lista para ser plantada.",futuro:"Una nueva oportunidad financiera o material está por llegar."},
+  {id:37,nombre:"Dos de Oros",palo:"Oros",img:"Imagenes/+.png",energia:"equilibrio y adaptabilidad",pasado:"Manejaste varias responsabilidades al mismo tiempo con habilidad.",presente:"Estás haciendo malabarismo con tus recursos — buscá el equilibrio.",futuro:"La flexibilidad y adaptación serán clave para manejar lo que viene."},
+  {id:38,nombre:"Tres de Oros",palo:"Oros",img:"Imagenes/three-of-pentacles.png",energia:"trabajo en equipo y habilidad",pasado:"El trabajo colaborativo produjo algo de valor duradero.",presente:"Es momento de reconocer tu talento y trabajar con otras.",futuro:"Un proyecto en equipo dará frutos si cada una aporta su mejor parte."},
+  {id:39,nombre:"Cuatro de Oros",palo:"Oros",img:"Imagenes/four-of-pentacles.png",energia:"control y apego material",pasado:"El miedo a perder te llevó a aferrarte demasiado.",presente:"El apego al control puede estar limitando tu crecimiento.",futuro:"Soltar el control de lo material abrirá nuevas posibilidades."},
+  {id:40,nombre:"Cinco de Oros",palo:"Oros",img:"Imagenes/five-of-pentacles.png",energia:"dificultad material y apoyo",pasado:"Atravesaste un momento de escasez o sensación de abandono.",presente:"Estás en una etapa difícil — pero hay ayuda disponible si la buscás.",futuro:"La situación difícil tiene salida — no estás sola en esto."},
+  {id:41,nombre:"Seis de Oros",palo:"Oros",img:"Imagenes/six-of-pentacles.png",energia:"generosidad y reciprocidad",pasado:"Dar y recibir fluyó de forma equilibrada en ese momento.",presente:"La generosidad — dar o recibir — es el tema central ahora.",futuro:"Lo que des con generosidad volverá multiplicado."},
+  {id:42,nombre:"Siete de Oros",palo:"Oros",img:"Imagenes/seven-of-pentacles.png",energia:"paciencia y evaluación",pasado:"Invertiste tiempo y esfuerzo esperando que los frutos llegaran.",presente:"Es momento de evaluar si lo que estás cultivando vale la pena.",futuro:"La paciencia dará sus frutos — el proceso tarda pero el resultado llega."},
+  {id:43,nombre:"Ocho de Oros",palo:"Oros",img:"Imagenes/eight-of-pentacles.png",energia:"dedicación y aprendizaje",pasado:"El trabajo constante y la dedicación te llevaron a dominar algo.",presente:"El momento pide enfocarte y perfeccionar tu habilidad.",futuro:"La dedicación sostenida te llevará a un nivel de maestría."},
+  {id:44,nombre:"Nueve de Oros",palo:"Oros",img:"Imagenes/nine-of-pentacles.png",energia:"independencia y logro personal",pasado:"Alcanzaste algo por tu propio esfuerzo y lo disfrutaste en plenitud.",presente:"Estás en un momento de independencia y autosuficiencia.",futuro:"Tu trabajo dará un fruto que podrás disfrutar con orgullo."},
+  {id:45,nombre:"Diez de Oros",palo:"Oros",img:"Imagenes/ten-of-pentacles.png",energia:"prosperidad y legado familiar",pasado:"La prosperidad y la estabilidad familiar fueron sólidas.",presente:"Hay abundancia material y estabilidad en tu entorno.",futuro:"Una base de prosperidad duradera y legado está tomando forma."},
+  {id:46,nombre:"Sota de Oros",palo:"Oros",img:"Imagenes/page-of-pentacles.png",energia:"estudio y oportunidades prácticas",pasado:"Una etapa de aprendizaje práctico abrió nuevas puertas.",presente:"Hay oportunidades concretas disponibles — prestales atención.",futuro:"Una oportunidad práctica de crecimiento está por presentarse."},
+  {id:47,nombre:"Caballero de Oros",palo:"Oros",img:"Imagenes/knight-of-pentacles.png",energia:"constancia y trabajo metódico",pasado:"La disciplina y el método te dieron resultados sólidos.",presente:"La constancia y el enfoque metódico son tu mejor estrategia ahora.",futuro:"El avance lento pero firme te llevará a donde querés llegar."},
+  {id:48,nombre:"Reina de Oros",palo:"Oros",img:"Imagenes/queen-of-pentacles.png",energia:"cuidado y prosperidad práctica",pasado:"Cuidaste lo material y lo emocional con sabiduría práctica.",presente:"Tu capacidad de crear ambientes seguros y prósperos brilla.",futuro:"Una figura generosa y práctica traerá estabilidad a tu vida."},
+  {id:49,nombre:"Rey de Oros",palo:"Oros",img:"Imagenes/king-of-pentacles.png",energia:"éxito material y liderazgo",pasado:"Lograste estabilidad y éxito a través del trabajo sostenido.",presente:"Tenés la capacidad de liderar y construir algo duradero.",futuro:"El éxito material y el reconocimiento llegan como resultado de tu trabajo."},
+  {id:50,nombre:"As de Espadas",palo:"Espadas",img:"Imagenes/ace-of-swords.png",energia:"claridad mental y verdad",pasado:"Una verdad cortó lo innecesario y te dio claridad.",presente:"Es momento de hablar con claridad y enfrentar la verdad.",futuro:"Una verdad reveladora o una decisión clara está por llegar."},
+  {id:51,nombre:"Dos de Espadas",palo:"Espadas",img:"Imagenes/two-of-swords.png",energia:"indecisión y bloqueo mental",pasado:"Evitaste una decisión difícil cerrando los ojos a la realidad.",presente:"Estás bloqueada — necesitás más información o valor para decidir.",futuro:"La parálisis cederá cuando decidas mirar la situación de frente."},
+  {id:52,nombre:"Tres de Espadas",palo:"Espadas",img:"Imagenes/three-of-swords.png",energia:"dolor, traición y pena",pasado:"Una traición o pérdida dolorosa dejó una marca profunda.",presente:"Hay una herida que necesita ser reconocida para poder sanar.",futuro:"El dolor que atravesás ahora lleva a una sanación más profunda."},
+  {id:53,nombre:"Cuatro de Espadas",palo:"Espadas",img:"Imagenes/four-of-swords.png",energia:"descanso y recuperación",pasado:"Un período de retiro y descanso fue necesario para recuperarte.",presente:"Tu mente y cuerpo piden una pausa — dásela sin culpa.",futuro:"El descanso ahora te dará la energía para lo que viene."},
+  {id:54,nombre:"Cinco de Espadas",palo:"Espadas",img:"Imagenes/five-of-swords.png",energia:"conflicto y derrota",pasado:"Hubo un conflicto donde alguien ganó pero todas perdieron algo.",presente:"Una batalla que no vale la pena ganar — considerá retirarte.",futuro:"Elegí bien tus batallas — ganar de forma deshonesta tiene un costo."},
+  {id:55,nombre:"Seis de Espadas",palo:"Espadas",img:"Imagenes/six-of-swords.png",energia:"transición y alejamiento",pasado:"Te alejaste de una situación difícil hacia algo más tranquilo.",presente:"Estás en tránsito — dejando atrás lo turbulento.",futuro:"Un alejamiento necesario te llevará a aguas más calmas."},
+  {id:56,nombre:"Siete de Espadas",palo:"Espadas",img:"Imagenes/seven-of-swords.png",energia:"astucia y engaño",pasado:"Alguien actuó de forma deshonesta o vos evitaste una confrontación.",presente:"Hay algo que no se está diciendo — investigá antes de confiar.",futuro:"La verdad oculta saldrá a la luz — preparate para enfrentarla."},
+  {id:57,nombre:"Ocho de Espadas",palo:"Espadas",img:"Imagenes/eight-of-swords.png",energia:"atrapamiento y limitación mental",pasado:"Te sentiste atrapada, pero las limitaciones eran más mentales que reales.",presente:"Las cadenas que sentís son en parte creadas por tu propia mente.",futuro:"Cuando cambies tu perspectiva, verás que tenés más libertad de la que creés."},
+  {id:58,nombre:"Nueve de Espadas",palo:"Espadas",img:"Imagenes/nine-of-swords.png",energia:"ansiedad y pensamientos negativos",pasado:"La ansiedad y los pensamientos oscuros te quitaron el sueño.",presente:"El miedo nocturno amplifica lo que de día parece manejable.",futuro:"Los miedos que te agobian son más grandes en tu mente que en la realidad."},
+  {id:59,nombre:"Diez de Espadas",palo:"Espadas",img:"Imagenes/ten-of-swords.png",energia:"final doloroso y nuevo amanecer",pasado:"Algo llegó a su fin de forma dolorosa pero definitiva.",presente:"Estás en el punto más bajo — pero esto también marca un nuevo comienzo.",futuro:"Después del final más difícil viene el amanecer más luminoso."},
+  {id:60,nombre:"Sota de Espadas",palo:"Espadas",img:"Imagenes/page-of-swords.png",energia:"curiosidad y comunicación directa",pasado:"La búsqueda de verdad y claridad guió tus pasos.",presente:"Es momento de hacer las preguntas difíciles y comunicarte con claridad.",futuro:"Una información importante o una conversación clave está por llegar."},
+  {id:61,nombre:"Caballero de Espadas",palo:"Espadas",img:"Imagenes/knight-of-swords.png",energia:"acción rápida y determinación",pasado:"Actuaste con rapidez y decisión, a veces sin medir consecuencias.",presente:"Tenés energía para actuar — canalizala con estrategia.",futuro:"Una acción rápida y decidida marcará la diferencia."},
+  {id:62,nombre:"Reina de Espadas",palo:"Espadas",img:"Imagenes/queen-of-swords.png",energia:"claridad, independencia y honestidad",pasado:"La razón y la honestidad te guiaron incluso cuando dolía.",presente:"Tu claridad mental es tu mayor fortaleza — usala con compasión.",futuro:"Una figura de gran claridad y honestidad te dará una perspectiva valiosa."},
+  {id:63,nombre:"Rey de Espadas",palo:"Espadas",img:"Imagenes/king-of-swords.png",energia:"autoridad intelectual y justicia",pasado:"La lógica y la justicia guiaron decisiones importantes.",presente:"Es momento de aplicar razón y criterio claro a tu situación.",futuro:"La justicia y la claridad intelectual resolverán lo que parece complejo."},
+  {id:64,nombre:"As de Bastos",palo:"Bastos",img:"Imagenes/ace-of-wands.png",energia:"inspiración y nuevos proyectos",pasado:"Una chispa de inspiración encendió algo nuevo y emocionante.",presente:"Hay una energía creativa y entusiasta lista para explotar.",futuro:"Un nuevo proyecto o inspiración poderosa está por llegar."},
+  {id:65,nombre:"Dos de Bastos",palo:"Bastos",img:"Imagenes/two-of-wands.png",energia:"planificación y visión futura",pasado:"Planificaste con visión de largo plazo y eso te dio ventaja.",presente:"Tenés el mundo ante vos — es momento de decidir qué dirección tomar.",futuro:"Una decisión sobre tu futuro cercano requiere visión y valentía."},
+  {id:66,nombre:"Tres de Bastos",palo:"Bastos",img:"Imagenes/three-of-wands.png",energia:"expansión y resultados que llegan",pasado:"Lo que sembraste empezó a dar sus primeros frutos.",presente:"Lo que iniciaste está creciendo — seguí expandiendo.",futuro:"Los resultados de tu esfuerzo están llegando desde lejos."},
+  {id:67,nombre:"Cuatro de Bastos",palo:"Bastos",img:"Imagenes/four-of-wands.png",energia:"celebración y estabilidad",pasado:"Hubo un momento de celebración y logro compartido.",presente:"Es momento de celebrar lo construido y disfrutar la estabilidad.",futuro:"Una celebración importante o un hito festivo se aproxima."},
+  {id:68,nombre:"Cinco de Bastos",palo:"Bastos",img:"Imagenes/five-of-wands.png",energia:"competencia y desacuerdo",pasado:"Hubo competencia o conflicto que generó caos pero también movimiento.",presente:"Hay tensiones y desacuerdos — buscá el diálogo antes del enfrentamiento.",futuro:"La competencia o el conflicto se resolverá a tu favor si mantenés la calma."},
+  {id:69,nombre:"Seis de Bastos",palo:"Bastos",img:"Imagenes/six-of-wands.png",energia:"victoria y reconocimiento",pasado:"Un logro fue reconocido públicamente y te dio confianza.",presente:"Tu esfuerzo está siendo visto — merecés el reconocimiento.",futuro:"Una victoria o reconocimiento público está por llegar."},
+  {id:70,nombre:"Siete de Bastos",palo:"Bastos",img:"Imagenes/seven-of-wands.png",energia:"defensa y perseverancia",pasado:"Tuviste que defender tu posición ante muchos desafíos.",presente:"Seguís en terreno elevado — defendé lo que construiste.",futuro:"La perseverancia ante los obstáculos dará sus frutos."},
+  {id:71,nombre:"Ocho de Bastos",palo:"Bastos",img:"Imagenes/eight-of-wands.png",energia:"velocidad y movimiento",pasado:"Las cosas se movieron muy rápido en ese momento.",presente:"Todo está acelerando — mantené el foco mientras fluís.",futuro:"Los eventos se acelerarán — preparate para actuar rápido."},
+  {id:72,nombre:"Nueve de Bastos",palo:"Bastos",img:"Imagenes/nine-of-wands.png",energia:"resistencia y perseverancia final",pasado:"Llegaste al límite pero no te rendiste.",presente:"Estás cansada pero cerca de la meta — no aflojes ahora.",futuro:"Un último esfuerzo te llevará al resultado que tanto esperás."},
+  {id:73,nombre:"Diez de Bastos",palo:"Bastos",img:"Imagenes/ten-of-wands.png",energia:"carga excesiva y responsabilidad",pasado:"Cargaste con demasiado y el peso te agotó.",presente:"Estás sobrecargada — es momento de delegar o soltar algo.",futuro:"Liberar carga innecesaria te dará la energía para seguir."},
+  {id:74,nombre:"Sota de Bastos",palo:"Bastos",img:"Imagenes/page-of-wands.png",energia:"entusiasmo y aventura",pasado:"Una energía joven y aventurera marcó ese período.",presente:"Tu entusiasmo es contagioso — canalizalo en algo concreto.",futuro:"Una aventura o nuevo comienzo emocionante está por presentarse."},
+  {id:75,nombre:"Caballero de Bastos",palo:"Bastos",img:"Imagenes/knight-of-wands.png",energia:"pasión y acción impulsiva",pasado:"Actuaste con pasión y velocidad, sin mirar demasiado atrás.",presente:"La energía está alta — actuá con pasión pero con dirección.",futuro:"Un movimiento rápido y apasionado te llevará a nuevos territorios."},
+  {id:76,nombre:"Reina de Bastos",palo:"Bastos",img:"Imagenes/queen-of-wands.png",energia:"confianza y liderazgo carismático",pasado:"Tu confianza y carisma inspiraron a quienes te rodeaban.",presente:"Tu energía magnética atrae lo que necesitás — confiá en vos.",futuro:"Una figura carismática y poderosa traerá inspiración a tu vida."},
+  {id:77,nombre:"Rey de Bastos",palo:"Bastos",img:"Imagenes/king-of-wands.png",energia:"visión y liderazgo creativo",pasado:"Lideraste con visión y creatividad dejando una huella importante.",presente:"Es tu momento de liderar con audacia y visión de largo plazo.",futuro:"Tu capacidad de inspirar y crear marcará el camino a seguir."}
+];
+</script>
+<script>
+
+
+const simbolos=['☽','★','✦','⚔','⚖','♦','∞','◈','☀','△'];
+
+function spawnCarta(sideId){
+  const side=document.getElementById(sideId);
+  if(!side||side.offsetWidth<60)return;
+  const carta=document.createElement('div');
+  carta.className='carta-float';
+  const left=10+Math.random()*70;
+  const top=5+Math.random()*65;
+  const rot=(Math.random()-.5)*20;
+  const dur=7+Math.random()*6;
+  carta.style.cssText=`left:${left}%;top:${top}%;--r:${rot}deg;animation-duration:${dur}s;`;
+  const sym=document.createElement('span');
+  sym.style.cssText='position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:16px;color:rgba(255,180,50,0.18);';
+  sym.textContent=simbolos[Math.floor(Math.random()*simbolos.length)];
+  carta.appendChild(sym);
+  side.appendChild(carta);
+  setTimeout(()=>carta.remove(),dur*1000);
+  setTimeout(()=>spawnCarta(sideId),3500+Math.random()*3000);
+}
+
+
+</script>
+<script>
+// Carta del día interactiva
+const mazoCartasDia=[
+  {id:0,img:"Imagenes/the-fool.png",nombre:"El Loco",palo:"Arcano Mayor",energia:"nuevos comienzos y libertad",consejo:"Hoy se abre un comienzo nuevo. No necesitás tener todas las respuestas para dar el primer paso.",accion:"Animate a probar algo distinto hoy, aunque no sepas exactamente a dónde te lleva. La confianza se construye caminando.",evitar:"Evitá quedarte paralizada por el miedo a equivocarte. Un paso en falso enseña más que quedarse quieta."},
+  {id:1,img:"Imagenes/the-magician.png",nombre:"El Mago",palo:"Arcano Mayor",energia:"voluntad y manifestación",consejo:"Tenés hoy todo lo que necesitás para crear lo que te propongas. El poder está en tu intención.",accion:"Enfocá tu energía en una sola cosa concreta que querés lograr hoy, y dale toda tu atención.",evitar:"Evitá dispersarte en mil frentes a la vez. Hoy rinde más la concentración que la dispersión."},
+  {id:2,img:"Imagenes/the-high-priestess.png",nombre:"La Sacerdotisa",palo:"Arcano Mayor",energia:"intuición y misterio",consejo:"Hay una verdad que ya sabés por dentro, aunque todavía no la puedas explicar con palabras.",accion:"Dedicá un momento de silencio hoy para escuchar lo que tu intuición te viene diciendo hace días.",evitar:"Evitá buscar afuera una respuesta que en realidad ya tenés adentro."},
+  {id:3,img:"Imagenes/the-empress.png",nombre:"La Emperatriz",palo:"Arcano Mayor",energia:"abundancia y creación",consejo:"Hoy tu energía creadora está en su punto más alto. Todo lo que nutras con amor crecerá.",accion:"Dedicá tiempo a algo que te nutra — cocinar, crear, cuidar tu cuerpo o tu espacio. La abundancia empieza por vos.",evitar:"Evitá el agotamiento por dar a otros lo que no te estás dando a vos misma primero."},
+  {id:4,img:"Imagenes/the-emperor.png",nombre:"El Emperador",palo:"Arcano Mayor",energia:"autoridad y estructura",consejo:"Hoy es momento de poner orden donde hay caos, con firmeza pero sin dureza.",accion:"Organizá algo que venías postergando — una decisión, un límite, una estructura que le hacía falta a tu día.",evitar:"Evitá controlar todo por miedo a que se desarme. La estructura sostiene, no aprisiona."},
+  {id:5,img:"Imagenes/the-heirophant.png",nombre:"El Hierofante",palo:"Arcano Mayor",energia:"tradición y guía espiritual",consejo:"Una enseñanza o una guía puede aparecer hoy en el lugar menos pensado — prestale atención.",accion:"Si tenés dudas sobre un camino a seguir, buscá el consejo de alguien en quien confiás de verdad.",evitar:"Evitá seguir una tradición o consejo solo porque 'siempre se hizo así'. Elegí lo que resuena con vos."},
+  {id:6,img:"Imagenes/the-lovers.png",nombre:"Los Enamorados",palo:"Arcano Mayor",energia:"elecciones del corazón y unión",consejo:"Hoy una elección del corazón pide que la mires de frente, sin darle más vueltas.",accion:"Si hay una decisión afectiva pendiente, hoy es un buen día para conversarla con honestidad.",evitar:"Evitá decidir solo por complacer a otra persona. Lo que elijas hoy, elegilo también por vos."},
+  {id:7,img:"Imagenes/the-chariot.png",nombre:"El Carro",palo:"Arcano Mayor",energia:"determinación y voluntad",consejo:"Tenés la determinación necesaria para avanzar hoy sin que nada te frene.",accion:"Ponete en movimiento hacia esa meta que tenías clara pero que no habías empezado a accionar todavía.",evitar:"Evitá avanzar en direcciones opuestas al mismo tiempo. Hoy el foco es tu mejor aliado."},
+  {id:8,img:"Imagenes/strength.png",nombre:"La Fuerza",palo:"Arcano Mayor",energia:"coraje interior",consejo:"Tu mayor poder hoy no está en la fuerza bruta sino en la calma. La paciencia y la compasión son tus armas más poderosas.",accion:"Frente a cualquier conflicto o desafío, respirá hondo antes de reaccionar. La respuesta suave siempre gana.",evitar:"Evitá las confrontaciones directas o impulsivas. No necesitás demostrar nada a nadie hoy."},
+  {id:9,img:"Imagenes/the-hermit.png",nombre:"El Ermitaño",palo:"Arcano Mayor",energia:"reflexión interior y sabiduría",consejo:"Hoy tu mejor respuesta está en el silencio, no en salir a buscarla afuera.",accion:"Date un rato a solas, sin pantallas ni ruido, para escuchar qué te está diciendo tu propia sabiduría.",evitar:"Evitá llenar el día de estímulos para no tener que quedarte con vos misma."},
+  {id:10,img:"Imagenes/wheel-of-fortune.png",nombre:"La Rueda de la Fortuna",palo:"Arcano Mayor",energia:"ciclos del destino",consejo:"Algo está por cambiar en tu vida. No es casualidad — es el ciclo natural moviéndose a tu favor.",accion:"Soltá el control de cómo tienen que ser las cosas y abrí los brazos a lo nuevo. El cambio que viene es necesario.",evitar:"Evitá resistirte a los cambios o aferrarte a lo que ya fue. La rueda siempre gira hacia adelante."},
+  {id:11,img:"Imagenes/justice.png",nombre:"La Justicia",palo:"Arcano Mayor",energia:"equilibrio y verdad",consejo:"Hoy el universo te pide honestidad — con vos misma y con los demás. Las cosas están por equilibrarse.",accion:"Si hay algo pendiente que sabés que debés resolver o decir, hoy es el día. La verdad dicha con calma siempre libera.",evitar:"Evitá las medias verdades o las decisiones tomadas por conveniencia. Lo que siembres hoy, lo cosecharás pronto."},
+  {id:12,img:"Imagenes/the-hanged-man.png",nombre:"El Colgado",palo:"Arcano Mayor",energia:"pausa, entrega y nueva perspectiva",consejo:"A veces avanzar es soltar el control y dejar que las cosas se acomoden solas.",accion:"Frente a algo que no podés cambiar hoy, probá mirarlo desde otro ángulo en vez de forzar una salida.",evitar:"Evitá la frustración de querer resolver todo ya. Esta pausa tiene un propósito."},
+  {id:13,img:"Imagenes/death.png",nombre:"La Muerte",palo:"Arcano Mayor",energia:"transformación y finales que liberan",consejo:"Algo está llegando a su fin para dejar espacio a algo mejor. No lo vivas solo como pérdida.",accion:"Identificá qué es lo que ya no te sirve y dale un cierre consciente hoy, aunque sea simbólico.",evitar:"Evitá aferrarte a lo que ya terminó. Sostenerlo solo demora lo nuevo que viene."},
+  {id:14,img:"Imagenes/temperance.png",nombre:"La Templanza",palo:"Arcano Mayor",energia:"equilibrio, paciencia y moderación",consejo:"Hoy la clave es el equilibrio: ni todo ni nada, el punto medio es tu lugar de poder.",accion:"Buscá mezclar dos cosas que parecían opuestas — trabajo y descanso, razón y emoción — con paciencia.",evitar:"Evitá los extremos y la urgencia. Lo que hoy fluye despacio, hoy es lo correcto."},
+  {id:15,img:"Imagenes/the-devil.png",nombre:"El Diablo",palo:"Arcano Mayor",energia:"apegos, sombras y liberación",consejo:"Hay algo que te tiene atada más de lo que creés, y hoy podés empezar a soltarlo.",accion:"Identificá un hábito, vínculo o pensamiento que te limita, y dá un primer paso pequeño para liberarte de él.",evitar:"Evitá justificar lo que sabés que te hace mal solo porque ya es costumbre."},
+  {id:16,img:"Imagenes/the-tower.png",nombre:"La Torre",palo:"Arcano Mayor",energia:"cambios profundos e inevitables",consejo:"Un cambio inesperado puede sacudir tus planes hoy — pero viene a liberarte de algo que ya no servía.",accion:"Si algo se desarma hoy, no lo vivas como catástrofe: preguntate qué base más sólida podés construir después.",evitar:"Evitá resistirte con todas tus fuerzas a lo que ya no se puede sostener."},
+  {id:17,img:"Imagenes/the-star.png",nombre:"La Estrella",palo:"Arcano Mayor",energia:"esperanza y guía",consejo:"Después de todo lo que atravesaste, hay una luz que te orienta. Hoy es día de renovar la esperanza.",accion:"Escribí o pensá en una cosa concreta que te genera ilusión para el futuro. Ese deseo tiene más poder del que creés.",evitar:"Evitá el cinismo o la resignación. La esperanza no es ingenuidad — es una fuerza real que mueve cosas."},
+  {id:18,img:"Imagenes/the-moon.png",nombre:"La Luna",palo:"Arcano Mayor",energia:"intuición y misterio",consejo:"Hoy el universo te pide que confíes en lo que sentís, aunque no puedas explicarlo con palabras.",accion:"Antes de tomar cualquier decisión, detenete un momento en silencio y escuchá tu primera reacción interna. Esa voz es tu guía hoy.",evitar:"Evitá dejarte llevar por el miedo o la confusión. Lo que parece oscuro hoy se aclarará si no forzás las cosas."},
+  {id:19,img:"Imagenes/the-sun.png",nombre:"El Sol",palo:"Arcano Mayor",energia:"claridad y éxito",consejo:"Hoy es un día para brillar. La energía que tenés es magnética y atrae exactamente lo que necesitás.",accion:"Avanzá con confianza en ese proyecto o conversación que venías postergando. La claridad está de tu lado.",evitar:"Evitá minimizar tus logros o dudar de vos misma. Hoy no es día para la modestia excesiva."},
+  {id:20,img:"Imagenes/judgement.png",nombre:"El Juicio",palo:"Arcano Mayor",energia:"despertar, llamado y redención",consejo:"Hoy es un buen día para hacer un balance honesto de tu camino y perdonarte lo que haga falta.",accion:"Tomate un momento para revisar cómo veniste actuando últimamente, sin juzgarte, solo para tomar conciencia.",evitar:"Evitá quedarte enganchada en culpas viejas. Hoy el llamado es a renovarte, no a castigarte."},
+  {id:21,img:"Imagenes/the-world.png",nombre:"El Mundo",palo:"Arcano Mayor",energia:"completud y ciclos que cierran",consejo:"Estás más cerca de cerrar un ciclo importante de lo que creés — reconocé el camino recorrido.",accion:"Celebrá, aunque sea en silencio, algo que lograste completar recientemente por más chico que parezca.",evitar:"Evitá minimizar tus logros o pasar de largo sin registrar lo que cerraste."},
+  {id:22,img:"Imagenes/ace-of-cups.png",nombre:"As de Copas",palo:"Copas",energia:"nuevo amor y apertura emocional",consejo:"Hoy tu corazón está abierto a algo nuevo — una emoción, un vínculo, una alegría inesperada.",accion:"Permitite sentir sin analizar de más. Si algo te emociona hoy, dejá que entre sin frenarlo.",evitar:"Evitá cerrarte por miedo a que te lastimen. Hoy conviene más abrirse que protegerse."},
+  {id:23,img:"Imagenes/two-of-cups.png",nombre:"Dos de Copas",palo:"Copas",energia:"unión y conexión mutua",consejo:"Una conexión especial y recíproca está presente hoy, prestale atención a los vínculos que fluyen fácil.",accion:"Reforzá hoy un lazo importante con un gesto simple: un mensaje, un encuentro, una charla pendiente.",evitar:"Evitá dar por sentado a quien te acompaña. Hoy es buen día para agradecer en voz alta."},
+  {id:24,img:"Imagenes/three-of-cups.png",nombre:"Tres de Copas",palo:"Copas",energia:"celebración y amistad",consejo:"Hoy el tarot te invita a celebrar y compartir con las personas que te hacen bien.",accion:"Buscá un momento hoy para reunirte, aunque sea brevemente, con alguien que te llena de energía.",evitar:"Evitá aislarte cuando lo que más necesitás es compañía."},
+  {id:25,img:"Imagenes/four-of-cups.png",nombre:"Cuatro de Copas",palo:"Copas",energia:"introspección y descontento",consejo:"Puede que hoy te sientas apática o que no valores lo que ya tenés — mirá con otros ojos.",accion:"Antes de buscar algo nuevo, hacé una lista de tres cosas buenas que ya tenés en tu vida hoy.",evitar:"Evitá quedarte enfocada solo en lo que falta. Hay una oportunidad frente a vos que quizás no estás viendo."},
+  {id:26,img:"Imagenes/five-of-cups.png",nombre:"Cinco de Copas",palo:"Copas",energia:"pérdida y duelo",consejo:"Hoy podés estar procesando una pérdida o decepción — está bien que te tomes el tiempo de sentirlo.",accion:"Permitite estar triste si lo necesitás, pero después mirá qué sigue en pie a pesar de todo.",evitar:"Evitá quedarte mirando solo lo que se derramó. Todavía hay copas de pie."},
+  {id:27,img:"Imagenes/six-of-cups.png",nombre:"Seis de Copas",palo:"Copas",energia:"nostalgia y recuerdos del pasado",consejo:"Hoy el pasado puede aparecer con fuerza — un recuerdo, una persona, una nostalgia dulce.",accion:"Si surge un recuerdo lindo hoy, disfrutalo sin quedarte atrapada en él, como una visita, no una mudanza.",evitar:"Evitá idealizar el pasado al punto de no ver lo bueno que tenés en el presente."},
+  {id:28,img:"Imagenes/seven-of-cups.png",nombre:"Siete de Copas",palo:"Copas",energia:"ilusiones y fantasías",consejo:"Hoy podés sentir que tenés demasiadas opciones dando vueltas en tu cabeza sin concretar ninguna.",accion:"Elegí una sola opción concreta hoy y dale un paso real, en vez de seguir soñando con todas a la vez.",evitar:"Evitá perderte en fantasías que no bajan a tierra. Hoy toca elegir, no seguir imaginando."},
+  {id:29,img:"Imagenes/eight-of-cups.png",nombre:"Ocho de Copas",palo:"Copas",energia:"dejar ir y seguir adelante",consejo:"Hoy podés sentir el impulso de dejar atrás algo que ya no te llena, aunque todavía funcione.",accion:"Si hay algo que ya no te nutre, permitite alejarte aunque no tengas certeza de qué viene después.",evitar:"Evitá quedarte en algo por costumbre o miedo al vacío. A veces avanzar es soltar primero."},
+  {id:30,img:"Imagenes/nine-of-cups.png",nombre:"Nueve de Copas",palo:"Copas",energia:"satisfacción y deseos cumplidos",consejo:"Hoy es un buen día para reconocer y disfrutar algo que lograste y que te llena de satisfacción.",accion:"Date el permiso de disfrutar plenamente algo bueno que tenés, sin culpa ni apuro por lo que sigue.",evitar:"Evitá restarle valor a tu propio bienestar. Merecés sentirte conforme con lo que construiste."},
+  {id:31,img:"Imagenes/ten-of-cups.png",nombre:"Diez de Copas",palo:"Copas",energia:"felicidad familiar y plenitud",consejo:"La felicidad hoy está en los vínculos cercanos — familia, amistades, tu gente.",accion:"Dedicale tiempo hoy a alguien de tu círculo más cercano, sin distracciones ni pantallas de por medio.",evitar:"Evitá dar por sentada la armonía que tenés. Cuidarla activamente la sostiene."},
+  {id:32,img:"Imagenes/page-of-cups.png",nombre:"Sota de Copas",palo:"Copas",energia:"mensajes emocionales y creatividad",consejo:"Puede llegar hoy un mensaje o una noticia que te toque emocionalmente — estate atenta.",accion:"Abrite a recibir una noticia o propuesta con curiosidad, sin anticipar si es buena o mala.",evitar:"Evitá cerrarte a algo nuevo solo porque te da un poco de vértigo emocional."},
+  {id:33,img:"Imagenes/knight-of-cups.png",nombre:"Caballero de Copas",palo:"Copas",energia:"romanticismo y propuestas",consejo:"Hoy tu corazón puede guiar tus acciones más que la razón — dejalo, pero con los pies en la tierra.",accion:"Si hay un gesto romántico o generoso que querías hacer, hoy es un buen día para animarte.",evitar:"Evitá dejarte llevar por promesas grandes sin sustento. Un gesto simple vale más que mil palabras."},
+  {id:34,img:"Imagenes/queen-of-cups.png",nombre:"Reina de Copas",palo:"Copas",energia:"empatía y sabiduría emocional",consejo:"Hoy tu sensibilidad es tu mayor fortaleza — usala para acompañar, a otros y a vos misma.",accion:"Ofrecele a alguien cercano un oído atento hoy, sin apurarte a resolverle nada, solo estando presente.",evitar:"Evitá cargar con las emociones de todos al punto de descuidar las tuyas."},
+  {id:35,img:"Imagenes/king-of-cups.png",nombre:"Rey de Copas",palo:"Copas",energia:"madurez emocional y equilibrio",consejo:"Hoy podés manejar una situación emocional compleja con más madurez de la que creés tener.",accion:"Frente a un conflicto afectivo, respondé desde la calma en vez de la reacción inmediata.",evitar:"Evitá reprimir lo que sentís por parecer fuerte. Madurez no es lo mismo que insensibilidad."},
+  {id:36,img:"Imagenes/ace-of-pentacles.png",nombre:"As de Oros",palo:"Oros",energia:"nueva oportunidad material",consejo:"Hoy se abre una oportunidad concreta en lo material o laboral — prestale atención aunque parezca chica.",accion:"Si aparece una propuesta o idea nueva relacionada al dinero o el trabajo, dale seguimiento hoy mismo.",evitar:"Evitá dejar pasar una oportunidad por dudar demasiado antes de dar el primer paso."},
+  {id:37,img:"Imagenes/+.png",nombre:"Dos de Oros",palo:"Oros",energia:"equilibrio y adaptabilidad",consejo:"Hoy estás haciendo malabares con varias responsabilidades — buscá el equilibrio antes que la perfección.",accion:"Priorizá dos tareas como máximo hoy, en vez de intentar avanzar en todo al mismo tiempo.",evitar:"Evitá comprometerte a algo nuevo hoy si ya tenés el plato lleno."},
+  {id:38,img:"Imagenes/three-of-pentacles.png",nombre:"Tres de Oros",palo:"Oros",energia:"trabajo en equipo y habilidad",consejo:"Hoy el trabajo en equipo rinde más que el esfuerzo solitario.",accion:"Pedí ayuda o colaborá con alguien en algo que venías haciendo sola. El resultado va a ser mejor.",evitar:"Evitá querer hacerlo todo vos misma por orgullo o desconfianza."},
+  {id:39,img:"Imagenes/four-of-pentacles.png",nombre:"Cuatro de Oros",palo:"Oros",energia:"control y apego material",consejo:"Hoy podés notar que te estás aferrando de más al control de lo material.",accion:"Soltá un poco el control sobre algo que no depende solo de vos — dinero, plan, resultado.",evitar:"Evitá tomar decisiones desde el miedo a perder. El apego excesivo achica las posibilidades."},
+  {id:40,img:"Imagenes/five-of-pentacles.png",nombre:"Cinco de Oros",palo:"Oros",energia:"dificultad material y apoyo",consejo:"Hoy podés sentir escasez o falta de apoyo — pero hay ayuda disponible si la pedís.",accion:"Si estás pasando un momento difícil, permitite pedir ayuda en vez de atravesarlo en soledad.",evitar:"Evitá el orgullo de no aceptar una mano tendida cuando la necesitás."},
+  {id:41,img:"Imagenes/six-of-pentacles.png",nombre:"Seis de Oros",palo:"Oros",energia:"generosidad y reciprocidad",consejo:"Hoy el intercambio — dar y recibir — está en el centro. Cuidá que fluya parejo.",accion:"Hacé un gesto generoso hoy con alguien, y también permitite recibir cuando te ofrezcan algo.",evitar:"Evitá dar siempre sin recibir nunca, o al revés. El equilibrio es la clave hoy."},
+  {id:42,img:"Imagenes/seven-of-pentacles.png",nombre:"Siete de Oros",palo:"Oros",energia:"paciencia y evaluación",consejo:"Hoy toca evaluar si lo que venís sembrando hace tiempo todavía vale la pena sostenerlo.",accion:"Revisá un proyecto de largo plazo y preguntate honestamente si seguís convencida de invertir tiempo ahí.",evitar:"Evitá la impaciencia. Algunas cosas todavía necesitan más tiempo antes de dar sus frutos."},
+  {id:43,img:"Imagenes/eight-of-pentacles.png",nombre:"Ocho de Oros",palo:"Oros",energia:"dedicación y aprendizaje",consejo:"Hoy es un buen momento para enfocarte y perfeccionar algo en lo que venís trabajando.",accion:"Dedicale hoy un rato concentrado a mejorar una habilidad concreta, sin distracciones.",evitar:"Evitá dispersarte aprendiendo de todo un poco. La maestría pide foco sostenido."},
+  {id:44,img:"Imagenes/nine-of-pentacles.png",nombre:"Nueve de Oros",palo:"Oros",energia:"independencia y logro personal",consejo:"Hoy podés disfrutar de algo que lograste por tu propio esfuerzo, sin necesitar validación externa.",accion:"Reconocete a vos misma un logro reciente, aunque nadie más lo haya notado todavía.",evitar:"Evitá necesitar la aprobación ajena para sentirte conforme con lo que construiste sola."},
+  {id:45,img:"Imagenes/ten-of-pentacles.png",nombre:"Diez de Oros",palo:"Oros",energia:"prosperidad y legado familiar",consejo:"Hoy hay una sensación de estabilidad y abundancia disponible en tu entorno más cercano.",accion:"Invertí tiempo hoy en fortalecer una base sólida — familiar, económica o de proyecto a largo plazo.",evitar:"Evitá dar por hecho lo estable. Cuidar lo que ya construiste también es avanzar."},
+  {id:46,img:"Imagenes/page-of-pentacles.png",nombre:"Sota de Oros",palo:"Oros",energia:"estudio y oportunidades prácticas",consejo:"Hoy puede llegar una oportunidad concreta de aprendizaje o crecimiento práctico — estate atenta.",accion:"Si surge la chance de aprender algo nuevo y útil hoy, animate a empezar aunque sea de a poco.",evitar:"Evitá subestimar los primeros pasos por sentir que 'recién estás empezando'."},
+  {id:47,img:"Imagenes/knight-of-pentacles.png",nombre:"Caballero de Oros",palo:"Oros",energia:"constancia y trabajo metódico",consejo:"Hoy la constancia rinde más que la velocidad. Un avance lento pero firme es lo que toca.",accion:"Sostené hoy tu rutina o método de trabajo aunque no veas resultados inmediatos todavía.",evitar:"Evitá la ansiedad por resultados rápidos. Lo que construís con método, dura más."},
+  {id:48,img:"Imagenes/queen-of-pentacles.png",nombre:"Reina de Oros",palo:"Oros",energia:"cuidado y prosperidad práctica",consejo:"Hoy tenés la capacidad de crear un ambiente seguro y cálido a tu alrededor — para vos y para otros.",accion:"Ocupate hoy de algo práctico que mejore tu bienestar cotidiano: tu espacio, tu comida, tu descanso.",evitar:"Evitá descuidar lo básico de tu día a día por estar enfocada solo en metas grandes."},
+  {id:49,img:"Imagenes/king-of-pentacles.png",nombre:"Rey de Oros",palo:"Oros",energia:"éxito material y liderazgo",consejo:"Hoy tenés la capacidad de liderar y construir algo duradero con tu propio esfuerzo.",accion:"Tomá una decisión hoy que requiera responsabilidad, con la confianza de que estás preparada para sostenerla.",evitar:"Evitá dudar de tu propia capacidad de liderazgo solo porque el desafío parece grande."},
+  {id:50,img:"Imagenes/ace-of-swords.png",nombre:"As de Espadas",palo:"Espadas",energia:"claridad mental y verdad",consejo:"Hoy podés ver una situación con una claridad mental poco habitual — aprovechala.",accion:"Si hay algo que necesitás decir con honestidad, hoy es el día para hacerlo con calma y claridad.",evitar:"Evitá guardarte una verdad importante por miedo a incomodar. Dicha con respeto, libera."},
+  {id:51,img:"Imagenes/two-of-swords.png",nombre:"Dos de Espadas",palo:"Espadas",energia:"indecisión y bloqueo mental",consejo:"Hoy podés sentirte bloqueada frente a una decisión — evitar mirarla no la resuelve.",accion:"Buscá más información o pedí una segunda opinión antes de seguir postergando esa decisión pendiente.",evitar:"Evitá seguir tapándote los ojos frente a una realidad que ya conocés."},
+  {id:52,img:"Imagenes/three-of-swords.png",nombre:"Tres de Espadas",palo:"Espadas",energia:"dolor, traición y pena",consejo:"Hoy puede resurgir el dolor de una traición o decepción pasada — reconocerlo es parte de sanar.",accion:"Si hay una herida vieja pidiendo atención, date el espacio de sentirla sin apurar el proceso.",evitar:"Evitá minimizar lo que te dolió. Nombrarlo es el primer paso para soltarlo de verdad."},
+  {id:53,img:"Imagenes/four-of-swords.png",nombre:"Cuatro de Espadas",palo:"Espadas",energia:"descanso y recuperación",consejo:"Hoy tu cuerpo y tu mente te están pidiendo una pausa real — hacele caso.",accion:"Date permiso de descansar hoy, aunque sea un rato corto, sin sentir que estás perdiendo el tiempo.",evitar:"Evitá seguir exigiéndote al límite. El descanso de hoy es la energía de mañana."},
+  {id:54,img:"Imagenes/five-of-swords.png",nombre:"Cinco de Espadas",palo:"Espadas",energia:"conflicto y derrota",consejo:"Hoy podés estar frente a un conflicto que, aunque lo ganes, no va a valer la pena del todo.",accion:"Antes de entrar en una discusión hoy, preguntate si de verdad necesitás ganarla.",evitar:"Evitá pelear batallas que solo alimentan tu ego y te alejan de lo que importa."},
+  {id:55,img:"Imagenes/six-of-swords.png",nombre:"Seis de Espadas",palo:"Espadas",energia:"transición y alejamiento",consejo:"Hoy estás en tránsito hacia algo más tranquilo — dejando atrás una etapa turbulenta.",accion:"Date el permiso de alejarte, aunque sea un paso chico, de una situación que te venía agotando.",evitar:"Evitá quedarte en aguas revueltas por costumbre o miedo al cambio."},
+  {id:56,img:"Imagenes/seven-of-swords.png",nombre:"Siete de Espadas",palo:"Espadas",energia:"astucia y engaño",consejo:"Hoy conviene mirar dos veces antes de confiar del todo — puede haber algo que no se está diciendo.",accion:"Investigá un poco más antes de tomar una decisión importante que involucre a otra persona.",evitar:"Evitá actuar de forma deshonesta para evitar una confrontación. A la larga, sale más caro."},
+  {id:57,img:"Imagenes/eight-of-swords.png",nombre:"Ocho de Espadas",palo:"Espadas",energia:"atrapamiento y limitación mental",consejo:"Hoy podés sentirte atrapada, pero gran parte de esas cadenas están más en tu mente que en la realidad.",accion:"Cuestioná hoy una creencia que te viene limitando, y preguntate si realmente es tan cierta como creés.",evitar:"Evitá darle más poder del real a los pensamientos que te paralizan."},
+  {id:58,img:"Imagenes/nine-of-swords.png",nombre:"Nueve de Espadas",palo:"Espadas",energia:"ansiedad y pensamientos negativos",consejo:"Hoy la ansiedad puede amplificar todo — lo que de día parece manejable, de noche pesa el doble.",accion:"Si algo te preocupa hoy, escribilo en un papel. Sacarlo de tu cabeza le baja el volumen.",evitar:"Evitá tomar decisiones importantes desde el pico de la ansiedad. Esperá a que baje la marea."},
+  {id:59,img:"Imagenes/ten-of-swords.png",nombre:"Diez de Espadas",palo:"Espadas",energia:"final doloroso y nuevo amanecer",consejo:"Hoy puede sentirse como un punto bajo — pero justamente ahí empieza lo nuevo.",accion:"Si algo llegó a su fin, permitite reconocerlo del todo antes de apurarte a empezar de nuevo.",evitar:"Evitá negar un final doloroso. Aceptarlo es lo que abre paso al amanecer siguiente."},
+  {id:60,img:"Imagenes/page-of-swords.png",nombre:"Sota de Espadas",palo:"Espadas",energia:"curiosidad y comunicación directa",consejo:"Hoy la curiosidad y las preguntas directas son tu mejor herramienta.",accion:"Animate a preguntar lo que necesitás saber en vez de suponer o especular.",evitar:"Evitá quedarte con dudas por miedo a parecer inoportuna. Preguntar hoy te ahorra confusión después."},
+  {id:61,img:"Imagenes/knight-of-swords.png",nombre:"Caballero de Espadas",palo:"Espadas",energia:"acción rápida y determinación",consejo:"Hoy tenés energía para actuar rápido — usala con estrategia, no solo con impulso.",accion:"Si tenés que tomar una decisión veloz hoy, hacelo, pero dedicale un minuto extra a pensarla.",evitar:"Evitá actuar sin medir las consecuencias solo por la urgencia del momento."},
+  {id:62,img:"Imagenes/queen-of-swords.png",nombre:"Reina de Espadas",palo:"Espadas",energia:"claridad, independencia y honestidad",consejo:"Hoy tu claridad mental es tu mayor fortaleza — usala con compasión, no solo con razón.",accion:"Comunicá hoy lo que pensás con honestidad, pero eligiendo las palabras con cuidado.",evitar:"Evitá ser cortante solo porque tenés razón. La claridad no necesita lastimar."},
+  {id:63,img:"Imagenes/king-of-swords.png",nombre:"Rey de Espadas",palo:"Espadas",energia:"autoridad intelectual y justicia",consejo:"Hoy la lógica y el criterio claro te van a ayudar a resolver algo que parecía complicado.",accion:"Aplicá el sentido común hoy a una situación que venías viendo desde lo emocional nada más.",evitar:"Evitá dejarte llevar solo por la emoción del momento en una decisión importante."},
+  {id:64,img:"Imagenes/ace-of-wands.png",nombre:"As de Bastos",palo:"Bastos",energia:"inspiración y nuevos proyectos",consejo:"Hoy puede encenderse una chispa de inspiración para algo nuevo — no la dejes pasar.",accion:"Anotá esa idea que te entusiasma hoy, aunque no sepas todavía cómo llevarla a cabo.",evitar:"Evitá apagar tu entusiasmo con excesivo análisis. Dejalo respirar un poco antes de cuestionarlo todo."},
+  {id:65,img:"Imagenes/two-of-wands.png",nombre:"Dos de Bastos",palo:"Bastos",energia:"planificación y visión futura",consejo:"Hoy tenés que decidir hacia dónde dirigir tu energía — el mundo está ante vos.",accion:"Elegí hoy una dirección concreta para algo que venías pensando, aunque no tengas el plan completo.",evitar:"Evitá quedarte parada mirando todas las opciones sin animarte a elegir ninguna."},
+  {id:66,img:"Imagenes/three-of-wands.png",nombre:"Tres de Bastos",palo:"Bastos",energia:"expansión y resultados que llegan",consejo:"Lo que sembraste está empezando a dar sus primeros frutos — seguí expandiendo con confianza.",accion:"Dale continuidad hoy a algo que ya iniciaste, en vez de arrancar algo completamente nuevo.",evitar:"Evitá la impaciencia por resultados más grandes. Lo que crece bien, crece de a poco."},
+  {id:67,img:"Imagenes/four-of-wands.png",nombre:"Cuatro de Bastos",palo:"Bastos",energia:"celebración y estabilidad",consejo:"Hoy es un buen día para celebrar algo que lograste, aunque sea chico.",accion:"Reconocé en voz alta, con alguien cercano, algo bueno que construiste últimamente.",evitar:"Evitá restarle importancia a tus propios logros por modestia excesiva."},
+  {id:68,img:"Imagenes/five-of-wands.png",nombre:"Cinco de Bastos",palo:"Bastos",energia:"competencia y desacuerdo",consejo:"Hoy pueden aparecer tensiones o desacuerdos — el diálogo rinde más que el enfrentamiento.",accion:"Si hay una tensión con alguien, buscá conversarla con calma antes de que escale.",evitar:"Evitá competir por competir. No todo necesita convertirse en una pelea."},
+  {id:69,img:"Imagenes/six-of-wands.png",nombre:"Seis de Bastos",palo:"Bastos",energia:"victoria y reconocimiento",consejo:"Hoy tu esfuerzo puede ser reconocido — dejate ver, no lo escondas por humildad.",accion:"Compartí hoy un logro reciente con quienes te rodean, sin miedo a que parezca soberbia.",evitar:"Evitá esconder tus méritos. Merecés que se note el trabajo que veniste haciendo."},
+  {id:70,img:"Imagenes/seven-of-wands.png",nombre:"Siete de Bastos",palo:"Bastos",energia:"defensa y perseverancia",consejo:"Hoy puede tocarte defender una posición que ya conseguiste con esfuerzo — sostenela con firmeza.",accion:"Si algo que construiste está siendo cuestionado hoy, defendelo con argumentos claros y calma.",evitar:"Evitá ceder terreno solo para evitar el conflicto. Lo que valorás, merece ser sostenido."},
+  {id:71,img:"Imagenes/eight-of-wands.png",nombre:"Ocho de Bastos",palo:"Bastos",energia:"velocidad y movimiento",consejo:"Hoy todo puede acelerarse de golpe — mantené el foco en medio del movimiento.",accion:"Priorizá lo urgente de hoy sin perder de vista lo importante en el fondo.",evitar:"Evitá tomar decisiones apuradas solo porque todo parece moverse rápido a tu alrededor."},
+  {id:72,img:"Imagenes/nine-of-wands.png",nombre:"Nueve de Bastos",palo:"Bastos",energia:"resistencia y perseverancia final",consejo:"Hoy podés sentirte cansada pero cerca de la meta — no es momento de aflojar.",accion:"Dale un último empujón hoy a algo que estabas por abandonar justo antes de lograrlo.",evitar:"Evitá rendirte cuando ya recorriste la mayor parte del camino."},
+  {id:73,img:"Imagenes/ten-of-wands.png",nombre:"Diez de Bastos",palo:"Bastos",energia:"carga excesiva y responsabilidad",consejo:"Hoy podés sentirte sobrecargada — es un buen momento para delegar o soltar algo de peso.",accion:"Identificá una tarea o responsabilidad que podés compartir o soltar hoy, aunque te cueste pedirlo.",evitar:"Evitá seguir cargando sola con todo por miedo a decepcionar a alguien."},
+  {id:74,img:"Imagenes/page-of-wands.png",nombre:"Sota de Bastos",palo:"Bastos",energia:"entusiasmo y aventura",consejo:"Hoy una energía joven y entusiasta te invita a animarte a algo nuevo.",accion:"Canalizá tu entusiasmo de hoy en un proyecto concreto, aunque sea un primer paso pequeño.",evitar:"Evitá dejar que la emoción del momento se quede solo en palabras."},
+  {id:75,img:"Imagenes/knight-of-wands.png",nombre:"Caballero de Bastos",palo:"Bastos",energia:"pasión y acción impulsiva",consejo:"Hoy la pasión te empuja a actuar — dale dirección para que no se disperse.",accion:"Actuá hoy con toda la pasión que sentís, pero elegí bien en qué la ponés.",evitar:"Evitá la impulsividad total. Un poco de dirección potencia, no frena, tu pasión."},
+  {id:76,img:"Imagenes/queen-of-wands.png",nombre:"Reina de Bastos",palo:"Bastos",energia:"confianza y liderazgo carismático",consejo:"Hoy tu confianza y carisma pueden inspirar a quienes te rodean — mostrate como sos.",accion:"Animate a liderar algo hoy, aunque sea una conversación o una pequeña decisión grupal.",evitar:"Evitá esconder tu energía por miedo a ocupar demasiado espacio."},
+  {id:77,img:"Imagenes/king-of-wands.png",nombre:"Rey de Bastos",palo:"Bastos",energia:"visión y liderazgo creativo",consejo:"Hoy tenés visión de largo plazo — usala para trazar un rumbo, no solo para soñarlo.",accion:"Dedicale hoy un momento a planificar un paso concreto hacia una meta grande que tenés en mente.",evitar:"Evitá quedarte solo en la idea sin bajarla nunca a un plan de acción."}
+];
+
+const angulos=[-28,-14,-5,4,14,25,-20];
+let cartaDiaElegida=false;
+
+let cartasDia=[];
+
+function crearMesaDia(){
+  const mesa=document.getElementById('mesaDia');
+  if(!mesa)return;
+  mesa.innerHTML='';
+  cartasDia=[...mazoCartasDia].sort(()=>Math.random()-.5).slice(0,7);
+  const esMovil = window.innerWidth < 480;
+  const anchoCarta = esMovil ? 40 : 65;
+  const altoCarta = esMovil ? 66 : 105;
+  const overlapCarta = esMovil ? -20 : -14;
+  cartasDia.forEach((c,i)=>{
+    const div=document.createElement('div');
+    div.className='carta-boca-abajo';
+    div.style.cssText=`
+      width:${anchoCarta}px;height:${altoCarta}px;border-radius:10px;cursor:pointer;
+      background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);
+      border:1.5px solid rgba(150,100,255,0.5);
+      display:inline-flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+      transform:rotate(${angulos[i]}deg);
+      z-index:${i+1};
+      margin-left:${i===0?'0':overlapCarta+'px'};
+      transition:transform 0.3s ease;
+      vertical-align:bottom;
+    `;
+    div.onmouseover=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg) translateY(-25px) scale(1.08)`;div.style.boxShadow='0 12px 30px rgba(150,100,255,0.7)';div.style.zIndex=20;}};
+    div.onmouseout=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg)`;div.style.boxShadow='';div.style.zIndex=i+1;}};
+    div.onclick=()=>elegirCartaDia(c,div,angulos[i]);
+    mesa.appendChild(div);
+  });
+}
+
+async function elegirCartaDia(carta,el,rot){
+  if(cartaDiaElegida)return;
+  // Verificar login y créditos de carta del día
+  if(!window.usuaria){
+    window.abrirModal('modalRegistro');
+    return;
+  }
+  // Cargar perfil si no está disponible
+  if(!window.perfil){
+    await cargarPerfil();
+    await new Promise(r => setTimeout(r, 500));
+  }
+  if(window.perfil && window.perfil.creditos_carta <= 0){
+    window.abrirModal('modalSinCreditos');
+    return;
+  }
+  // Maximo 1 carta del dia por dia, aunque tenga creditos disponibles: en tarot no
+  // conviene sacar mas de una carta de consejo el mismo dia.
+  try {
+    const inicioHoyCarta = new Date();
+    inicioHoyCarta.setHours(0,0,0,0);
+    const { data: cartaHoy } = await supa
+      .from('historial_consultas')
+      .select('id')
+      .eq('user_id', window.usuaria.id)
+      .eq('tipo', 'carta_dia')
+      .gte('created_at', inicioHoyCarta.toISOString())
+      .limit(1);
+    if (cartaHoy && cartaHoy.length > 0) {
+      const txtModal = document.getElementById('textoConsultaDiaria');
+      if (txtModal) {
+        txtModal.textContent = 'Ya sacaste tu carta del día de hoy. Se libera una por día para que la energía tenga tiempo de asentarse — volvé mañana por la siguiente.';
+      }
+      window.abrirModal('modalConsultaDiaria');
+      return;
+    }
+  } catch (e) {
+    // si falla la lectura, no bloqueamos a la clienta
+  }
+  cartaDiaElegida=true;
+  el.style.transform=`rotate(${rot}deg) translateY(-30px) scale(1.1)`;
+  el.style.boxShadow='0 15px 40px rgba(150,100,255,0.7)';
+  el.style.zIndex=20;
+  document.getElementById('instruccionDia').style.display='none';
+  const btnMezclarOcultar=document.getElementById('btnMezclarDia');
+  if(btnMezclarOcultar) btnMezclarOcultar.style.display='none';
+  setTimeout(async ()=>{
+    document.getElementById('mesaDia').style.display='none';
+    const frente=document.getElementById('flipFrente');
+    // descHtml no se usa en carta del día
+    frente.innerHTML=`
+      <img src="${carta.img}" alt="${carta.nombre}" class="cf-img" onerror="this.style.display='none'">
+      <div class="cf-nombre">${carta.nombre}</div>
+      <div class="cf-palo">${carta.palo}</div>
+      <div class="cf-energia">${carta.energia}</div>
+      <div class="cf-consejo">${carta.consejo}</div>
+      <div class="cf-bloque"><span class="cf-label">Tu acción de hoy</span><span class="cf-texto">${carta.accion}</span></div>
+      <div class="cf-bloque"><span class="cf-label">Qué evitar</span><span class="cf-texto">${carta.evitar}</span></div>
+    `;
+    const container=document.getElementById('flipContainer');
+    const inner=document.getElementById('flipInner');
+    container.style.display='block';
+    inner.style.animation='none';
+    inner.offsetHeight;
+    inner.style.animation='voltear 1s ease forwards';
+    const btnNC=document.getElementById('btnNuevaCarta');
+    if(window.perfil && window.perfil.creditos > 0){
+      btnNC.textContent='✦ Quiero una consulta completa';
+      btnNC.onclick=function(){showTab('consulta', document.querySelectorAll('nav button')[1]);};
+    } else {
+      btnNC.textContent='✦ Ver planes';
+      btnNC.onclick=function(){showTab('planes', document.querySelectorAll('nav button')[4]);};
+    }
+    btnNC.style.display='inline-block';
+    // Descontar crédito carta del día
+    if(window.perfil && window.perfil.creditos_carta > 0){
+      const nuevos = window.perfil.creditos_carta - 1;
+      const { error } = await supa.from('perfiles').update({creditos_carta: nuevos}).eq('id', window.usuaria.id);
+      if(error){
+        console.error('No se pudo descontar el crédito de carta del día:', error);
+      }
+      window.perfil.creditos_carta = nuevos;
+      perfil = window.perfil;
+      actualizarUI();
+      if(nuevos === 0 && window.usuaria){
+        fetch('/resumen-plan', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: window.usuaria.id }) }).catch(function(){});
+      }
+    }
+    if(window.guardarHistorial){
+      window.guardarHistorial('carta_dia', null, null, [{nombre:carta.nombre, energia:carta.energia}], carta.consejo || null);
+    }
+  },500);
+}
+
+function nuevaCarta(){
+  cartaDiaElegida=false;
+  const mesa=document.getElementById('mesaDia');
+  if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
+  const instruccion=document.getElementById('instruccionDia');
+  if(instruccion)instruccion.style.display='block';
+  const flip=document.getElementById('flipContainer');
+  if(flip)flip.style.display='none';
+  const btn=document.getElementById('btnNuevaCarta');
+  if(btn)btn.style.display='none';
+  const btnMezclarMostrar=document.getElementById('btnMezclarDia');
+  if(btnMezclarMostrar)btnMezclarMostrar.style.display='inline-block';
+  crearMesaDia();
+}
+
+async function mezclarCartasDia(){
+  if(cartaDiaElegida)return;
+  const mesa=document.getElementById('mesaDia');
+  const btnMezclar=document.getElementById('btnMezclarDia');
+  if(!mesa)return;
+  if(btnMezclar)btnMezclar.disabled=true;
+  mesa.classList.add('mezclando');
+  await new Promise(r=>setTimeout(r,350));
+  crearMesaDia();
+  mesa.classList.remove('mezclando');
+  await new Promise(r=>setTimeout(r,350));
+  if(btnMezclar)btnMezclar.disabled=false;
+}
+
+// Inicializar mesa manejado en showTab principal
+</script>
+<script>
+// SUPABASE AUTH
+const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U";
+const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+window.usuaria = null;
+window.perfil = null;
+let usuaria = null;
+let perfil = null;
+let destinoRegistro = 'consulta';
+
+// Inicializar sesión al cargar
+async function initAuth() {
+  const { data: { session } } = await supa.auth.getSession();
+  if (session) {
+    usuaria = session.user;
+    await cargarPerfil();
+  }
+  actualizarUI();
+}
+
+async function cargarPerfil() {
+  const { data, error } = await supa
+    .from('perfiles')
+    .select('*')
+    .eq('id', usuaria.id)
+    .maybeSingle();
+  if (data) { perfil = data; window.perfil = data; window.usuaria = usuaria; }
+  if (error) console.log('Error perfil:', error.message);
+}
+
+window.guardarHistorial = async function(tipo, area, pregunta, cartas, interpretacion){
+  if(!window.usuaria) return;
+  const { error } = await supa.from('historial_consultas').insert({
+    user_id: window.usuaria.id,
+    tipo: tipo,
+    area: area || null,
+    pregunta: pregunta || null,
+    cartas: cartas,
+    interpretacion: interpretacion || null
+  });
+  if(error) console.error('No se pudo guardar el historial:', error.message);
+}
+
+const etiquetasPlan = {
+  consulta: { nombre: 'Consulta Individual', detalle: '1 consulta de tarot completa' },
+  semanal:  { nombre: 'Pack Semanal', detalle: '4 consultas específicas, 1 por semana' },
+  mensual:  { nombre: 'Plan Mensual', detalle: '8 consultas específicas (2 por semana) + carta del día' },
+  consejo:  { nombre: 'Carta del día', detalle: '1 carta del día' },
+  combo:    { nombre: 'Combo Consulta + Carta del día', detalle: '1 consulta de tarot completa + 1 carta del día' },
+  consulta_test: { nombre: 'Consulta Individual (prueba)', detalle: '1 consulta de tarot completa' },
+  semanal_test:  { nombre: 'Pack Semanal (prueba)', detalle: '4 consultas específicas, 1 por semana' },
+  mensual_test:  { nombre: 'Plan Mensual (prueba)', detalle: '8 consultas específicas (2 por semana) + carta del día' },
+  consejo_test:  { nombre: 'Carta del día (prueba)', detalle: '1 carta del día' },
+  combo_test:    { nombre: 'Combo Consulta + Carta del día (prueba)', detalle: '1 consulta de tarot completa + 1 carta del día' }
+};
+
+window.toggleMisPlanes = function(){
+  const cuerpo = document.getElementById('misPlanesCuerpo');
+  const flecha = document.getElementById('misPlanesFlecha');
+  if(!cuerpo) return;
+  const abierto = cuerpo.style.display !== 'none';
+  cuerpo.style.display = abierto ? 'none' : 'block';
+  if(flecha) flecha.textContent = abierto ? '▸' : '▾';
+}
+
+window.cargarMisPlanes = async function(){
+  const cont = document.getElementById('misPlanesLista');
+  if(!cont || !window.usuaria) { if(cont) cont.innerHTML=''; return; }
+  const cabeceraFn = function(titulo){
+    return '<div class="slabel" style="margin-bottom:0.75rem;cursor:pointer;user-select:none;" onclick="toggleMisPlanes()"><div class="snum">💳</div>' + titulo + '<span id="misPlanesFlecha" style="margin-left:auto;font-size:12px;">▸</span></div>';
+  };
+  const { data, error } = await supa
+    .from('pagos_procesados')
+    .select('plan, created_at')
+    .eq('user_id', window.usuaria.id)
+    .order('created_at', { ascending: false })
+    .limit(20);
+  if(error){
+    cont.innerHTML = cabeceraFn('Mis planes') + '<div id="misPlanesCuerpo" style="display:none;"><div class="hint">No pudimos cargar tus planes (' + error.message + ').</div></div><div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
+    return;
+  }
+  if(!data || data.length === 0){
+    cont.innerHTML = cabeceraFn('Mis planes') + '<div id="misPlanesCuerpo" style="display:none;"><div class="hint">No tenés planes activos.</div></div><div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
+    return;
+  }
+  cont.innerHTML = cabeceraFn('Mis planes (' + data.length + ')') + '<div id="misPlanesCuerpo" style="display:none;">' +
+    data.map(function(item){
+      const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const info = etiquetasPlan[item.plan] || { nombre: item.plan, detalle: '' };
+      return '<div class="histcard" style="margin-bottom:14px;"><div class="histtop"><span class="histtipo">✦ ' + info.nombre + '</span><span class="histfecha">' + fecha + '</span></div><div class="histcartas">' + info.detalle + '</div></div>';
+    }).join('') + '</div>' +
+    '<div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
+}
+
+window.cargarMiCamino = async function(){
+  const cont = document.getElementById('miCaminoLista');
+  if(!cont || !window.usuaria) { if(cont) cont.innerHTML=''; return; }
+  const { data, error } = await supa
+    .from('resumenes_plan')
+    .select('*')
+    .eq('user_id', window.usuaria.id)
+    .order('created_at', { ascending: false })
+    .limit(10);
+  if(error || !data || data.length === 0){ cont.innerHTML = ''; return; }
+  cont.innerHTML = '<div class="slabel" style="margin-bottom:0.75rem;"><div class="snum">🧭</div>Mi camino</div>' +
+    data.map(function(item){
+      const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+      const planLabel = item.plan.startsWith('semanal') ? 'Pack Semanal' : 'Plan Mensual';
+      return '<div class="histcard" style="border-color:rgba(180,140,255,0.35);background:rgba(120,70,220,0.08);margin-bottom:14px;"><div class="histtop"><span class="histtipo">✦ Resumen · ' + planLabel + '</span><span class="histfecha">' + fecha + '</span></div><div class="histinterp">' + item.resumen + '</div></div>';
+    }).join('') +
+    '<div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
+}
+
+window.cargarHistorial = async function(){
+  const cont = document.getElementById('historialLista');
+  if(!cont) return;
+  if(!window.usuaria){
+    cont.innerHTML = '<div class="hint">Iniciá sesión para ver tu historial.</div>';
+    return;
+  }
+  cont.innerHTML = '<div class="hint">Cargando tu historial...</div>';
+  const { data, error } = await supa
+    .from('historial_consultas')
+    .select('*')
+    .eq('user_id', window.usuaria.id)
+    .order('created_at', { ascending: false })
+    .limit(50);
+  if(error){
+    cont.innerHTML = '<div class="hint">No pudimos cargar tu historial. Probá de nuevo más tarde.</div>';
+    console.error('Error cargando historial:', error.message);
+    return;
+  }
+  if(!data || data.length === 0){
+    cont.innerHTML = '<div class="hint">Todavía no tenés consultas registradas. ¡Hacé tu primera consulta!</div>';
+    return;
+  }
+  cont.innerHTML = data.map(function(item){
+    const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const tipoLabel = item.tipo === 'carta_dia' ? 'Carta del día' : 'Consulta';
+    const cartasNombres = (item.cartas || []).map(function(c){ return c.nombre; }).join(' · ');
+    const preguntaHtml = item.pregunta ? ('<div class="histpregunta">"' + item.pregunta + '"</div>') : '';
+    const interpHtml = item.interpretacion ? ('<div class="histinterp">' + item.interpretacion + '</div>') : '';
+    return '<div class="histcard"><div class="histtop"><span class="histtipo">' + tipoLabel + '</span><span class="histfecha">' + fecha + '</span></div>' + preguntaHtml + '<div class="histcartas">' + cartasNombres + '</div>' + interpHtml + '</div>';
+  }).join('');
+}
+
+window.verMiHistorial = function(){
+  if(!window.usuaria){
+    window.abrirModal('modalLogin');
+    return;
+  }
+  showTab('historial');
+}
+
+function actualizarUI() {
+  const userBar = document.getElementById('userBar');
+  const ctaBox = document.querySelector('.cta-box');
+  const heroGratis = document.getElementById('heroGratisBadge');
+  if (usuaria && perfil) {
+    userBar.classList.add('visible');
+    document.getElementById('userNombre').textContent = perfil.nombre;
+    const avatarEl = document.getElementById('userAvatar');
+    if(avatarEl) avatarEl.textContent = (perfil.nombre || '?').trim().charAt(0).toUpperCase();
+    
+    // Mensaje contextual según créditos
+    let credMsg = '';
+    let credColor = 'rgba(150,220,150,0.8)';
+    const c = perfil.creditos || 0;
+    const cc = perfil.creditos_carta || 0;
+    
+    if(c > 0 && cc > 0){
+      credMsg = c + ' consulta' + (c !== 1 ? 's' : '') + ' de tarot · ' + cc + ' carta del día';
+      credColor = 'rgba(150,220,150,0.8)';
+    } else if(c > 0 && cc === 0){
+      credMsg = c + ' consulta' + (c !== 1 ? 's' : '') + ' de tarot disponible' + (c !== 1 ? 's' : '');
+      credColor = 'rgba(150,220,150,0.8)';
+    } else if(c === 0 && cc > 0){
+      credMsg = cc + ' carta del día disponible';
+      credColor = 'rgba(150,220,150,0.8)';
+    } else if(perfil.consultas_gratis_usadas || c === 0){
+      credMsg = 'Ya usaste tu consulta gratuita · Ver planes';
+      credColor = 'rgba(255,150,100,0.8)';
+    } else {
+      credMsg = 'Sin consultas disponibles · Ver planes';
+      credColor = 'rgba(255,150,100,0.8)';
+    }
+    
+    const credEl = document.getElementById('userCreditos');
+    credEl.textContent = credMsg;
+    credEl.style.color = credColor;
+    credEl.style.borderColor = credColor.replace('0.8','0.3');
+    credEl.style.background = credColor.replace('rgba(','rgba(').replace(',0.8)',',0.1)');
+    
+    // Click en "Ver planes" cuando sin créditos
+    if(c === 0 && cc === 0){
+      credEl.style.cursor = 'pointer';
+      credEl.onclick = () => {
+        const planesBtn = document.querySelector('nav button:nth-child(5)');
+        if(planesBtn) showTab('planes', planesBtn);
+      };
+    } else {
+      credEl.style.cursor = 'default';
+      credEl.onclick = null;
+    }
+    
+    if (ctaBox) ctaBox.style.display = 'none';
+    if (heroGratis) heroGratis.style.display = 'none';
+  } else {
+    userBar.classList.remove('visible');
+    if (ctaBox) ctaBox.style.display = 'block';
+    if (heroGratis) heroGratis.style.display = 'inline-block';
+  }
+}
+
+window.registrarse = async function() {
+  const nombre = document.getElementById('reg-nombre').value.trim();
+  const pronombre = document.getElementById('reg-pronombre').value;
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  const fecha = document.getElementById('reg-fecha').value;
+  const hora = document.getElementById('reg-hora').value || null;
+  const ciudad = document.getElementById('reg-ciudad').value.trim();
+  const pais = document.getElementById('reg-pais').value.trim() || 'Argentina';
+  const errEl = document.getElementById('reg-error');
+  const btnReg = document.getElementById('btnRegistrar');
+
+  if (!nombre || !email || !pass || !fecha || !ciudad) {
+    errEl.textContent = 'Por favor completá todos los campos requeridos.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  errEl.style.display = 'none';
+  if(btnReg){ btnReg.disabled = true; btnReg.textContent = 'Creando cuenta...'; }
+
+  try {
+    const { data, error } = await supa.auth.signUp({ email, password: pass,
+      options: { data: { nombre, pronombre, fecha_nacimiento: fecha, hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais } }
+    });
+
+    if (error) {
+      const msgRed = (error.message || '').toLowerCase();
+      if (msgRed.includes('fetch') || msgRed.includes('network')) {
+        errEl.textContent = 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.';
+      } else {
+        errEl.textContent = error.message === 'User already registered' ? 'Ya existe una cuenta con ese email.' : 'Error: ' + error.message;
+      }
+      errEl.style.display = 'block';
+      return;
+    }
+
+    // Actualizar perfil con datos completos
+    if (data.user) {
+      const perfilCampos = {
+        nombre, pronombre, fecha_nacimiento: fecha,
+        hora_nacimiento: hora, ciudad_nacimiento: ciudad, pais_nacimiento: pais
+      };
+      const { data: filasActualizadas, error: errUpdate } = await supa.from('perfiles')
+        .update(perfilCampos).eq('id', data.user.id).select('id');
+
+      if (!errUpdate && (!filasActualizadas || filasActualizadas.length === 0)) {
+        // El trigger que crea la fila en perfiles no llego a tiempo o fallo: la creamos nosotros mismos
+        await supa.from('perfiles').insert({
+          id: data.user.id, ...perfilCampos, creditos: 1, creditos_carta: 1
+        });
+      }
+
+      usuaria = data.user;
+      const histContReg = document.getElementById('historialLista');
+      if(histContReg) histContReg.innerHTML = '';
+      await cargarPerfil();
+      actualizarUI();
+      if(destinoRegistro === 'cartadia'){
+        const btnCartaDia = document.querySelectorAll('nav button')[0];
+        if(btnCartaDia) showTab('cartadia', btnCartaDia);
+      }
+      destinoRegistro = 'consulta';
+    }
+
+    cerrarModales();
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.';
+    errEl.style.display = 'block';
+  } finally {
+    if(btnReg){ btnReg.disabled = false; btnReg.textContent = 'Crear cuenta y comenzar'; }
+  }
+}
+
+window.iniciarSesion = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  const btnLog = document.getElementById('btnLogin');
+
+  errEl.style.display = 'none';
+  if(btnLog){ btnLog.disabled = true; btnLog.textContent = 'Entrando...'; }
+
+  try {
+    const { data, error } = await supa.auth.signInWithPassword({ email, password: pass });
+
+    if (error) {
+      const msgLog = (error.message || '').toLowerCase();
+      errEl.textContent = (msgLog.includes('fetch') || msgLog.includes('network'))
+        ? 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.'
+        : 'Email o contraseña incorrectos.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    usuaria = data.user;
+    const histContLogin = document.getElementById('historialLista');
+    if(histContLogin) histContLogin.innerHTML = '';
+    await cargarPerfil();
+    actualizarUI();
+    cerrarModales();
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar. Revisá tu conexión a internet (o desactivá el bloqueador de anuncios si tenés uno) e intentá de nuevo.';
+    errEl.style.display = 'block';
+  } finally {
+    if(btnLog){ btnLog.disabled = false; btnLog.textContent = 'Entrar'; }
+  }
+}
+
+async function olvidoPassword(){
+  const email = document.getElementById('login-email').value.trim();
+  const errEl = document.getElementById('login-error');
+  if(!email){
+    errEl.textContent = 'Ingresá tu email primero.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const { error } = await supa.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://tarotluzyfuerza.com.ar/reset.html'
+  });
+  if(error){
+    errEl.textContent = 'Error al enviar el email.';
+    errEl.style.display = 'block';
+  } else {
+    errEl.style.color = 'rgba(100,220,100,0.8)';
+    errEl.textContent = 'Te enviamos un email para recuperar tu contraseña.';
+    errEl.style.display = 'block';
+  }
+}
+
+function cerrarBienvenida(){
+  document.getElementById('popupBienvenida').classList.remove('active');
+}
+
+function mostrarBienvenida(nombre, pronombre){
+  const pronombres = {ella:'Bienvenida', el:'Bienvenido', elle:'Bienvenide', ninguno:'Bienvenide'};
+  const saludo = pronombres[pronombre] || 'Bienvenida';
+  document.getElementById('bienvenidaTitulo').textContent = saludo + ', ' + nombre + ' ✦';
+  document.getElementById('bienvenidaMsg').textContent = 'Listo, las cartas ya están disponibles para vos. La suerte está echada.';
+  const btnBv = document.getElementById('bienvenidaBtn');
+  if(btnBv) btnBv.textContent = 'Comenzar ✦';
+  document.getElementById('popupBienvenida').classList.add('active');
+}
+
+function mostrarDespedida(nombre){
+  document.getElementById('bienvenidaTitulo').textContent = 'Gracias por visitarnos' + (nombre ? ', ' + nombre : '') + ' ✦';
+  document.getElementById('bienvenidaMsg').textContent = 'Te esperamos pronto para tu próxima consulta. Las cartas van a estar ahí cuando las necesites.';
+  const btnDesp = document.getElementById('bienvenidaBtn');
+  if(btnDesp) btnDesp.textContent = 'Cerrar';
+  document.getElementById('popupBienvenida').classList.add('active');
+}
+
+function togglePass(id, btn){
+  const inp = document.getElementById(id);
+  if(inp.type === 'password'){ inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁'; }
+}
+
+window.cerrarSesion = async function() {
+  const nombreDespedida = (window.perfil && window.perfil.nombre) ? window.perfil.nombre : '';
+  await supa.auth.signOut();
+  usuaria = null;
+  perfil = null;
+  window.usuaria = null;
+  window.perfil = null;
+  const histCont = document.getElementById('historialLista');
+  if(histCont) histCont.innerHTML = '';
+  actualizarUI();
+  mostrarDespedida(nombreDespedida);
+}
+
+window.irOpcionHero = function(destino){
+  if(window.usuaria){
+    const idx = destino === 'cartadia' ? 0 : 1;
+    const btn = document.querySelectorAll('nav button')[idx];
+    if(btn) showTab(destino, btn);
+  } else {
+    destinoRegistro = destino;
+    abrirModal('modalRegistro2');
+  }
+}
+
+window.abrirModal = function(id) {
+  cerrarModales();
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+window.cerrarModales = function() {
+  document.querySelectorAll('.auth-overlay, .modal-overlay').forEach(m => m.classList.remove('active'));
+}
+
+window.switchModal = function(cerrar, abrir) {
+  cerrarModales();
+  if (abrir === 'login') abrirModal('modalLogin');
+  else if (abrir === 'registro') abrirModal('modalRegistro2');
+}
+
+// Cerrar modales al hacer clic afuera
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('auth-overlay') || e.target.classList.contains('modal-overlay')) {
+    cerrarModales();
+  }
+});
+
+// Verificar créditos antes de consultar
+window.verificarCreditos = async function() {
+  if (!usuaria) {
+    window.abrirModal('modalRegistro');
+    return false;
+  }
+  await cargarPerfil();
+  if (!perfil) {
+    // Perfil no cargó aún, esperar un poco más
+    await new Promise(r => setTimeout(r, 1000));
+    await cargarPerfil();
+  }
+  if (!perfil || perfil.creditos <= 0) {
+    window.abrirModal('modalSinCreditos');
+    return false;
+  }
+  // Los planes de varias tiradas (semanal/mensual) liberan las consultas de a poco
+  // en vez de todas juntas, porque en tarot no conviene consultar todos los dias.
+  // Semanal: 1 consulta nueva por semana. Mensual: 2 consultas nuevas por semana.
+  // Si compro una consulta individual suelta, esa se puede usar al toque.
+  let cuotaPorSemana = 0;
+  let fechaCompra = null;
+  try {
+    const { data: ultimaCompra } = await supa
+      .from('pagos_procesados')
+      .select('plan, created_at')
+      .eq('user_id', usuaria.id)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (ultimaCompra && ultimaCompra[0]) {
+      if (ultimaCompra[0].plan === 'semanal' || ultimaCompra[0].plan === 'semanal_test') { cuotaPorSemana = 1; fechaCompra = ultimaCompra[0].created_at; }
+      else if (ultimaCompra[0].plan === 'mensual' || ultimaCompra[0].plan === 'mensual_test') { cuotaPorSemana = 2; fechaCompra = ultimaCompra[0].created_at; }
+    }
+  } catch (e) {
+    cuotaPorSemana = 0; // si no se puede leer, no bloqueamos a la clienta
+  }
+
+  if (cuotaPorSemana > 0 && fechaCompra) {
+    try {
+      const msPorDia = 24 * 60 * 60 * 1000;
+      const diasTranscurridos = Math.max(0, Math.floor((Date.now() - new Date(fechaCompra).getTime()) / msPorDia));
+      const semanaActual = Math.floor(diasTranscurridos / 7); // 0-indexed
+      const cupoDisponible = (semanaActual + 1) * cuotaPorSemana;
+      const { data: usadasDesdeCompra } = await supa
+        .from('historial_consultas')
+        .select('id')
+        .eq('user_id', usuaria.id)
+        .eq('tipo', 'consulta')
+        .gte('created_at', fechaCompra);
+      const usadas = usadasDesdeCompra ? usadasDesdeCompra.length : 0;
+      if (usadas >= cupoDisponible) {
+        const txtModal = document.getElementById('textoConsultaDiaria');
+        if (txtModal) {
+          const diasParaProxima = 7 - (diasTranscurridos % 7);
+          txtModal.textContent = `Ya usaste tus consultas disponibles de esta semana. Se liberan ${cuotaPorSemana === 1 ? '1 consulta nueva' : '2 consultas nuevas'} cada semana, para que vayas viviendo el camino paso a paso — en tarot no conviene consultar todos los días. La próxima se habilita en ${diasParaProxima} día${diasParaProxima === 1 ? '' : 's'}.`;
+        }
+        window.abrirModal('modalConsultaDiaria');
+        return false;
+      }
+    } catch (e) {
+      // si falla la lectura del historial, no bloqueamos a la clienta
+    }
+  }
+  return true;
+}
+
+// Descontar crédito después de consulta
+window.descontarCredito = async function() {
+  if (!usuaria || !perfil) return;
+  const nuevos = Math.max(0, perfil.creditos - 1);
+  await supa.from('perfiles').update({ creditos: nuevos }).eq('id', usuaria.id);
+  perfil.creditos = nuevos;
+  actualizarUI();
+  if(nuevos === 0 && usuaria){
+    fetch('/resumen-plan', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: usuaria.id }) }).catch(function(){});
+  }
+}
+
+// Inicializar al cargar
+window.addEventListener('load', async function(){
+  // Escuchar cambios de auth - detecta cuando Supabase procesa el token de recovery
+  let modoRecovery = false;
+
+  supa.auth.onAuthStateChange(async (event, session) => {
+    if(event === 'PASSWORD_RECOVERY'){
+      modoRecovery = true;
+      usuaria = session.user;
+      window.usuaria = session.user;
+      // NO cargar perfil ni actualizar UI - solo mostrar formulario de nueva clave
+      document.getElementById('modalNuevaClave').classList.add('active');
+    } else if(event === 'SIGNED_IN' && session && !modoRecovery){
+      usuaria = session.user;
+      window.usuaria = session.user;
+      await cargarPerfil();
+      actualizarUI();
+    } else if(event === 'SIGNED_OUT'){
+      modoRecovery = false;
+      usuaria = null; perfil = null;
+      window.usuaria = null; window.perfil = null;
+      actualizarUI();
+    }
+  });
+  initAuth();
+  chequearPagoOk();
+});
+
+window.pagar = async function(plan){
+  if(!usuaria){ window.abrirModal('modalRegistro'); return; }
+  const { data: { session } } = await supa.auth.getSession();
+  if(!session){ window.abrirModal('modalLogin'); return; }
+  const btns = document.querySelectorAll('.btn-mp');
+  btns.forEach(b=>b.disabled=true);
+  try{
+    const r = await fetch('/crear-preferencia', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ plan, access_token: session.access_token })
+    });
+    const d = await r.json();
+    if(d.init_point){
+      window.location.href = d.init_point;
+    } else {
+      alert('No se pudo iniciar el pago. Probá de nuevo en un momento.');
+      btns.forEach(b=>b.disabled=false);
+    }
+  } catch(e){
+    alert('No se pudo iniciar el pago. Probá de nuevo en un momento.');
+    btns.forEach(b=>b.disabled=false);
+  }
+}
+
+const nombresPlan = {
+  consulta: { titulo: '¡Bárbaro! Ya podés hacer tu consulta', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  semanal:  { titulo: '¡Bárbaro! Ya tenés tu Pack Semanal activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  mensual:  { titulo: '¡Bárbaro! Ya tenés tu Plan Mensual activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  consejo:  { titulo: '¡Bárbaro! Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
+  combo:    { titulo: '¡Bárbaro! Ya podés usar tu consulta y tu carta del día', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  consulta_test: { titulo: '[PRUEBA] Ya podés hacer tu consulta', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  semanal_test:  { titulo: '[PRUEBA] Ya tenés tu Pack Semanal activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  mensual_test:  { titulo: '[PRUEBA] Ya tenés tu Plan Mensual activo', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' },
+  consejo_test:  { titulo: '[PRUEBA] Ya podés usar tu carta del día', tab: 'cartadia', idx: 0, boton: 'Ir a mi carta del día' },
+  combo_test:    { titulo: '[PRUEBA] Ya podés usar tu consulta y tu carta del día', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' }
+};
+
+// Modo prueba: revela los planes espejo de precio simbolico solo con el link secreto ?modotest=1
+(function(){
+  try {
+    if (new URLSearchParams(window.location.search).get('modotest') === '1') {
+      localStorage.setItem('lf_modotest', '1');
+    }
+    if (localStorage.getItem('lf_modotest') === '1') {
+      document.addEventListener('DOMContentLoaded', function(){
+        const bloque = document.getElementById('bloquePlanesPrueba');
+        if (bloque) bloque.style.display = 'block';
+      });
+    }
+  } catch(e) {}
+})();
+
+function chequearPagoOk(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('pago') !== 'ok') return;
+  const plan = params.get('plan');
+  history.replaceState(null, '', window.location.pathname);
+  let intentos = 0;
+  const antes = JSON.stringify(perfil);
+  const intervalo = setInterval(async ()=>{
+    intentos++;
+    if(usuaria){ await cargarPerfil(); actualizarUI(); }
+    const cambio = JSON.stringify(perfil) !== antes;
+    if(cambio || intentos >= 8){
+      clearInterval(intervalo);
+      const info = nombresPlan[plan] || { titulo: '¡Bárbaro! Tu pago se acreditó', tab: 'consulta', idx: 1, boton: 'Ir a mi consulta' };
+      const titulo = document.getElementById('pagoOkTitulo');
+      if(titulo) titulo.textContent = info.titulo;
+      const texto = document.getElementById('pagoOkTexto');
+      if(texto){
+        texto.textContent = cambio
+          ? 'Tu pago se acreditó correctamente.'
+          : 'Tu pago está siendo confirmado — puede tardar unos segundos más en reflejarse. Si no ves el crédito en un minuto, escribinos por Contacto.';
+      }
+      const btn = document.getElementById('pagoOkBtn');
+      if(btn){
+        btn.textContent = info.boton;
+        btn.onclick = function(){
+          cerrarModales();
+          showTab(info.tab, document.querySelectorAll('nav button')[info.idx]);
+        };
+      }
+      window.abrirModal('modalPagoOk');
+    }
+  }, 1500);
+}
+
+
+const arcanosGuia = {
+  1:  {emoji:'🪄', nombre:'El Mago',            frase:'La voluntad, la manifestación, el poder personal.'},
+  2:  {emoji:'📖', nombre:'La Sacerdotisa',      frase:'La intuición, el misterio, el conocimiento oculto.'},
+  3:  {emoji:'🌸', nombre:'La Emperatriz',       frase:'La abundancia, la fertilidad, la creatividad.'},
+  4:  {emoji:'👑', nombre:'El Emperador',        frase:'La autoridad, la estructura, el liderazgo.'},
+  5:  {emoji:'🏛️', nombre:'El Hierofante',       frase:'La tradición, la guía espiritual, la enseñanza.'},
+  6:  {emoji:'💫', nombre:'Los Enamorados',      frase:'Las elecciones del corazón, la unión, los valores.'},
+  7:  {emoji:'🏆', nombre:'El Carro',            frase:'La determinación, la victoria, el avance.'},
+  8:  {emoji:'🦁', nombre:'La Fuerza',           frase:'El coraje interior, la compasión, la paciencia.'},
+  9:  {emoji:'🕯️', nombre:'El Ermitaño',         frase:'La reflexión, la sabiduría interior, la soledad.'},
+  10: {emoji:'🎡', nombre:'La Rueda de la Fortuna', frase:'Los ciclos, el destino, los cambios inevitables.'},
+  11: {emoji:'⚖️', nombre:'La Justicia',         frase:'El equilibrio, la verdad, el karma.'},
+  12: {emoji:'🙃', nombre:'El Colgado',          frase:'La pausa, la entrega, la nueva perspectiva.'},
+  13: {emoji:'🦋', nombre:'La Muerte',           frase:'La transformación, los finales que liberan.'},
+  14: {emoji:'🌊', nombre:'La Templanza',        frase:'El equilibrio, la moderación, la paciencia.'},
+  15: {emoji:'⛓️', nombre:'El Diablo',           frase:'Los apegos, las sombras, la liberación.'},
+  16: {emoji:'⚡', nombre:'La Torre',            frase:'Los cambios profundos, la destrucción creadora.'},
+  17: {emoji:'✨', nombre:'La Estrella',         frase:'La esperanza, la guía, la renovación.'},
+  18: {emoji:'🌙', nombre:'La Luna',             frase:'La intuición, el misterio, lo oculto.'},
+  19: {emoji:'☀️', nombre:'El Sol',              frase:'La claridad, la alegría, el éxito.'},
+  20: {emoji:'🎺', nombre:'El Juicio',           frase:'El despertar, el llamado, la redención.'},
+  21: {emoji:'🌍', nombre:'El Mundo',            frase:'La completud, el logro, los ciclos que cierran.'},
+  22: {emoji:'🌟', nombre:'El Loco',             frase:'El inicio, la inocencia, los nuevos comienzos.'}
+};
+
+window.irALecturaDesdeGuia = function(){
+  cerrarModales();
+  if(window.usuaria){
+    const btnConsulta = document.querySelector('nav button:nth-child(2)');
+    if(btnConsulta) showTab('consulta', btnConsulta);
+  } else {
+    abrirModal('modalRegistro2');
+  }
+}
+
+window.calcularNumeroGuia = function(){
+  const input = document.getElementById('fechaGuia');
+  if(!input.value){ input.focus(); return; }
+  const soloDigitos = input.value.replace(/-/g,'');
+  let suma = soloDigitos.split('').reduce((acc,d)=>acc+parseInt(d,10),0);
+  while(suma > 22){
+    suma = String(suma).split('').reduce((acc,d)=>acc+parseInt(d,10),0);
+  }
+  const arcano = arcanosGuia[suma] || arcanosGuia[22];
+  document.getElementById('guiaEmoji').textContent = arcano.emoji;
+  document.getElementById('guiaNombre').textContent = 'Tu número de guía: ' + arcano.nombre;
+  document.getElementById('guiaFrase').textContent = arcano.frase;
+  document.getElementById('resultadoGuia').style.display = 'block';
+}
+
+window.guardarNuevaClave = async function(){
+  const pass1 = document.getElementById('nueva-pass').value;
+  const pass2 = document.getElementById('nueva-pass2').value;
+  const errEl = document.getElementById('nueva-pass-error');
+  if(pass1.length < 6){ errEl.textContent='La contraseña debe tener al menos 6 caracteres.'; errEl.style.display='block'; return; }
+  if(pass1 !== pass2){ errEl.textContent='Las contraseñas no coinciden.'; errEl.style.display='block'; return; }
+  const { error } = await supa.auth.updateUser({ password: pass1 });
+  if(error){ errEl.textContent='Error: ' + error.message; errEl.style.display='block'; return; }
+  document.getElementById('modalNuevaClave').classList.remove('active');
+  await cargarPerfil();
+  actualizarUI();
+  // Limpiar la URL
+  history.replaceState(null, '', '/');
+  alert('¡Contraseña actualizada! Ya podés ingresar con tu nueva contraseña.');
+}
+</script>
+
+<script>
+// Canvas de estrellas orgánicas
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas(){
+    const hero = canvas.parentElement;
+    canvas.width = hero ? hero.offsetWidth : window.innerWidth;
+    canvas.height = hero ? hero.offsetHeight : 320;
+    if(canvas.width < 10) canvas.width = window.innerWidth;
+    if(canvas.height < 10) canvas.height = 320;
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 200);
+
+  const estrellas = [];
+  for(let i = 0; i < 200; i++){
+    estrellas.push({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 1.8 + 0.3,
+      op: Math.random() * 0.7 + 0.2,
+      vel: Math.random() * 0.02 + 0.005,
+      fase: Math.random() * Math.PI * 2,
+      color: Math.random() > 0.7 ? 'rgba(200,180,255,' : Math.random() > 0.5 ? 'rgba(150,200,255,' : 'rgba(255,255,255,'
+    });
+  }
+
+  const grandes = [];
+  for(let i = 0; i < 15; i++){
+    grandes.push({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 2 + 1.5,
+      op: Math.random() * 0.5 + 0.4,
+      vel: Math.random() * 0.015 + 0.003,
+      fase: Math.random() * Math.PI * 2
+    });
+  }
+
+  let t = 0;
+  function dibujar(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    t += 0.01;
+
+    estrellas.forEach(s => {
+      const op = s.op * (0.5 + 0.5 * Math.sin(t * s.vel * 100 + s.fase));
+      ctx.beginPath();
+      ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = s.color + op + ')';
+      ctx.fill();
+    });
+
+    grandes.forEach(s => {
+      const op = s.op * (0.4 + 0.6 * Math.sin(t * s.vel * 100 + s.fase));
+      const x = s.x * canvas.width;
+      const y = s.y * canvas.height;
+
+      ctx.beginPath();
+      ctx.arc(x, y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,200,255,${op})`;
+      ctx.fill();
+
+      const largo = s.r * 5 * op;
+      const g1 = ctx.createLinearGradient(x - largo, y, x + largo, y);
+      g1.addColorStop(0, 'transparent');
+      g1.addColorStop(0.5, `rgba(220,200,255,${op * 0.5})`);
+      g1.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.strokeStyle = g1; ctx.lineWidth = 0.8;
+      ctx.moveTo(x - largo, y); ctx.lineTo(x + largo, y); ctx.stroke();
+
+      const g2 = ctx.createLinearGradient(x, y - largo, x, y + largo);
+      g2.addColorStop(0, 'transparent');
+      g2.addColorStop(0.5, `rgba(220,200,255,${op * 0.5})`);
+      g2.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.strokeStyle = g2;
+      ctx.moveTo(x, y - largo); ctx.lineTo(x, y + largo); ctx.stroke();
+    });
+
+    requestAnimationFrame(dibujar);
+  }
+  dibujar();
+})();
+</script>
+</body>
+</html>
