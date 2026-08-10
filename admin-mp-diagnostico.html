@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diagnostico MP | Luz & Fuerza</title>
+<meta name="robots" content="noindex,nofollow">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{background:#0f0818;color:#e8e0ff;font-family:'Montserrat',sans-serif;padding:2rem;max-width:900px;margin:0 auto;}
+  h1{font-family:'Marcellus',serif;font-size:20px;}
+  pre{white-space:pre-wrap;word-break:break-word;background:rgba(20,10,40,0.8);border:1px solid rgba(150,100,255,0.3);border-radius:10px;padding:1rem;font-size:12px;}
+  .msg{margin-top:1rem;color:rgba(255,190,110,0.9);}
+</style>
+</head>
+<body>
+<h1>Diagnóstico de movimientos MercadoPago (temporal)</h1>
+<div id="estado" class="msg">Verificando tu sesión...</div>
+<pre id="salida" style="display:none;"></pre>
+<script>
+const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U";
+const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+async function init(){
+  const { data: { session } } = await supa.auth.getSession();
+  if(!session){
+    document.getElementById('estado').textContent = 'No hay sesión activa. Iniciá sesión en tarotluzyfuerza.com.ar con tu cuenta en esta misma pestaña y volvé a entrar acá.';
+    return;
+  }
+  const estado = document.getElementById('estado');
+  estado.textContent = 'Consultando MercadoPago...';
+  try{
+    const r = await fetch('/admin-mp-diagnostico', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ access_token: session.access_token }) });
+    const d = await r.json();
+    if(r.status === 401 || r.status === 403){ estado.textContent = 'Tu cuenta no tiene permiso para ver esto.'; return; }
+    estado.textContent = 'Listo. Copiá todo el texto de abajo y pasámelo.';
+    const salida = document.getElementById('salida');
+    salida.style.display = 'block';
+    salida.textContent = JSON.stringify(d, null, 2);
+  } catch(e){
+    estado.textContent = 'Error consultando: ' + e.message;
+  }
+}
+init();
+</script>
+</body>
+</html>
