@@ -1057,12 +1057,28 @@ async function revelar(){
   clearInterval(intervaloIntriga);
 
   const tres=[...mazo].sort(()=>Math.random()-.5).slice(0,3);
-  cartasDiv.innerHTML=tres.map((c,i)=>`<div class="carta carta-in" style="animation-delay:${i*0.15}s"><div class="cpos">${posiciones[i].nombre}</div><img src="${c.img}" alt="${c.nombre}" style="width:100%;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display='none'"><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${c[posiciones[i].clave]}</em></div></div>`).join("");
+  const pronombreActual=(window.perfil && window.perfil.pronombre) || null;
+  cartasDiv.innerHTML=tres.map((c,i)=>`<div class="carta carta-in" style="animation-delay:${i*0.15}s"><div class="cpos">${posiciones[i].nombre}</div><img src="${c.img}" alt="${c.nombre}" style="width:100%;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display='none'"><div class="cnombre">${c.nombre}</div><div class="cpalo">${c.palo}</div><div class="cenergia">${c.energia}</div><div class="cdesc">${posiciones[i].desc}<br><br><em>${adecuarTexto(c[posiciones[i].clave], pronombreActual)}</em></div></div>`).join("");
 
-  interpDiv.classList.add("loading");interpDiv.textContent="El tarot está leyendo las cartas...";
+  const frasesEspera=["El tarot está leyendo las cartas...","Conectando con tu energía...","Pensá en tu consulta mientras tanto...","Interpretando el mensaje de las cartas...","Ya casi está tu lectura..."];
+  let esperaIdx=0;
+  interpDiv.classList.add("loading");interpDiv.textContent=frasesEspera[0];
+  const intervaloEspera=setInterval(function(){esperaIdx=(esperaIdx+1)%frasesEspera.length;interpDiv.textContent=frasesEspera[esperaIdx];},2600);
   const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
-  try{const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area})});const d=await r.json();interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");if(window.descontarCredito)window.descontarCredito();if(d.respuesta&&window.guardarHistorial)window.guardarHistorial('consulta',area,ctx,tres.map(c=>({nombre:c.nombre,energia:c.energia})),d.respuesta);}
-  catch(e){interpDiv.textContent="El tarot necesita un momento. Intentá de nuevo.";interpDiv.classList.remove("loading");}
+  try{
+    const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area,pronombre:pronombreActual,userId:window.usuaria?window.usuaria.id:null})});
+    const d=await r.json();
+    clearInterval(intervaloEspera);
+    interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";
+    interpDiv.classList.remove("loading");
+    if(window.descontarCredito)window.descontarCredito();
+    if(d.respuesta&&!d.error&&window.guardarHistorial)window.guardarHistorial('consulta',area,ctx,tres.map(c=>({nombre:c.nombre,energia:c.energia})),d.respuesta);
+  }
+  catch(e){
+    clearInterval(intervaloEspera);
+    interpDiv.textContent="El tarot necesita un momento. Intentá de nuevo.";
+    interpDiv.classList.remove("loading");
+  }
   finally{
     consultaEnCurso=false;
     if(btnVolverPreg) btnVolverPreg.disabled=false;
@@ -1300,6 +1316,17 @@ function crearMesaDia(){
   });
 }
 
+const generoAdjetivos={ensimismada:["ensimismado","ensimismade"],bloqueada:["bloqueado","bloqueade"],cansada:["cansado","cansade"],atrapada:["atrapado","atrapade"],sobrecargada:["sobrecargado","sobrecargade"],paralizada:["paralizado","paralizade"],enganchada:["enganchado","enganchade"],enfocada:["enfocado","enfocade"],preparada:["preparado","preparade"]};
+function adecuarTexto(txt,pronombre){
+  if(!txt||!pronombre||pronombre==='ella') return txt;
+  const idx = pronombre==='el' ? 0 : 1;
+  let out = txt;
+  Object.keys(generoAdjetivos).forEach(function(fem){
+    const variante = generoAdjetivos[fem][idx];
+    out = out.replace(new RegExp('\\b'+fem+'\\b','g'), variante);
+  });
+  return out;
+}
 async function elegirCartaDia(carta,el,rot){
   if(cartaDiaElegida)return;
   // Verificar login y créditos de carta del día
@@ -1355,9 +1382,9 @@ async function elegirCartaDia(carta,el,rot){
       <div class="cf-nombre">${carta.nombre}</div>
       <div class="cf-palo">${carta.palo}</div>
       <div class="cf-energia">${carta.energia}</div>
-      <div class="cf-consejo">${carta.consejo}</div>
-      <div class="cf-bloque"><span class="cf-label">Tu acción de hoy</span><span class="cf-texto">${carta.accion}</span></div>
-      <div class="cf-bloque"><span class="cf-label">Qué evitar</span><span class="cf-texto">${carta.evitar}</span></div>
+      <div class="cf-consejo">${adecuarTexto(carta.consejo, window.perfil && window.perfil.pronombre)}</div>
+      <div class="cf-bloque"><span class="cf-label">Tu acción de hoy</span><span class="cf-texto">${adecuarTexto(carta.accion, window.perfil && window.perfil.pronombre)}</span></div>
+      <div class="cf-bloque"><span class="cf-label">Qué evitar</span><span class="cf-texto">${adecuarTexto(carta.evitar, window.perfil && window.perfil.pronombre)}</span></div>
     `;
     const container=document.getElementById('flipContainer');
     const inner=document.getElementById('flipInner');
