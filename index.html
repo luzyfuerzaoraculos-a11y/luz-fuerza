@@ -566,6 +566,20 @@ h1{letter-spacing:3px;}
       </div>
     </div>
   </div>
+
+  <div id="bloqueTransferencia" style="margin-top:2.5rem;padding:1.4rem;border:1px solid rgba(150,120,255,0.25);border-radius:14px;background:rgba(20,10,40,0.4);">
+    <div class="slabel" style="margin-bottom:0.5rem;"><div class="snum">✦</div>¿No tenés MercadoPago?</div>
+    <div class="hint" style="margin-bottom:12px;">También podés pagar por transferencia al alias <b>tarotluzyfuerza</b> (CVU 0000003100001441491187). Elegí el plan, transferí el monto exacto y avisanos acá abajo — te acreditamos apenas confirmamos el pago.</div>
+    <select id="selectPlanTransferencia" class="auth-select" style="margin-bottom:12px;">
+      <option value="consulta">Consulta Individual — $2.500</option>
+      <option value="semanal">Pack Semanal — $6.000</option>
+      <option value="mensual">Plan Mensual — $9.000</option>
+      <option value="consejo">Carta del día — $2.000</option>
+      <option value="combo">Combo Consulta + Carta del día — $3.000</option>
+    </select>
+    <button onclick="avisarPagoTransferencia(this)" class="btn-mp">Ya transferí, avisar</button>
+    <div class="hint" id="transferenciaMsg" style="margin-top:10px;"></div>
+  </div>
 </div>
 
 <div id="tab-sobre" class="tab">
@@ -1490,19 +1504,34 @@ window.cargarMisPlanes = async function(){
     .eq('user_id', window.usuaria.id)
     .order('created_at', { ascending: false })
     .limit(20);
+  const { data: dataManual } = await supa
+    .from('pagos_manuales')
+    .select('plan, monto, estado, created_at')
+    .eq('user_id', window.usuaria.id)
+    .order('created_at', { ascending: false })
+    .limit(20);
   if(error){
     cont.innerHTML = cabeceraFn('Mis planes') + '<div id="misPlanesCuerpo" style="display:none;"><div class="hint">No pudimos cargar tus planes (' + error.message + ').</div></div><div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
     return;
   }
-  if(!data || data.length === 0){
+  const itemsAutomaticos = (data || []).map(function(item){ return { plan: item.plan, created_at: item.created_at, manual: false }; });
+  const itemsManuales = (dataManual || []).map(function(item){ return { plan: item.plan, created_at: item.created_at, manual: true, estado: item.estado }; });
+  const todos = itemsAutomaticos.concat(itemsManuales).sort(function(a,b){ return new Date(b.created_at) - new Date(a.created_at); });
+  if(todos.length === 0){
     cont.innerHTML = cabeceraFn('Mis planes') + '<div id="misPlanesCuerpo" style="display:none;"><div class="hint">No tenés planes activos.</div></div><div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
     return;
   }
-  cont.innerHTML = cabeceraFn('Mis planes (' + data.length + ')') + '<div id="misPlanesCuerpo" style="display:none;">' +
-    data.map(function(item){
+  cont.innerHTML = cabeceraFn('Mis planes (' + todos.length + ')') + '<div id="misPlanesCuerpo" style="display:none;">' +
+    todos.map(function(item){
       const fecha = new Date(item.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
       const info = etiquetasPlan[item.plan] || { nombre: item.plan, detalle: '' };
-      return '<div class="histcard" style="margin-bottom:14px;"><div class="histtop"><span class="histtipo">✦ ' + info.nombre + '</span><span class="histfecha">' + fecha + '</span></div><div class="histcartas">' + info.detalle + '</div></div>';
+      let estadoTxt = '';
+      if(item.manual){
+        estadoTxt = item.estado === 'acreditado'
+          ? '<div class="hint" style="color:rgba(100,220,100,0.85);margin-top:4px;">✓ Acreditado (transferencia)</div>'
+          : '<div class="hint" style="color:rgba(255,190,110,0.9);margin-top:4px;">⏳ Pendiente de acreditación (transferencia)</div>';
+      }
+      return '<div class="histcard" style="margin-bottom:14px;"><div class="histtop"><span class="histtipo">✦ ' + info.nombre + '</span><span class="histfecha">' + fecha + '</span></div><div class="histcartas">' + info.detalle + '</div>' + estadoTxt + '</div>';
     }).join('') + '</div>' +
     '<div style="height:1px;background:rgba(150,120,255,0.15);margin:1.5rem 0;"></div>';
 }
@@ -1961,6 +1990,28 @@ window.pagar = async function(plan){
     alert('No se pudo iniciar el pago. Probá de nuevo en un momento.');
     btns.forEach(b=>b.disabled=false);
   }
+}
+
+window.avisarPagoTransferencia = async function(btn){
+  if(!usuaria){ window.abrirModal('modalRegistro'); return; }
+  const plan = document.getElementById('selectPlanTransferencia').value;
+  const montos = {consulta:2500, semanal:6000, mensual:9000, consejo:2000, combo:3000};
+  if(btn) btn.disabled = true;
+  const { error } = await supa.from('pagos_manuales').insert({
+    user_id: usuaria.id,
+    email: usuaria.email,
+    plan: plan,
+    monto: montos[plan] || null,
+    estado: 'pendiente'
+  });
+  const msgEl = document.getElementById('transferenciaMsg');
+  if(error){
+    if(msgEl) msgEl.textContent = 'No pudimos registrar el aviso. Escribinos por WhatsApp con el comprobante y listo.';
+  } else {
+    if(msgEl) msgEl.textContent = 'Listo, quedó registrado. Tu pago está pendiente de confirmación — te avisamos apenas se acredite (podés ver el estado en "Mis Planes"). Si querés agilizarlo, mandanos el comprobante por WhatsApp.';
+    if(window.cargarMisPlanes) window.cargarMisPlanes();
+  }
+  if(btn) btn.disabled = false;
 }
 
 const nombresPlan = {

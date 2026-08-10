@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Pagos manuales | Luz & Fuerza</title>
+<meta name="robots" content="noindex,nofollow">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{background:#0f0818;color:#e8e0ff;font-family:'Montserrat',sans-serif;padding:2rem;max-width:800px;margin:0 auto;}
+  h1{font-family:'Marcellus',serif;font-size:22px;}
+  button{cursor:pointer;font-family:inherit;font-size:15px;padding:10px 14px;border-radius:8px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:none;color:#e8e0ff;}
+  button:disabled{opacity:0.5;cursor:default;}
+  .fila{border:1px solid rgba(150,100,255,0.25);border-radius:10px;padding:1rem;margin-bottom:1rem;}
+  .msg{margin-top:1rem;color:rgba(255,190,110,0.9);}
+</style>
+</head>
+<body>
+<h1>Pagos manuales pendientes</h1>
+<div id="estado" class="msg">Verificando tu sesión...</div>
+<div id="lista" style="display:none;"></div>
+<script>
+const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6dHVjaWd1aWpibnBndGx2YWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTc5OTEsImV4cCI6MjA5NjU5Mzk5MX0.iRUOebtIXUFKrmoUyBySLuaz0iHLPM8C4uFJkfkGt3U";
+const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+let ACCESS_TOKEN = '';
+
+async function init(){
+  const { data: { session } } = await supa.auth.getSession();
+  if(!session){
+    document.getElementById('estado').textContent = 'No hay sesión activa. Iniciá sesión en tarotluzyfuerza.com.ar con tu cuenta (bravo.gabriela@gmail.com) en esta misma pestaña del navegador y volvé a entrar acá.';
+    return;
+  }
+  ACCESS_TOKEN = session.access_token;
+  await cargar();
+}
+async function cargar(){
+  const estado = document.getElementById('estado');
+  estado.textContent = 'Cargando...';
+  try{
+    const r = await fetch('/admin-pagos-manuales', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ access_token: ACCESS_TOKEN, accion: 'listar' }) });
+    if(r.status === 401 || r.status === 403){ estado.textContent = 'Tu cuenta no tiene permiso para ver esto.'; return; }
+    const d = await r.json();
+    document.getElementById('lista').style.display = 'block';
+    estado.textContent = '';
+    render(d.pagos || []);
+  } catch(e){
+    estado.textContent = 'Error cargando la lista.';
+  }
+}
+function render(pagos){
+  const cont = document.getElementById('lista');
+  if(pagos.length === 0){ cont.innerHTML = '<p>No hay pagos pendientes.</p>'; return; }
+  cont.innerHTML = pagos.map(function(p){
+    const fecha = new Date(p.created_at).toLocaleString('es-AR');
+    return '<div class="fila"><div><b>' + (p.email||p.user_id) + '</b></div><div>Plan: ' + p.plan + ' - $' + (p.monto||'?') + '</div><div>' + fecha + '</div><button onclick="acreditar(' + p.id + ', this)">Acreditar</button></div>';
+  }).join('');
+}
+async function acreditar(id, btn){
+  btn.disabled = true;
+  btn.textContent = 'Acreditando...';
+  try{
+    const r = await fetch('/admin-pagos-manuales', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ access_token: ACCESS_TOKEN, accion: 'acreditar', id: id }) });
+    const d = await r.json();
+    if(d.ok){ await cargar(); }
+    else { btn.textContent = 'Error: ' + (d.error||'?'); }
+  } catch(e){
+    btn.textContent = 'Error de red';
+  }
+}
+init();
+</script>
+</body>
+</html>
