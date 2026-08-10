@@ -12,11 +12,17 @@
   button:disabled{opacity:0.5;cursor:default;}
   .fila{border:1px solid rgba(150,100,255,0.25);border-radius:10px;padding:1rem;margin-bottom:1rem;}
   .msg{margin-top:1rem;color:rgba(255,190,110,0.9);}
+  .ok{color:rgba(100,220,100,0.9);}
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
 </style>
 </head>
 <body>
 <h1>Pagos manuales pendientes</h1>
+<div class="top">
+  <button id="btnVerificar" onclick="verificar()" disabled>🔄 Verificar pagos con MercadoPago</button>
+</div>
 <div id="estado" class="msg">Verificando tu sesión...</div>
+<div id="resultadoVerificacion"></div>
 <div id="lista" style="display:none;"></div>
 <script>
 const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
@@ -31,6 +37,7 @@ async function init(){
     return;
   }
   ACCESS_TOKEN = session.access_token;
+  document.getElementById('btnVerificar').disabled = false;
   await cargar();
 }
 async function cargar(){
@@ -52,7 +59,7 @@ function render(pagos){
   if(pagos.length === 0){ cont.innerHTML = '<p>No hay pagos pendientes.</p>'; return; }
   cont.innerHTML = pagos.map(function(p){
     const fecha = new Date(p.created_at).toLocaleString('es-AR');
-    return '<div class="fila"><div><b>' + (p.email||p.user_id) + '</b></div><div>Plan: ' + p.plan + ' - $' + (p.monto||'?') + '</div><div>' + fecha + '</div><button onclick="acreditar(' + p.id + ', this)">Acreditar</button></div>';
+    return '<div class="fila"><div><b>' + (p.email||p.user_id) + '</b></div><div>Plan: ' + p.plan + ' - $' + (p.monto||'?') + '</div><div>' + fecha + '</div><button onclick="acreditar(' + p.id + ', this)">Acreditar manualmente</button></div>';
   }).join('');
 }
 async function acreditar(id, btn){
@@ -66,6 +73,36 @@ async function acreditar(id, btn){
   } catch(e){
     btn.textContent = 'Error de red';
   }
+}
+async function verificar(){
+  const btn = document.getElementById('btnVerificar');
+  const resDiv = document.getElementById('resultadoVerificacion');
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+  resDiv.innerHTML = '';
+  try{
+    const r = await fetch('/admin-pagos-manuales', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ access_token: ACCESS_TOKEN, accion: 'verificar' }) });
+    const d = await r.json();
+    if(!d.ok){ resDiv.innerHTML = '<div class="msg">Error: ' + (d.error||'?') + '</div>'; }
+    else {
+      let html = '';
+      if(d.acreditados && d.acreditados.length > 0){
+        html += '<div class="msg ok">✓ Se acreditaron automáticamente ' + d.acreditados.length + ' pago(s): ' + d.acreditados.map(function(a){ return a.email + ' (' + a.plan + ', $' + a.monto + ')'; }).join(', ') + '</div>';
+      }
+      if(d.ambiguos && d.ambiguos.length > 0){
+        html += '<div class="msg">⚠ Hay ' + d.ambiguos.length + ' aviso(s) con monto ambiguo (más de una transferencia posible) — revisalos y acreditalos manualmente abajo.</div>';
+      }
+      if((!d.acreditados || d.acreditados.length === 0) && (!d.ambiguos || d.ambiguos.length === 0)){
+        html += '<div class="msg">No se encontró ninguna transferencia nueva que coincida con los avisos pendientes.</div>';
+      }
+      resDiv.innerHTML = html;
+    }
+    await cargar();
+  } catch(e){
+    resDiv.innerHTML = '<div class="msg">Error de red al verificar.</div>';
+  }
+  btn.disabled = false;
+  btn.textContent = '🔄 Verificar pagos con MercadoPago';
 }
 init();
 </script>
