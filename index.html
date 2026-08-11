@@ -1059,7 +1059,10 @@ async function revelar(){
     clearInterval(intervaloEspera);
     interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";
     interpDiv.classList.remove("loading");
-    if(window.descontarCredito)window.descontarCredito();
+    // El credito ahora se descuenta del lado del servidor (en /consultar). Acá solo
+    // volvemos a leer el perfil para que el contador de creditos en pantalla quede al día.
+    await cargarPerfil();
+    actualizarUI();
     if(d.respuesta&&!d.error&&window.guardarHistorial)window.guardarHistorial('consulta',area,ctx,tres.map(c=>({nombre:c.nombre,energia:c.energia})),d.respuesta);
   }
   catch(e){

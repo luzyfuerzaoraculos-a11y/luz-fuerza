@@ -1,4 +1,4 @@
-export async function onRequestPost(context) {
+﻿export async function onRequestPost(context) {
   const { request, env } = context;
 
   const SUPA_URL = "https://iztuciguijbnpgtlvajy.supabase.co";
@@ -25,46 +25,124 @@ export async function onRequestPost(context) {
       }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
+    if (!headersAdmin) {
+      console.error("Falta SUPABASE_SERVICE_ROLE_KEY, no se puede validar la sesion ni los creditos.");
+      return new Response(JSON.stringify({
+        respuesta: "Estamos teniendo un inconveniente para conectar con el tarot en este momento. Ya estamos al tanto y lo estamos revisando — probá de nuevo en unos minutos.",
+        error: true
+      }), { status: 500, headers: { "Content-Type": "application/json" } });
+    }
+
     // El userId NUNCA se toma del body tal cual (cualquiera podria mandar el id de otra
-    // persona ahi). Solo se usa si viene acompañado de un access_token de Supabase valido,
-    // y el userId que realmente se usa es el que surge de verificar ese token, no el que
-    // mando el cliente.
+    // persona ahi). Ahora hace falta un access_token de Supabase valido para poder consultar
+    // - sin sesion valida no se puede verificar que haya creditos, asi que se bloquea.
+    if (!body.access_token) {
+      return new Response(JSON.stringify({
+        respuesta: "Necesitás iniciar sesión para consultar.",
+        error: true
+      }), { status: 401, headers: { "Content-Type": "application/json" } });
+    }
+
     let userId = null;
-    if (body.access_token) {
+    try {
+      const userResp = await fetch(`${SUPA_URL}/auth/v1/user`, {
+        headers: { apikey: SUPA_ANON, Authorization: `Bearer ${body.access_token}` }
+      });
+      if (userResp.ok) {
+        const usuarioVerificado = await userResp.json();
+        if (usuarioVerificado && usuarioVerificado.id) userId = usuarioVerificado.id;
+      }
+    } catch (e) {
+      console.error("No se pudo verificar el access_token:", e.message);
+    }
+
+    if (!userId) {
+      return new Response(JSON.stringify({
+        respuesta: "Tu sesión expiró. Volvé a iniciar sesión para consultar.",
+        error: true
+      }), { status: 401, headers: { "Content-Type": "application/json" } });
+    }
+
+    // Verificacion de creditos y cuota semanal, del lado del servidor (no confiar solo en
+    // el chequeo que hace el navegador antes de llegar aca). Replica la misma logica de
+    // window.verificarCreditos en index.html.
+    const perfilResp = await fetch(`${SUPA_URL}/rest/v1/perfiles?id=eq.${encodeURIComponent(userId)}&select=creditos`, { headers: headersAdmin });
+    if (!perfilResp.ok) {
+      console.error("No se pudo leer el perfil para verificar creditos:", await perfilResp.text().catch(() => ""));
+      return new Response(JSON.stringify({
+        respuesta: "Estamos teniendo un inconveniente para conectar con el tarot en este momento. Ya estamos al tanto y lo estamos revisando — probá de nuevo en unos minutos.",
+        error: true
+      }), { status: 500, headers: { "Content-Type": "application/json" } });
+    }
+
+    const perfilArr = await perfilResp.json();
+    const perfil = Array.isArray(perfilArr) && perfilArr[0] ? perfilArr[0] : null;
+    if (!perfil || !(perfil.creditos > 0)) {
+      return new Response(JSON.stringify({
+        respuesta: "No tenés créditos disponibles. Elegí un plan para seguir consultando.",
+        error: true
+      }), { status: 403, headers: { "Content-Type": "application/json" } });
+    }
+
+    // Los planes de varias tiradas (semanal/mensual) liberan las consultas de a poco.
+    let cuotaPorSemana = 0;
+    let fechaCompra = null;
+    try {
+      const ultimaCompraResp = await fetch(
+        `${SUPA_URL}/rest/v1/pagos_procesados?user_id=eq.${encodeURIComponent(userId)}&select=plan,created_at&order=created_at.desc&limit=1`,
+        { headers: headersAdmin }
+      );
+      if (ultimaCompraResp.ok) {
+        const ultimaCompraArr = await ultimaCompraResp.json();
+        const ultimaCompra = ultimaCompraArr && ultimaCompraArr[0];
+        if (ultimaCompra) {
+          if (ultimaCompra.plan === "semanal" || ultimaCompra.plan === "semanal_test") { cuotaPorSemana = 1; fechaCompra = ultimaCompra.created_at; }
+          else if (ultimaCompra.plan === "mensual" || ultimaCompra.plan === "mensual_test") { cuotaPorSemana = 2; fechaCompra = ultimaCompra.created_at; }
+        }
+      }
+    } catch (e) {
+      cuotaPorSemana = 0; // si no se puede leer, no bloqueamos a la clienta
+    }
+
+    if (cuotaPorSemana > 0 && fechaCompra) {
       try {
-        const userResp = await fetch(`${SUPA_URL}/auth/v1/user`, {
-          headers: { apikey: SUPA_ANON, Authorization: `Bearer ${body.access_token}` }
-        });
-        if (userResp.ok) {
-          const usuarioVerificado = await userResp.json();
-          if (usuarioVerificado && usuarioVerificado.id) userId = usuarioVerificado.id;
+        const msPorDia = 24 * 60 * 60 * 1000;
+        const diasTranscurridos = Math.max(0, Math.floor((Date.now() - new Date(fechaCompra).getTime()) / msPorDia));
+        const semanaActual = Math.floor(diasTranscurridos / 7);
+        const cupoDisponible = (semanaActual + 1) * cuotaPorSemana;
+        const usadasResp = await fetch(
+          `${SUPA_URL}/rest/v1/historial_consultas?user_id=eq.${encodeURIComponent(userId)}&tipo=eq.consulta&created_at=gte.${encodeURIComponent(fechaCompra)}&select=id`,
+          { headers: headersAdmin }
+        );
+        const usadasArr = usadasResp.ok ? await usadasResp.json() : [];
+        const usadas = Array.isArray(usadasArr) ? usadasArr.length : 0;
+        if (usadas >= cupoDisponible) {
+          const diasParaProxima = 7 - (diasTranscurridos % 7);
+          const msjCuota = `Ya usaste tus consultas disponibles de esta semana. Se liberan ${cuotaPorSemana === 1 ? "1 consulta nueva" : "2 consultas nuevas"} cada semana, para que vayas viviendo el camino paso a paso — en tarot no conviene consultar todos los días. La próxima se habilita en ${diasParaProxima} día${diasParaProxima === 1 ? "" : "s"}.`;
+          return new Response(JSON.stringify({ respuesta: msjCuota, error: true }), { status: 403, headers: { "Content-Type": "application/json" } });
         }
       } catch (e) {
-        // Si falla la verificacion, seguimos sin contexto en vez de bloquear la consulta
-        console.error("No se pudo verificar el access_token:", e.message);
+        // si falla la lectura del historial, no bloqueamos a la clienta
       }
     }
 
     // Contexto de consultas anteriores de la misma persona, para que la IA note si la
     // pregunta de hoy esta relacionada con una anterior y le de continuidad si corresponde.
     let contextoPrevio = "";
-    if (userId && headersAdmin) {
-      try {
-        const histResp = await fetch(
-          `${SUPA_URL}/rest/v1/historial_consultas?user_id=eq.${encodeURIComponent(userId)}&tipo=eq.consulta&select=area,pregunta,interpretacion,created_at&order=created_at.desc&limit=3`,
-          { headers: headersAdmin }
-        );
-        if (histResp.ok) {
-          const previas = await histResp.json();
-          if (Array.isArray(previas) && previas.length > 0) {
-            contextoPrevio = "\n\nConsultas anteriores de esta misma persona (de la mas reciente a la mas vieja). Usalas solo si la pregunta de hoy esta relacionada, para darle continuidad y mas criterio a tu respuesta. Si el tema de hoy no tiene relacion con ninguna de estas, ignoralas por completo y respondé solo en base a la pregunta de hoy:\n" +
-              previas.map((p, i) => `${i + 1}. Área: ${p.area || "vida"}. Preguntó: "${p.pregunta}". Resumen de lo que se le dijo: "${(p.interpretacion || "").slice(0, 220)}"`).join("\n");
-          }
+    try {
+      const histResp = await fetch(
+        `${SUPA_URL}/rest/v1/historial_consultas?user_id=eq.${encodeURIComponent(userId)}&tipo=eq.consulta&select=area,pregunta,interpretacion,created_at&order=created_at.desc&limit=3`,
+        { headers: headersAdmin }
+      );
+      if (histResp.ok) {
+        const previas = await histResp.json();
+        if (Array.isArray(previas) && previas.length > 0) {
+          contextoPrevio = "\n\nConsultas anteriores de esta misma persona (de la mas reciente a la mas vieja). Usalas solo si la pregunta de hoy esta relacionada, para darle continuidad y mas criterio a tu respuesta. Si el tema de hoy no tiene relacion con ninguna de estas, ignoralas por completo y respondé solo en base a la pregunta de hoy:\n" +
+            previas.map((p, i) => `${i + 1}. Área: ${p.area || "vida"}. Preguntó: "${p.pregunta}". Resumen de lo que se le dijo: "${(p.interpretacion || "").slice(0, 220)}"`).join("\n");
         }
-      } catch (e) {
-        // Si falla traer el historial previo, seguimos sin contexto en vez de bloquear la consulta
-        console.error("No se pudo traer historial previo para contexto:", e.message);
       }
+    } catch (e) {
+      console.error("No se pudo traer historial previo para contexto:", e.message);
     }
 
     const generoInstr = {
@@ -102,8 +180,25 @@ Tono cálido, directo. De vos a vos. Sin markdown. Máximo 100 palabras.`;
     const data = resultado.data;
     const texto = Array.isArray(data.content) ? data.content.map(i => i.text || "").join("") : "";
 
+    // Descontar el credito aca, del lado del servidor - esta es la fuente de verdad ahora.
+    // El navegador ya no descuenta el credito el mismo, solo vuelve a leer el perfil.
+    try {
+      const nuevosCreditos = Math.max(0, (perfil.creditos || 0) - 1);
+      await fetch(`${SUPA_URL}/rest/v1/perfiles?id=eq.${encodeURIComponent(userId)}`, {
+        method: "PATCH",
+        headers: headersAdmin,
+        body: JSON.stringify({ creditos: nuevosCreditos })
+      });
+      if (nuevosCreditos === 0) {
+        const resumenUrl = new URL("/resumen-plan", request.url).toString();
+        fetch(resumenUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId }) }).catch(() => {});
+      }
+    } catch (e) {
+      console.error("No se pudo descontar el credito server-side:", e.message);
+    }
+
     // Registrar consumo de tokens para poder monitorear el gasto de la API
-    if (data.usage && headersAdmin) {
+    if (data.usage) {
       try {
         await fetch(`${SUPA_URL}/rest/v1/uso_tokens`, {
           method: "POST",
