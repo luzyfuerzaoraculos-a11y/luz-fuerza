@@ -1286,9 +1286,9 @@ function crearMesaDia(){
   mesa.innerHTML='';
   cartasDia=[...mazoCartasDia].sort(()=>Math.random()-.5).slice(0,7);
   const esMovil = window.innerWidth < 480;
-  const anchoCarta = esMovil ? 40 : 65;
-  const altoCarta = esMovil ? 66 : 105;
-  const overlapCarta = esMovil ? -20 : -14;
+  const anchoCarta = esMovil ? 50 : 65;
+  const altoCarta = esMovil ? 84 : 105;
+  const overlapCarta = esMovil ? -16 : -14;
   cartasDia.forEach((c,i)=>{
     const div=document.createElement('div');
     div.className='carta-boca-abajo';
