@@ -1053,7 +1053,8 @@ async function revelar(){
   const intervaloEspera=setInterval(function(){esperaIdx=(esperaIdx+1)%frasesEspera.length;interpDiv.textContent=frasesEspera[esperaIdx];},2600);
   const ct=tres.map((c,i)=>posiciones[i].nombre+": "+c.nombre+" ("+c.energia+")").join(", ");
   try{
-    const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area,pronombre:pronombreActual,userId:window.usuaria?window.usuaria.id:null})});
+    const { data: { session: sesionConsulta } } = await supa.auth.getSession();
+    const r=await fetch("/consultar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pregunta:ctx,cartas:ct,area,pronombre:pronombreActual,access_token:sesionConsulta?sesionConsulta.access_token:null})});
     const d=await r.json();
     clearInterval(intervaloEspera);
     interpDiv.textContent=d.respuesta||"El tarot necesita un momento. Intentá de nuevo.";
