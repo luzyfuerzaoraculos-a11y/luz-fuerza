@@ -1036,6 +1036,14 @@ function intentarRevelar(){
   if(esPreguntaCerrada(preg)){
     const campo=document.getElementById('contextoExtraInput');
     if(campo) campo.value='';
+    const subDiv=document.querySelector('#modalContextoExtra .auth-subtitulo');
+    if(subDiv){
+      const yaVisto=localStorage.getItem('avisoTarotVisto');
+      subDiv.textContent = yaVisto
+        ? 'Como ya sabés, el tarot no predice el futuro ni da certezas, pero te puede dar luz y una guía. Si querés, contanos: ¿cómo te sentís con esto? ¿qué camino te trajo hasta acá para preguntarlo? ¿qué es lo que más te moviliza?'
+        : 'Notamos que tu pregunta busca una respuesta de sí o no, y lo entendemos: cuando algo nos importa, queremos certezas. El tarot no predice el futuro ni te puede asegurar un resultado, pero sí puede darte luz y una guía para que tomes la decisión con más claridad. Para acompañarte mejor, contanos un poco más: ¿cómo te sentís con esto? ¿qué camino te trajo hasta acá para preguntarlo? ¿qué es lo que más te moviliza?';
+      localStorage.setItem('avisoTarotVisto','1');
+    }
     abrirModal('modalContextoExtra');
   } else {
     revelar('');
