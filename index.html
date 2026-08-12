@@ -363,7 +363,7 @@ h1{letter-spacing:3px;}
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
     <div id="tipPregunta" style="font-size:13.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:8px 0 0;"></div>
     <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
-    <button class="btn" id="btnRevelar" onclick="revelar()" disabled>🔀 Mezclar las cartas y consultar</button>
+    <button class="btn" id="btnRevelar" onclick="intentarRevelar()" disabled>🔀 Mezclar las cartas y consultar</button>
   </div>
   <div id="step3" style="display:none;">
     <button id="btnVolverPregunta" onclick="volverAPregunta()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:14px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
@@ -806,6 +806,17 @@ h1{letter-spacing:3px;}
   </div>
 </div>
 
+<div class="auth-overlay" id="modalContextoExtra">
+  <div class="auth-box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:1rem;">🔮</div>
+    <div class="auth-titulo">Antes de tirar las cartas...</div>
+    <div class="auth-subtitulo">El tarot no predice el futuro ni garantiza resultados — es una guía para acompañarte a decidir. Contanos un poco más para que la lectura tenga más sentido para vos: ¿cómo te sentís con esto? ¿es una instancia final o hay más pasos después? ¿qué es lo que más te moviliza?</div>
+    <textarea id="contextoExtraInput" rows="3" placeholder="Escribí lo que quieras contarnos (opcional)"></textarea>
+    <button class="auth-btn-primary" onclick="cerrarModales();revelar(document.getElementById('contextoExtraInput').value.trim())">Sumar esto y tirar las cartas</button>
+    <button class="auth-btn-secondary" onclick="cerrarModales();revelar('')">Tirar las cartas igual</button>
+  </div>
+</div>
+
 <div class="auth-overlay" id="modalPagoOk">
   <div class="auth-box" style="text-align:center;">
     <div style="font-size:32px;margin-bottom:1rem;">✨</div>
@@ -1015,7 +1026,22 @@ document.addEventListener('click', function(e){
 function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés mezclar las cartas y consultar";cnt.classList.add("ok");btn.disabled=false;}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;}}
 
 
-async function revelar(){
+function esPreguntaCerrada(txt){
+  const t=(txt||"").toLowerCase();
+  const patrones=[/\bva a\b/,/\bvan a\b/,/\bvoy a\b/,/\bvamos a\b/,/\bser[áa]\b/,/\bresultar[áa]\b/,/\bsaldr[áa]\b/,/\blogr(ar[ée]|o)\b/,/\bconsegu(ir[ée]|i)\b/,/\bgan(ar[ée]|o)\b/,/\bperd(er[ée]|i)\b/,/\baprob(ar[ée]|o)\b/,/\bme (elige|eligen|acepta|aceptan|dice que si|dice que no)\b/];
+  return patrones.some(p=>p.test(t));
+}
+function intentarRevelar(){
+  const preg=document.getElementById("pregunta").value.trim();
+  if(esPreguntaCerrada(preg)){
+    const campo=document.getElementById('contextoExtraInput');
+    if(campo) campo.value='';
+    abrirModal('modalContextoExtra');
+  } else {
+    revelar('');
+  }
+}
+async function revelar(contextoExtra){
   if(consultaEnCurso) return;
   consultaEnCurso=true;
   const btnRev=document.getElementById('btnRevelar');
@@ -1025,7 +1051,7 @@ async function revelar(){
   if(btnVolverPreg) btnVolverPreg.disabled=true;
   if(btnNuevaStep3) btnNuevaStep3.disabled=true;
   const preg=document.getElementById("pregunta").value.trim();
-  const ctx=preg;
+  const ctx=contextoExtra?preg+"\n\nContexto adicional que compartió la persona: "+contextoExtra:preg;
   document.getElementById("step1").style.display="none";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="block";
   if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:3}, '', '#consulta');
   const pMostrada=document.getElementById("preguntaMostrada");

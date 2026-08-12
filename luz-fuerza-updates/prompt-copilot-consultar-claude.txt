@@ -1,0 +1,25 @@
+Eres un desarrollador de backend revisando el archivo `functions/consultar.js` de un servicio de tarot.
+
+Tarea:
+1. Verificá que la generación del prompt para Claude sea correcta.
+2. Revisá el manejo de datos: `pregunta`, `area`, `cartas`, `pronombre`, `userId`.
+3. Revisá el manejo de errores y reintentos al llamar a Anthropic.
+4. Revisá la extracción de texto de la respuesta y el registro de uso de tokens.
+5. Si encontrás un problema, indicá qué cambiar y cómo corregirlo.
+
+Contexto clave:
+- La ruta POST `/consultar` recibe JSON con las claves `pregunta`, `area`, `cartas`, `pronombre`, `userId`.
+- Busca hasta 3 consultas anteriores del mismo usuario en Supabase para contexto previo.
+- Genera un prompt para el tarot que pide:
+  * Área
+  * Pregunta literal
+  * Cartas pasado/presente/futuro
+  * Instrucciones de género según `pronombre`
+  * 3 párrafos: situación actual, mensaje del tarot y acción concreta
+  * tono cálido, directo, de vos a vos
+  * sin markdown
+  * máximo 100 palabras
+- Usa la API de Claude con reintentos y retorna un mensaje amable si falla.
+- Si hay error definitivo, debe registrar el error y alertar por email sin bloquear la experiencia del usuario.
+
+Preguntá también si hay alguna mejora en el prompt para evitar respuestas genéricas o desconectadas de la pregunta literal.

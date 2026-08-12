@@ -39,17 +39,17 @@ padding:3rem 2rem 2.5rem;text-align:center;border-bottom:0.5px solid rgba(150,10
 .hero-contenido{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
 h1{font-family:"Marcellus",serif;font-size:36px;font-weight:600;color:#fff;letter-spacing:5px;position:relative;z-index:2;text-shadow:0 0 30px rgba(180,130,255,1),0 0 60px rgba(120,60,255,0.7);}
 .amp{color:#cc99ff;}
-.tagline{font-family:"Marcellus",serif;font-size:13px;color:rgba(230,210,255,0.95);letter-spacing:1.5px;margin-top:10px;position:relative;z-index:2;}
+.tagline{font-family:"Marcellus",serif;font-size:15px;color:rgba(230,210,255,0.95);letter-spacing:1.5px;margin-top:10px;position:relative;z-index:2;}
 
 nav{display:flex;justify-content:center;flex-wrap:wrap;background:rgba(8,4,20,0.92);border-bottom:0.5px solid rgba(150,100,255,0.2);position:relative;z-index:1;backdrop-filter:blur(10px);}
-nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(220,200,255,0.9);font-size:12px;font-family:"Marcellus",serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
+nav button{background:none;border:none;border-bottom:2px solid transparent;color:rgba(220,200,255,0.9);font-size:14px;font-family:"Marcellus",serif;cursor:pointer;padding:12px 16px;letter-spacing:0.5px;}
 nav button.active{color:#ffffff;border-bottom:2px solid #cc99ff;}
 
 main{max-width:700px;margin:0 auto;padding:1rem 1.5rem;background:rgba(10,14,26,0.85);min-height:60vh;position:relative;z-index:1;backdrop-filter:blur(8px);}
 .tab{display:none;}.tab.active{display:block;}
 
-.slabel{font-size:11px;letter-spacing:2.5px;color:#4a6fa5;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.snum{width:20px;height:20px;border-radius:50%;border:0.5px solid #4a6fa5;font-size:11px;color:#4a6fa5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.slabel{font-size:13px;letter-spacing:2.5px;color:#4a6fa5;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.snum{width:20px;height:20px;border-radius:50%;border:0.5px solid #4a6fa5;font-size:13px;color:#4a6fa5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hint{font-size:14px;color:#8baad4;margin-bottom:18px;line-height:1.6;}
 
 .chips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
@@ -57,12 +57,12 @@ main{max-width:700px;margin:0 auto;padding:1rem 1.5rem;background:rgba(10,14,26,
 .chip-card:hover,.chip-card.sel{border-color:#cc99ff;background:rgba(40,20,70,0.9);transform:translateY(-2px);box-shadow:0 4px 20px rgba(150,100,255,0.25);}
 .chip-icon{font-size:36px;transition:transform 0.25s ease;line-height:1;}
 .chip-card:hover .chip-icon,.chip-card.sel .chip-icon{transform:scale(1.2);}
-.chip-label{font-size:12px;color:#7bafd4;letter-spacing:0.5px;font-family:Georgia,serif;}
+.chip-label{font-size:14px;color:#7bafd4;letter-spacing:0.5px;font-family:Georgia,serif;}
 .chip-card.sel .chip-label{color:#ffffff;}
 
 textarea{width:100%;background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:16px;color:#c8d8f0;font-size:15px;resize:none;line-height:1.7;font-family:Georgia,serif;}
 textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4a6fa5;}
-.counter{font-size:12px;color:rgba(180,160,255,0.7);text-align:right;margin-top:6px;}.counter.ok{color:#4a6fa5;}
+.counter{font-size:14px;color:rgba(180,160,255,0.7);text-align:right;margin-top:6px;}.counter.ok{color:#4a6fa5;}
 .bprofunda{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
 .bprofunda p{font-size:14px;color:#8baad4;font-style:italic;line-height:1.7;}
 
@@ -70,7 +70,7 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 .btn:hover{background:rgba(22,32,53,0.9);box-shadow:0 4px 20px rgba(123,175,212,0.1);}
 .btn:disabled{opacity:0.4;cursor:not-allowed;}
 #btnVolverPregunta:disabled{opacity:0.35;cursor:not-allowed;}
-.btn-sm{display:inline-block;padding:10px 20px;background:none;border:0.5px solid #4a6fa5;border-radius:12px;color:#7bafd4;font-size:13px;cursor:pointer;font-family:Georgia,serif;margin-top:10px;}
+.btn-sm{display:inline-block;padding:10px 20px;background:none;border:0.5px solid #4a6fa5;border-radius:12px;color:#7bafd4;font-size:15px;cursor:pointer;font-family:Georgia,serif;margin-top:10px;}
 .btn-sm:hover{background:rgba(22,32,53,0.9);}
 
 .cartas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
@@ -87,38 +87,38 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 @keyframes cartaIn{from{opacity:0;transform:translateY(16px) scale(0.94);}to{opacity:1;transform:translateY(0) scale(1);}}
 .carta-in{animation:cartaIn 0.6s ease forwards;opacity:0;}
 .carta{background:rgba(8,5,20,0.92);border:1px solid rgba(150,100,255,0.4);border-radius:12px;padding:1.25rem 0.75rem;text-align:center;}
-.cpos{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;margin-bottom:12px;padding:4px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(130,70,255,0.95),rgba(80,30,200,0.95));box-shadow:0 0 12px rgba(120,60,255,0.45);}
+.cpos{display:inline-block;font-size:13px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;margin-bottom:12px;padding:4px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(130,70,255,0.95),rgba(80,30,200,0.95));box-shadow:0 0 12px rgba(120,60,255,0.45);}
 .cemoji{font-size:30px;margin-bottom:8px;}.cnombre{font-size:14px;color:#ffffff;margin-bottom:4px;font-weight:600;}
-.cpalo{font-size:10px;color:rgba(180,160,255,0.8);margin-bottom:6px;letter-spacing:1px;}
-.cenergia{font-size:12px;color:rgba(220,200,255,1);font-style:italic;margin-bottom:10px;line-height:1.4;}
-.cdesc{font-size:12px;color:rgba(220,210,255,0.95);line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.3);padding-top:10px;}
+.cpalo{font-size:12px;color:rgba(180,160,255,0.8);margin-bottom:6px;letter-spacing:1px;}
+.cenergia{font-size:14px;color:rgba(220,200,255,1);font-style:italic;margin-bottom:10px;line-height:1.4;}
+.cdesc{font-size:14px;color:rgba(220,210,255,0.95);line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.3);padding-top:10px;}
 .interp{background:rgba(15,22,40,0.85);border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.5rem;font-size:15px;line-height:1.9;color:#8baad4;font-style:italic;}
 
 .planes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .plan{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.5rem 1rem;text-align:center;}
 .plan.pop{border-color:#7bafd4;}
-.pbadge{font-size:12px;background:rgba(100,60,180,0.3);color:rgba(220,200,255,1);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;}
+.pbadge{font-size:14px;background:rgba(100,60,180,0.3);color:rgba(220,200,255,1);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;}
 .plan.pop .pbadge{background:#1e3055;color:#c8d8f0;}
 .pprecio{font-size:26px;color:#ffffff;margin-bottom:4px;}.pprecio span{font-size:14px;color:rgba(180,160,255,0.8);}
-.pitems{list-style:none;margin-top:12px;}.pitems li{font-size:12px;color:#5a7aaa;padding:5px 0;border-top:0.5px solid #1e2a45;}
+.pitems{list-style:none;margin-top:12px;}.pitems li{font-size:14px;color:#5a7aaa;padding:5px 0;border-top:0.5px solid #1e2a45;}
 
 .cfrow{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:2rem;}
 .cfcard{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem;}
 .histcard{background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem;text-align:left;}
 .histtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
-.histtipo{font-family:'Marcellus',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));padding:4px 12px;border-radius:20px;}
-.histfecha{font-family:'Montserrat',sans-serif;font-size:12px;color:rgba(180,160,255,0.6);}
+.histtipo{font-family:'Marcellus',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));padding:4px 12px;border-radius:20px;}
+.histfecha{font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(180,160,255,0.6);}
 .histpregunta{font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(220,200,255,0.9);font-style:italic;margin-bottom:8px;}
-.histcartas{font-family:'Marcellus',serif;font-size:13px;color:rgba(200,180,255,0.85);margin-bottom:8px;}
-.histinterp{font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(200,190,230,0.85);line-height:1.6;border-top:0.5px solid rgba(150,100,255,0.2);padding-top:10px;}
-.cfcard h3{font-size:14px;color:#ffffff;font-weight:400;margin-bottom:8px;}.cfcard p{font-size:13px;color:#5a7aaa;line-height:1.7;}.cfcard .icon{font-size:24px;margin-bottom:10px;}
+.histcartas{font-family:'Marcellus',serif;font-size:15px;color:rgba(200,180,255,0.85);margin-bottom:8px;}
+.histinterp{font-family:'Montserrat',sans-serif;font-size:15px;color:rgba(200,190,230,0.85);line-height:1.6;border-top:0.5px solid rgba(150,100,255,0.2);padding-top:10px;}
+.cfcard h3{font-size:14px;color:#ffffff;font-weight:400;margin-bottom:8px;}.cfcard p{font-size:15px;color:#5a7aaa;line-height:1.7;}.cfcard .icon{font-size:24px;margin-bottom:10px;}
 .hblock{margin-bottom:2rem;}.hblock h3{font-size:16px;color:#ffffff;font-weight:400;margin-bottom:10px;border-bottom:0.5px solid #1e2a45;padding-bottom:8px;}.hblock p{font-size:14px;color:#5a7aaa;line-height:1.8;margin-bottom:10px;}
 .arcanos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1rem;}
 .arcano-card{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:10px;padding:1rem;display:flex;gap:10px;align-items:flex-start;}
-.arcano-emoji{font-size:20px;flex-shrink:0;}.arcano-info h4{font-size:12px;color:rgba(210,185,255,0.95);margin-bottom:4px;}.arcano-info p{font-size:11px;color:#4a6fa5;line-height:1.5;}
+.arcano-emoji{font-size:20px;flex-shrink:0;}.arcano-info h4{font-size:14px;color:rgba(210,185,255,0.95);margin-bottom:4px;}.arcano-info p{font-size:13px;color:#4a6fa5;line-height:1.5;}
 .sobre{color:#5a7aaa;font-size:15px;line-height:1.9;}.sobre p{margin-bottom:1.25rem;}.sobre strong{color:rgba(210,185,255,0.95);font-weight:400;}
 
-footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0.5px solid #1e2a45;font-size:11px;color:#1e2a45;letter-spacing:1px;position:relative;z-index:1;}
+footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0.5px solid #1e2a45;font-size:13px;color:#1e2a45;letter-spacing:1px;position:relative;z-index:1;}
 
 /* LAYOUT CON COSTADOS */
 
@@ -136,7 +136,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 /* CARTA DEL DIA */
 .mesa-cartas{display:flex;justify-content:center;align-items:flex-end;min-height:160px;padding:2rem 1rem 1.5rem;flex-wrap:nowrap;overflow:visible;transition:opacity 0.35s ease, transform 0.35s ease;}
 .mesa-cartas.mezclando{opacity:0;transform:scale(0.92) translateY(6px);}
-.btn-mezclar-dia{margin-bottom:0.5rem;padding:9px 22px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.8);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
+.btn-mezclar-dia{margin-bottom:0.5rem;padding:9px 22px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.8);font-family:'Marcellus',serif;font-size:14px;cursor:pointer;letter-spacing:1px;display:inline-block;}
 .btn-mezclar-dia:hover{border-color:#8855ff;color:#c8b8ff;}
 .btn-mezclar-dia:disabled{opacity:0.5;cursor:default;}
 @media(max-width:480px){.carta-boca-abajo{width:55px;height:90px;}.carta-boca-abajo::after{font-size:14px;}}
@@ -151,13 +151,13 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .cf-img{width:120px;border-radius:10px;margin-bottom:10px;display:block;}
 .cf-nombre{font-family:'Marcellus',serif;font-size:16px;color:#ffffff;margin-bottom:4px;}
 .cf-palo{font-family:'Marcellus',serif;font-size:9px;color:rgba(200,180,255,0.9);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.cf-energia{font-size:13px;color:rgba(220,200,255,0.95);font-style:italic;margin-bottom:12px;line-height:1.5;}
-.cf-desc{font-size:12px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
-.cf-consejo{font-size:13px;color:rgba(230,215,255,0.98);font-style:italic;line-height:1.7;margin-bottom:12px;border-top:0.5px solid rgba(150,100,255,0.3);padding-top:10px;}
+.cf-energia{font-size:15px;color:rgba(220,200,255,0.95);font-style:italic;margin-bottom:12px;line-height:1.5;}
+.cf-desc{font-size:14px;color:#8888aa;line-height:1.7;border-top:0.5px solid rgba(150,100,255,0.15);padding-top:10px;}
+.cf-consejo{font-size:15px;color:rgba(230,215,255,0.98);font-style:italic;line-height:1.7;margin-bottom:12px;border-top:0.5px solid rgba(150,100,255,0.3);padding-top:10px;}
 .cf-bloque{margin-top:10px;text-align:left;}
 .cf-label{display:block;font-family:'Marcellus',serif;font-size:9px;letter-spacing:1.5px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:4px;}
-.cf-texto{display:block;font-size:12px;color:rgba(220,210,255,0.95);line-height:1.6;}
-.btn-nueva-carta{margin-top:1rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;letter-spacing:1px;display:inline-block;}
+.cf-texto{display:block;font-size:14px;color:rgba(220,210,255,0.95);line-height:1.6;}
+.btn-nueva-carta{margin-top:1rem;padding:10px 24px;background:none;border:0.5px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(150,120,255,0.7);font-family:'Marcellus',serif;font-size:14px;cursor:pointer;letter-spacing:1px;display:inline-block;}
 .btn-nueva-carta:hover{border-color:#8855ff;color:#c8b8ff;}
 
 /* AUTH MODALES */
@@ -167,7 +167,7 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .auth-titulo{font-family:"Marcellus",serif;font-size:18px;color:#fff;letter-spacing:2px;margin-bottom:0.5rem;text-align:center;text-shadow:0 0 20px rgba(150,100,255,0.8);}
 .auth-subtitulo{font-family:"Montserrat",sans-serif;font-size:15px;color:rgba(235,220,255,0.98);text-align:center;margin-bottom:1.5rem;line-height:1.6;}
 .auth-campo{margin-bottom:1rem;}
-.auth-label{font-family:"Marcellus",serif;font-size:10px;letter-spacing:1.5px;color:rgba(200,170,255,0.9);text-transform:uppercase;display:block;margin-bottom:6px;}
+.auth-label{font-family:"Marcellus",serif;font-size:12px;letter-spacing:1.5px;color:rgba(200,170,255,0.9);text-transform:uppercase;display:block;margin-bottom:6px;}
 .auth-input{width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.4);border-radius:8px;padding:10px 14px;color:#e8e0ff;font-family:"Montserrat",sans-serif;font-size:15px;}
 .auth-input:focus{outline:none;border-color:rgba(150,100,255,0.6);}
 .pass-wrap{position:relative;}
@@ -179,26 +179,26 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .auth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .auth-row .auth-campo{min-width:0;}
 .auth-row .auth-input{min-width:0;}
-.auth-btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Marcellus",serif;font-size:13px;cursor:pointer;letter-spacing:1px;margin-top:1rem;box-shadow:0 0 20px rgba(120,60,255,0.3);}
+.auth-btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Marcellus",serif;font-size:15px;cursor:pointer;letter-spacing:1px;margin-top:1rem;box-shadow:0 0 20px rgba(120,60,255,0.3);}
 .auth-btn-primary:hover{box-shadow:0 0 30px rgba(150,80,255,0.5);}
-.auth-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Marcellus",serif;font-size:11px;cursor:pointer;margin-top:8px;letter-spacing:0.5px;}
+.auth-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Marcellus",serif;font-size:13px;cursor:pointer;margin-top:8px;letter-spacing:0.5px;}
 .auth-btn-secondary:hover{border-color:rgba(150,100,255,0.6);color:#c8b8ff;}
-.auth-error{font-family:"Montserrat",sans-serif;font-size:13px;color:rgba(255,100,100,0.8);text-align:center;margin-top:8px;display:none;}
-.auth-link{font-family:"Montserrat",sans-serif;font-size:13px;color:rgba(200,180,255,0.9);text-align:center;margin-top:1rem;cursor:pointer;}
+.auth-error{font-family:"Montserrat",sans-serif;font-size:15px;color:rgba(255,100,100,0.8);text-align:center;margin-top:8px;display:none;}
+.auth-link{font-family:"Montserrat",sans-serif;font-size:15px;color:rgba(200,180,255,0.9);text-align:center;margin-top:1rem;cursor:pointer;}
 .auth-link span{color:#c8b8ff;text-decoration:underline;}
 .auth-optional{font-family:"Marcellus",serif;font-size:9px;color:rgba(100,80,150,0.5);letter-spacing:1px;margin-left:6px;}
 
 /* HEADER USUARIO LOGUEADO */
 .user-bar{position:relative;z-index:2;display:none;align-items:center;gap:10px;margin-top:14px;background:rgba(20,10,45,0.55);border:0.5px solid rgba(150,100,255,0.25);border-radius:30px;padding:6px 16px 6px 6px;}
 .user-bar.visible{display:flex;}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,rgba(150,100,255,1),rgba(90,40,210,1));color:#fff;font-family:"Marcellus",serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(150,100,255,0.5);flex-shrink:0;}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,rgba(150,100,255,1),rgba(90,40,210,1));color:#fff;font-family:"Marcellus",serif;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(150,100,255,0.5);flex-shrink:0;}
 .user-nombre{font-family:"Marcellus",serif;font-size:14px;color:#fff;letter-spacing:0.5px;font-weight:600;}
-.user-creditos{font-family:"Montserrat",sans-serif;font-size:11px;color:rgba(150,220,150,0.9);background:rgba(0,100,50,0.15);border:0.5px solid rgba(0,150,80,0.35);border-radius:20px;padding:4px 12px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.btn-logout{font-family:"Marcellus",serif;font-size:11px;color:rgba(210,190,255,0.85);background:rgba(150,100,255,0.12);border:0.5px solid rgba(150,100,255,0.4);border-radius:20px;padding:4px 12px;cursor:pointer;letter-spacing:0.5px;}
-.btn-historial{font-family:"Marcellus",serif;font-size:11px;color:rgba(200,220,255,0.9);background:rgba(90,60,220,0.18);border:0.5px solid rgba(150,130,255,0.45);border-radius:20px;padding:4px 12px;cursor:pointer;letter-spacing:0.3px;white-space:nowrap;}
+.user-creditos{font-family:"Montserrat",sans-serif;font-size:13px;color:rgba(150,220,150,0.9);background:rgba(0,100,50,0.15);border:0.5px solid rgba(0,150,80,0.35);border-radius:20px;padding:4px 12px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.btn-logout{font-family:"Marcellus",serif;font-size:13px;color:rgba(210,190,255,0.85);background:rgba(150,100,255,0.12);border:0.5px solid rgba(150,100,255,0.4);border-radius:20px;padding:4px 12px;cursor:pointer;letter-spacing:0.5px;}
+.btn-historial{font-family:"Marcellus",serif;font-size:13px;color:rgba(200,220,255,0.9);background:rgba(90,60,220,0.18);border:0.5px solid rgba(150,130,255,0.45);border-radius:20px;padding:4px 12px;cursor:pointer;letter-spacing:0.3px;white-space:nowrap;}
 .btn-historial:hover{color:#fff;border-color:rgba(150,130,255,0.75);background:rgba(120,80,255,0.3);}
 .btn-logout:hover{color:#fff;border-color:rgba(150,100,255,0.7);background:rgba(150,100,255,0.25);}
-.btn-mp{display:block;width:100%;padding:12px 24px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:'Marcellus',serif;font-size:13px;text-align:center;text-decoration:none;letter-spacing:0.5px;cursor:pointer;margin-top:14px;box-sizing:border-box;transition:all 0.2s;}
+.btn-mp{display:block;width:100%;padding:12px 24px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:'Marcellus',serif;font-size:15px;text-align:center;text-decoration:none;letter-spacing:0.5px;cursor:pointer;margin-top:14px;box-sizing:border-box;transition:all 0.2s;}
 .btn-mp-pop{box-shadow:0 0 22px rgba(120,60,255,0.5);}
 .btn-mp:disabled{opacity:0.5;cursor:default;}
 @media(max-width:520px){.user-bar{flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;padding:10px 14px;}.user-creditos{max-width:88vw;white-space:normal;overflow:visible;text-overflow:clip;text-align:center;line-height:1.4;}.user-nombre{text-align:center;}}
@@ -231,21 +231,21 @@ footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0
 .modal-check{font-family:"Montserrat",sans-serif;font-size:14px;color:rgba(180,160,255,0.7);display:flex;align-items:center;gap:8px;}
 .modal-btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:"Marcellus",serif;font-size:14px;cursor:pointer;letter-spacing:1px;box-shadow:0 0 25px rgba(120,60,255,0.4);margin-bottom:10px;}
 .modal-btn-primary:hover{box-shadow:0 0 35px rgba(150,80,255,0.6);transform:translateY(-1px);}
-.modal-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Marcellus",serif;font-size:12px;cursor:pointer;letter-spacing:0.5px;}
+.modal-btn-secondary{width:100%;padding:10px;background:none;border:0.5px solid rgba(150,100,255,0.3);border-radius:30px;color:rgba(150,120,255,0.6);font-family:"Marcellus",serif;font-size:14px;cursor:pointer;letter-spacing:0.5px;}
 .modal-btn-secondary:hover{border-color:rgba(150,100,255,0.6);color:#c8b8ff;}
-.modal-sub{font-family:"Montserrat",sans-serif;font-size:12px;color:rgba(120,100,200,0.5);margin-top:12px;font-style:italic;}
-@media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:11px;}}
+.modal-sub{font-family:"Montserrat",sans-serif;font-size:14px;color:rgba(120,100,200,0.5);margin-top:12px;font-style:italic;}
+@media(max-width:500px){.cartas,.planes,.cfrow,.arcanos-grid{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(2,1fr);}h1{font-size:24px;}nav button{padding:10px 10px;font-size:13px;}}
 @media(max-width:600px){
 .hero{padding:1.8rem 1.2rem 1.8rem;min-height:auto;}
 .hero-icon-wrap{margin-bottom:0.6rem!important;}
 .hero-icon-svg{width:56px!important;height:56px!important;}
 h1{letter-spacing:3px;}
-.tagline{font-size:11px;margin-top:6px;}
+.tagline{font-size:13px;margin-top:6px;}
 .hero-subcopy{margin-top:0.9rem!important;}
 .hero-subcopy-text{font-size:14px!important;margin-bottom:0.7rem!important;line-height:1.5!important;}
 .hero-checklist{margin-bottom:0.7rem!important;gap:5px 12px!important;}
-.hero-checklist>div{font-size:11px!important;color:rgba(225,215,255,0.95)!important;}
-#heroGratisBadge{font-size:11px!important;padding:5px 14px!important;margin-bottom:10px!important;}
+.hero-checklist>div{font-size:13px!important;color:rgba(225,215,255,0.95)!important;}
+#heroGratisBadge{font-size:13px!important;padding:5px 14px!important;margin-bottom:10px!important;}
 }
 </style>
 </head>
@@ -308,26 +308,26 @@ h1{letter-spacing:3px;}
     <div class="hero-subcopy-text" style="font-family:'Montserrat',sans-serif;font-size:17px;color:rgba(200,180,255,0.85);line-height:1.7;margin-bottom:1.25rem;">Descubrí el mensaje que las cartas tienen para vos.</div>
     <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;align-items:center;max-width:220px;">
-        <button onclick="irOpcionHero('cartadia')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">🔮 Sacar mi carta del día</button>
-        <div style="font-family:'Montserrat',sans-serif;font-size:11.5px;color:rgba(190,175,230,0.7);margin-top:8px;line-height:1.4;min-height:32px;display:flex;align-items:flex-start;justify-content:center;text-align:center;">Tu carta del día, en un click.</div>
+        <button onclick="irOpcionHero('cartadia')" style="font-family:'Marcellus',serif;font-size:15px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">🔮 Sacar mi carta del día</button>
+        <div style="font-family:'Montserrat',sans-serif;font-size:13.5px;color:rgba(190,175,230,0.7);margin-top:8px;line-height:1.4;min-height:32px;display:flex;align-items:flex-start;justify-content:center;text-align:center;">Tu carta del día, en un click.</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;max-width:220px;">
-        <button onclick="irOpcionHero('consulta')" style="font-family:'Marcellus',serif;font-size:13px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">✨ Hacer una consulta</button>
-        <div style="font-family:'Montserrat',sans-serif;font-size:11.5px;color:rgba(190,175,230,0.7);margin-top:8px;line-height:1.4;min-height:32px;display:flex;align-items:flex-start;justify-content:center;text-align:center;">Una lectura de 3 cartas sobre tu pregunta.</div>
+        <button onclick="irOpcionHero('consulta')" style="font-family:'Marcellus',serif;font-size:15px;padding:13px 22px;width:210px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:16px;color:#fff;cursor:pointer;letter-spacing:0.5px;box-shadow:0 0 25px rgba(120,60,255,0.4),0 0 50px rgba(80,20,200,0.2);white-space:normal;box-sizing:border-box;">✨ Hacer una consulta</button>
+        <div style="font-family:'Montserrat',sans-serif;font-size:13.5px;color:rgba(190,175,230,0.7);margin-top:8px;line-height:1.4;min-height:32px;display:flex;align-items:flex-start;justify-content:center;text-align:center;">Una lectura de 3 cartas sobre tu pregunta.</div>
       </div>
     </div>
     <div class="cta-box">
       <div class="auth-link" onclick="abrirModal('modalLogin')" style="margin-top:12px;">¿Ya tenés cuenta? <span>Iniciá sesión</span></div>
     </div>
-    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos.</div>
-    <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgba(255,205,150,0.95);background:rgba(255,175,70,0.1);border:1px solid rgba(255,175,70,0.45);padding:5px 16px;border-radius:20px;margin-top:16px;letter-spacing:0.3px;">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:15px;color:rgba(150,120,255,0.5);margin-top:10px;font-style:italic;">Elegí el plan que mejor se adapte a vos.</div>
+    <div id="heroGratisBadge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgba(255,205,150,0.95);background:rgba(255,175,70,0.1);border:1px solid rgba(255,175,70,0.45);padding:5px 16px;border-radius:20px;margin-top:16px;letter-spacing:0.3px;">🎁 Tu primera carta del día y tu primera consulta son gratis</div>
   </div>
 </header>
 
 <div class="hero-checklist" style="position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 24px;padding:16px 20px;background:rgba(120,70,220,0.12);border-top:1px solid rgba(180,140,255,0.2);border-bottom:1px solid rgba(180,140,255,0.2);">
-  <div style="font-family:'Marcellus',serif;font-size:13px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
-  <div style="font-family:'Marcellus',serif;font-size:13px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
-  <div style="font-family:'Marcellus',serif;font-size:13px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Carta del día según tu plan</div>
+  <div style="font-family:'Marcellus',serif;font-size:15px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Disponible 24/7</div>
+  <div style="font-family:'Marcellus',serif;font-size:15px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Interpretaciones personalizadas</div>
+  <div style="font-family:'Marcellus',serif;font-size:15px;color:rgba(225,215,255,0.95);display:flex;align-items:center;gap:6px;">✅ Carta del día según tu plan</div>
 </div>
 
 <nav>
@@ -356,16 +356,16 @@ h1{letter-spacing:3px;}
     </div>
   </div>
   <div id="step2" style="display:none;">
-    <button onclick="volverAArea()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver al área</button>
+    <button onclick="volverAArea()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:14px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver al área</button>
     <div class="slabel"><div class="snum">2</div>Tu pregunta</div>
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
-    <div id="tipPregunta" style="font-size:11.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:8px 0 0;"></div>
+    <div id="tipPregunta" style="font-size:13.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:8px 0 0;"></div>
     <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
     <button class="btn" id="btnRevelar" onclick="revelar()" disabled>🔀 Mezclar las cartas y consultar</button>
   </div>
   <div id="step3" style="display:none;">
-    <button id="btnVolverPregunta" onclick="volverAPregunta()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:12px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
+    <button id="btnVolverPregunta" onclick="volverAPregunta()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:14px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver a la pregunta</button>
     <div class="slabel"><div class="snum">3</div>Tu tirada</div>
     <div class="cartas" id="cartas"></div>
     <div class="slabel" style="margin-top:1.5rem;"><div class="snum">4</div>Interpretación</div>
@@ -377,8 +377,8 @@ h1{letter-spacing:3px;}
 
 <div id="tab-cartadia" class="tab">
   <div style="text-align:center;padding:0.5rem 0 0;overflow:visible;">
-    <div style="font-family:'Marcellus',serif;font-size:11px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
-    <div style="font-family:'Montserrat',sans-serif;font-size:13.5px;color:rgba(200,185,235,0.8);max-width:480px;margin:0 auto 14px;line-height:1.7;">Una tirada simple: te da un mensaje de orientación para tu momento actual. Mirá las cartas y elegí la que sientas que es para vos.</div>
+    <div style="font-family:'Marcellus',serif;font-size:13px;letter-spacing:2.5px;color:rgba(150,100,255,0.6);text-transform:uppercase;margin-bottom:10px;">Carta del Día</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:15.5px;color:rgba(200,185,235,0.8);max-width:480px;margin:0 auto 14px;line-height:1.7;">Una tirada simple: te da un mensaje de orientación para tu momento actual. Mirá las cartas y elegí la que sientas que es para vos.</div>
     <div style="font-family:'Montserrat',sans-serif;font-size:16px;color:rgba(180,160,255,0.7);margin-bottom:8px;line-height:1.6;" id="instruccionDia">Tocá la carta que sentís que es para vos...</div>
     <button class="btn-mezclar-dia" id="btnMezclarDia" onclick="mezclarCartasDia()">🔀 Mezclar las cartas</button>
     <div id="mesaDia" class="mesa-cartas"></div>
@@ -458,7 +458,7 @@ h1{letter-spacing:3px;}
 
 <div id="tab-planes" class="tab">
   <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
-  <div style="font-family:'Montserrat',sans-serif;font-size:12.5px;color:rgba(210,195,240,0.85);line-height:1.6;background:rgba(120,70,220,0.1);border:1px solid rgba(150,100,255,0.25);border-radius:12px;padding:14px 16px;margin-bottom:1.5rem;">
+  <div style="font-family:'Montserrat',sans-serif;font-size:14.5px;color:rgba(210,195,240,0.85);line-height:1.6;background:rgba(120,70,220,0.1);border:1px solid rgba(150,100,255,0.25);border-radius:12px;padding:14px 16px;margin-bottom:1.5rem;">
     <strong style="color:#fff;">Importante:</strong> esto es tarot exprés — una carta del día y/o preguntas específicas. Si necesitás profundizar, te recomendamos agendar una sesión por videollamada con nuestra tarotista Pato Escobar.
     <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
       <a href="https://patoescobar.com/" target="_blank" style="color:#b28dff;font-weight:600;text-decoration:underline;">Te dejamos su sitio para que conozcas su trayectoria →</a>
@@ -466,7 +466,7 @@ h1{letter-spacing:3px;}
     </div>
   </div>
   
-  <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:12px;">Consulta de tarot · 3 cartas</div>
+  <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin-bottom:12px;">Consulta de tarot · 3 cartas</div>
   <div class="planes">
     <div class="plan">
       <div class="pbadge">Consulta</div>
@@ -501,7 +501,7 @@ h1{letter-spacing:3px;}
     </div>
   </div>
 
-  <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Carta del día · 1 carta</div>
+  <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Carta del día · 1 carta</div>
   <div class="planes" style="grid-template-columns:1fr;">
     <div class="plan">
       <div class="pbadge">Carta del día</div>
@@ -515,7 +515,7 @@ h1{letter-spacing:3px;}
     </div>
   </div>
 
-  <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Combo promocional</div>
+  <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:2px;color:rgba(200,180,255,0.9);text-transform:uppercase;margin:1.5rem 0 12px;">Combo promocional</div>
   <div class="planes" style="grid-template-columns:1fr;">
     <div class="plan">
       <div class="pbadge">Consulta + Carta del día</div>
@@ -532,7 +532,7 @@ h1{letter-spacing:3px;}
   <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.8);text-align:center;margin-top:1.5rem;font-style:italic;">Primera consulta gratis con tu registro</div>
 
   <div id="bloquePlanesPrueba" style="margin-top:2.5rem;">
-    <div style="font-family:'Marcellus',serif;font-size:10px;letter-spacing:2px;color:rgba(255,180,120,0.9);text-transform:uppercase;margin-bottom:12px;">⚠ Modo prueba — mismos planes, precio simbólico</div>
+    <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:2px;color:rgba(255,180,120,0.9);text-transform:uppercase;margin-bottom:12px;">⚠ Modo prueba — mismos planes, precio simbólico</div>
     <div class="planes">
       <div class="plan">
         <div class="pbadge">Consulta (prueba)</div>
@@ -579,17 +579,17 @@ h1{letter-spacing:3px;}
   <div style="background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:2rem;max-width:500px;margin:2rem auto 0;text-align:center;">
     <div style="font-size:32px;margin-bottom:0.5rem;">🔮</div>
     <div style="font-family:'Marcellus',serif;font-size:16px;color:#fff;margin-bottom:0.5rem;">Pato Escobar, nuestra tarotista de cabecera</div>
-    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(210,190,255,0.8);line-height:1.6;margin-bottom:1.25rem;">La sabiduría detrás de estas lecturas también vive fuera de la pantalla. Pato es tarotista y astróloga, y acompaña procesos personales con sesiones 1:1.</div>
-    <a href="https://patoescobar.com/" target="_blank" style="display:inline-block;padding:11px 28px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:'Marcellus',serif;font-size:13px;text-decoration:none;letter-spacing:0.5px;">Conocé su trabajo</a>
+    <div style="font-family:'Montserrat',sans-serif;font-size:15px;color:rgba(210,190,255,0.8);line-height:1.6;margin-bottom:1.25rem;">La sabiduría detrás de estas lecturas también vive fuera de la pantalla. Pato es tarotista y astróloga, y acompaña procesos personales con sesiones 1:1.</div>
+    <a href="https://patoescobar.com/" target="_blank" style="display:inline-block;padding:11px 28px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;font-family:'Marcellus',serif;font-size:15px;text-decoration:none;letter-spacing:0.5px;">Conocé su trabajo</a>
   </div>
 
   <div style="background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:2rem;max-width:500px;margin:2rem auto 0;text-align:center;">
     <div style="font-size:32px;margin-bottom:0.5rem;">✦</div>
     <div style="font-family:'Marcellus',serif;font-size:16px;color:#fff;margin-bottom:0.5rem;">Somos 3 amigas, las 3 número 9 de arcano de vida</div>
-    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(210,190,255,0.8);line-height:1.6;margin-bottom:1.25rem;">Dejanos tu fecha de nacimiento y descubrí tu número de guía.</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:15px;color:rgba(210,190,255,0.8);line-height:1.6;margin-bottom:1.25rem;">Dejanos tu fecha de nacimiento y descubrí tu número de guía.</div>
     <input type="date" id="fechaGuia" style="width:100%;background:rgba(20,10,40,0.8);border:0.5px solid rgba(150,100,255,0.4);border-radius:8px;padding:10px 14px;color:#e8e0ff;font-family:'Montserrat',sans-serif;font-size:14px;margin-bottom:1rem;">
     <br>
-    <button onclick="calcularNumeroGuia()" style="font-family:'Marcellus',serif;font-size:13px;padding:11px 28px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:0.5px;">Descubrir mi número de guía</button>
+    <button onclick="calcularNumeroGuia()" style="font-family:'Marcellus',serif;font-size:15px;padding:11px 28px;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));border:1px solid rgba(180,140,255,0.6);border-radius:30px;color:#fff;cursor:pointer;letter-spacing:0.5px;">Descubrir mi número de guía</button>
     <div id="resultadoGuia" style="display:none;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(150,100,255,0.2);">
       <div id="guiaEmoji" style="font-size:36px;margin-bottom:0.5rem;"></div>
       <div id="guiaNombre" style="font-family:'Marcellus',serif;font-size:18px;color:#fff;margin-bottom:0.5rem;"></div>
@@ -608,13 +608,13 @@ h1{letter-spacing:3px;}
     <div style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgba(210,190,255,0.9);line-height:1.7;margin-bottom:1.5rem;">
       Si tenés dudas sobre tu cuenta, un pago o el funcionamiento del sitio, escribinos por email o por WhatsApp.
     </div>
-    <a href="mailto:contacto@tarotluzyfuerza.com.ar" style="display:block;padding:12px 24px;background:rgba(100,60,180,0.3);border:1px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(220,200,255,0.9);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;margin-bottom:12px;">
+    <a href="mailto:contacto@tarotluzyfuerza.com.ar" style="display:block;padding:12px 24px;background:rgba(100,60,180,0.3);border:1px solid rgba(150,100,255,0.4);border-radius:30px;color:rgba(220,200,255,0.9);font-family:'Marcellus',serif;font-size:15px;text-decoration:none;margin-bottom:12px;">
       ✉ contacto@tarotluzyfuerza.com.ar
     </a>
-    <a href="https://wa.me/5491128295352" target="_blank" style="display:block;padding:12px 24px;background:rgba(0,100,50,0.2);border:1px solid rgba(0,180,80,0.3);border-radius:30px;color:rgba(0,220,100,0.8);font-family:'Marcellus',serif;font-size:13px;text-decoration:none;">
+    <a href="https://wa.me/5491128295352" target="_blank" style="display:block;padding:12px 24px;background:rgba(0,100,50,0.2);border:1px solid rgba(0,180,80,0.3);border-radius:30px;color:rgba(0,220,100,0.8);font-family:'Marcellus',serif;font-size:15px;text-decoration:none;">
       💬 Escribinos por WhatsApp
     </a>
-    <div style="font-family:'Montserrat',sans-serif;font-size:11px;color:rgba(150,120,255,0.4);margin-top:1.5rem;font-style:italic;">Respondemos en menos de 24 horas</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(150,120,255,0.4);margin-top:1.5rem;font-style:italic;">Respondemos en menos de 24 horas</div>
   </div>
 </div>
 
@@ -688,7 +688,7 @@ h1{letter-spacing:3px;}
     </div>
     <div class="auth-error" id="login-error"></div>
     <button class="auth-btn-primary" id="btnLogin" onclick="iniciarSesion()">Entrar</button>
-    <div class="auth-link" onclick="olvidoPassword()" style="margin-top:6px;font-size:12px;color:rgba(180,160,255,0.6);">¿Olvidaste tu contraseña? <span>Recuperar</span></div>
+    <div class="auth-link" onclick="olvidoPassword()" style="margin-top:6px;font-size:14px;color:rgba(180,160,255,0.6);">¿Olvidaste tu contraseña? <span>Recuperar</span></div>
     <div class="auth-link" onclick="switchModal('login','registro')">¿No tenés cuenta? <span>Registrate gratis</span></div>
     <button class="auth-btn-secondary" onclick="cerrarModales()">Cancelar</button>
   </div>
@@ -1482,7 +1482,7 @@ window.cargarMisPlanes = async function(){
   const cont = document.getElementById('misPlanesLista');
   if(!cont || !window.usuaria) { if(cont) cont.innerHTML=''; return; }
   const cabeceraFn = function(titulo){
-    return '<div class="slabel" style="margin-bottom:0.75rem;cursor:pointer;user-select:none;" onclick="toggleMisPlanes()"><div class="snum">💳</div>' + titulo + '<span id="misPlanesFlecha" style="margin-left:auto;font-size:12px;">▸</span></div>';
+    return '<div class="slabel" style="margin-bottom:0.75rem;cursor:pointer;user-select:none;" onclick="toggleMisPlanes()"><div class="snum">💳</div>' + titulo + '<span id="misPlanesFlecha" style="margin-left:auto;font-size:14px;">▸</span></div>';
   };
   const { data, error } = await supa
     .from('pagos_procesados')

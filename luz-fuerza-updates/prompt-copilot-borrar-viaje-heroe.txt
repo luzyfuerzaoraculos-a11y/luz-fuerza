@@ -1,0 +1,25 @@
+En index.html, hacé este reemplazo exacto (buscar el texto EXACTO de "BUSCAR" y reemplazarlo por "REEMPLAZAR"). No toques nada más del archivo. Es para borrar todo el bloque "El viaje del héroe" de la sección "Conocé las cartas", dejando que empiece directo en "Los 22 arcanos mayores".
+
+BUSCAR (texto exacto):
+<div id="tab-historia" class="tab">
+  <div class="hblock">
+    <h3>El viaje del héroe</h3>
+    <p>Les presentamos una síntesis del viaje del héroe a través de los 22 arcanos mayores del tarot, desde El Loco a El Mundo, que podríamos sintetizar así:</p>
+    <p style="margin-bottom:16px;">
+      <strong style="color:#c9a5ff;">Desde el amor</strong> a la alegría<br>
+      <strong style="color:#c9a5ff;">Desde el amanecer</strong> al anochecer<br>
+      <strong style="color:#c9a5ff;">Desde el inicio</strong> al fin<br>
+      <strong style="color:#c9a5ff;">Desde el todo</strong> y la nada<br>
+      <strong style="color:#c9a5ff;">Desde las frases</strong>
+    </p>
+    <p style="margin-bottom:16px;">Vivimos múltiples experiencias, momentos e instantes que nos proponen conectar con el aprendizaje interno y externo al mismo tiempo; y el tarot puede ser una guía para orientar tu danzar, tu camino de vida y tus decisiones conscientes.</p>
+    <p style="margin-bottom:16px;">¿Registrás tu manera de bailar?<br>¿Escuchás tu música?<br>¿Sentís el ritmo?<br>¿Expresás?</p>
+    <p style="font-style:italic;color:#8fb3e0;">"Sólo se vive de veras cuando se baila" (Isadora Duncan) — página 667 en Los Arcanos Mayores del Tarot, ed. Herder.</p>
+  </div>
+  <div class="hblock"><h3>Los 22 arcanos mayores</h3><p>El viaje del Loco al Mundo es el viaje de toda alma humana.</p>
+
+REEMPLAZAR POR:
+<div id="tab-historia" class="tab">
+  <div class="hblock"><h3>Los 22 arcanos mayores</h3><p>El viaje del Loco al Mundo es el viaje de toda alma humana.</p>
+
+Guardá, hacé commit con el mensaje "Sacar bloque El viaje del héroe de Conocé las cartas" y hacé push a master. Si el BUSCAR no se encuentra exactamente, decime para ajustarlo.
