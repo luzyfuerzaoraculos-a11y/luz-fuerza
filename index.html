@@ -904,7 +904,7 @@ function stepActualConsulta(){
   return 1;
 }
 
-function showTab(t,el){
+function showTab(t,el,silencioso){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   document.getElementById("tab-"+t).classList.add("active");
@@ -923,17 +923,21 @@ function showTab(t,el){
       const mesa=document.getElementById('mesaDia');
       if(mesa){mesa.style.display='flex';mesa.innerHTML='';}
       if(typeof crearMesaDia==='function')crearMesaDia();
-      const navEl=document.querySelector('nav');
-      if(navEl) navEl.scrollIntoView({block:'start'});
+      if(!silencioso){
+        const navEl=document.querySelector('nav');
+        if(navEl) navEl.scrollIntoView({block:'start'});
+      }
     },100);
   } else if(t){
     const tabActual=document.getElementById('tab-'+t);
     if(tabActual) tabActual.style.minHeight='100vh';
-    setTimeout(function(){
-      const navEl=document.querySelector('nav');
-      if(navEl) navEl.scrollIntoView({block:'start'});
-    },50);
-  } else {
+    if(!silencioso){
+      setTimeout(function(){
+        const navEl=document.querySelector('nav');
+        if(navEl) navEl.scrollIntoView({block:'start'});
+      },50);
+    }
+  } else if(!silencioso){
     window.scrollTo(0,0);
   }
   if(t==='historial' && typeof window.cargarHistorial==='function'){
@@ -941,7 +945,7 @@ function showTab(t,el){
     if(typeof window.cargarMiCamino==='function') window.cargarMiCamino();
     if(typeof window.cargarMisPlanes==='function') window.cargarMisPlanes();
   }
-  if(!navegandoPorHistorial){
+  if(!navegandoPorHistorial && !silencioso){
     history.pushState({tab:t, step:t==='consulta'?stepActualConsulta():1}, '', '#'+t);
   }
 }
@@ -2022,6 +2026,9 @@ window.addEventListener('load', async function(){
   });
   initAuth();
   chequearPagoOk();
+  if(!document.querySelector('.tab.active')){
+    showTab('cartadia', document.querySelectorAll('nav button')[0], true);
+  }
 });
 
 window.pagar = async function(plan){
