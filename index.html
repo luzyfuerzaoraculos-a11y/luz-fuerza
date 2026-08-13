@@ -1319,7 +1319,7 @@ let cartaDiaElegida=false;
 
 let cartasDia=[];
 
-function crearMesaDia(){
+function crearMesaDia(animarEntrada){
   const mesa=document.getElementById('mesaDia');
   if(!mesa)return;
   mesa.innerHTML='';
@@ -1331,22 +1331,31 @@ function crearMesaDia(){
   cartasDia.forEach((c,i)=>{
     const div=document.createElement('div');
     div.className='carta-boca-abajo';
+    const rotFinal=`rotate(${angulos[i]}deg)`;
     div.style.cssText=`
       width:${anchoCarta}px;height:${altoCarta}px;border-radius:10px;cursor:pointer;
       background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);
       border:1.5px solid rgba(150,100,255,0.5);
       display:inline-flex;align-items:center;justify-content:center;
       flex-shrink:0;
-      transform:rotate(${angulos[i]}deg);
+      transform:${animarEntrada?`${rotFinal} scale(0.5) translateY(30px)`:rotFinal};
+      opacity:${animarEntrada?0:1};
       z-index:${i+1};
       margin-left:${i===0?'0':overlapCarta+'px'};
-      transition:transform 0.3s ease;
+      transition:transform 0.3s ease, opacity 0.3s ease;
       vertical-align:bottom;
     `;
-    div.onmouseover=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg) translateY(-25px) scale(1.08)`;div.style.boxShadow='0 12px 30px rgba(150,100,255,0.7)';div.style.zIndex=20;}};
-    div.onmouseout=()=>{if(!cartaDiaElegida){div.style.transform=`rotate(${angulos[i]}deg)`;div.style.boxShadow='';div.style.zIndex=i+1;}};
+    div.onmouseover=()=>{if(!cartaDiaElegida){div.style.transform=`${rotFinal} translateY(-25px) scale(1.08)`;div.style.boxShadow='0 12px 30px rgba(150,100,255,0.7)';div.style.zIndex=20;}};
+    div.onmouseout=()=>{if(!cartaDiaElegida){div.style.transform=rotFinal;div.style.boxShadow='';div.style.zIndex=i+1;}};
     div.onclick=()=>elegirCartaDia(c,div,angulos[i]);
     mesa.appendChild(div);
+    if(animarEntrada){
+      setTimeout(function(){
+        div.style.transition='transform 0.45s cubic-bezier(.22,1,.36,1), opacity 0.35s ease';
+        div.style.transform=rotFinal;
+        div.style.opacity='1';
+      },40+i*70);
+    }
   });
 }
 
@@ -1476,12 +1485,51 @@ async function mezclarCartasDia(){
   const btnMezclar=document.getElementById('btnMezclarDia');
   if(!mesa)return;
   if(btnMezclar)btnMezclar.disabled=true;
-  mesa.classList.add('mezclando');
-  await new Promise(r=>setTimeout(r,350));
-  crearMesaDia();
-  mesa.classList.remove('mezclando');
-  await new Promise(r=>setTimeout(r,350));
+  await animarRiffleDia(mesa);
+  crearMesaDia(true);
   if(btnMezclar)btnMezclar.disabled=false;
+}
+
+// Animacion de "riffle shuffle": un mazo se divide en dos y se entrelaza antes de que
+// crearMesaDia(true) abra el abanico final con las cartas reales y clickeables.
+function animarRiffleDia(mesa){
+  return new Promise(function(resolve){
+    mesa.innerHTML='';
+    mesa.style.position='relative';
+    const esMovil = window.innerWidth < 480;
+    const anchoCarta = esMovil ? 50 : 65;
+    const altoCarta = esMovil ? 84 : 105;
+    const total = 10;
+    const temp = [];
+    for(let i=0;i<total;i++){
+      const div=document.createElement('div');
+      const lado = i%2===0 ? -1 : 1;
+      div.style.cssText=`
+        position:absolute;top:50%;left:50%;
+        width:${anchoCarta}px;height:${altoCarta}px;border-radius:10px;
+        background:linear-gradient(135deg,#1a0040,#2d0060,#1a0040);
+        border:1.5px solid rgba(150,100,255,0.5);
+        transform:translate(-50%,-50%) translateX(${lado*(anchoCarta*0.85)}px) translateY(${Math.floor(i/2)*-2}px) rotate(${lado*5}deg);
+        z-index:${i};
+        transition:transform 0.5s cubic-bezier(.22,1,.36,1);
+      `;
+      mesa.appendChild(div);
+      temp.push(div);
+    }
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        temp.forEach(function(div,i){
+          div.style.transitionDelay=(i*30)+'ms';
+          div.style.transform=`translate(-50%,-50%) translateY(${i*-1}px) rotate(${(i%2===0?-1:1)*1.5}deg)`;
+        });
+      });
+    });
+    setTimeout(function(){
+      temp.forEach(function(div){ div.remove(); });
+      mesa.style.position='';
+      resolve();
+    }, 850);
+  });
 }
 
 // Inicializar mesa manejado en showTab principal
