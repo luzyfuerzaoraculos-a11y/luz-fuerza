@@ -1063,7 +1063,8 @@ async function revelar(contextoExtra){
   if(btnVolverPreg) btnVolverPreg.disabled=true;
   if(btnNuevaStep3) btnNuevaStep3.disabled=true;
   const preg=document.getElementById("pregunta").value.trim();
-  const ctx=contextoExtra?preg+"\n\nContexto adicional que compartió la persona: "+contextoExtra:preg;
+  const nombreConsultante=(window.perfil && window.perfil.nombre)?window.perfil.nombre:"la persona";
+  const ctx=contextoExtra?preg+"\n\nContexto adicional que compartió "+nombreConsultante+": "+contextoExtra:preg;
   document.getElementById("step1").style.display="none";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="block";
   if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:3}, '', '#consulta');
   const pMostrada=document.getElementById("preguntaMostrada");
