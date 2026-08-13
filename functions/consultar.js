@@ -56,7 +56,7 @@ Muy importante: la respuesta tiene que estar anclada a lo que la persona pregunt
 
 ${instrGenero}
 
-Tono cálido, cercano, como alguien que escuchó de verdad antes de responder, no un informe. De vos a vos. Sin markdown. Máximo 100 palabras.`;
+Tono cálido, cercano, como alguien que escuchó de verdad antes de responder, no un informe. De vos a vos. Sin markdown. Máximo 150 palabras.`;
 
     const resultado = await llamarClaudeConReintento(env, prompt, 3);
 
