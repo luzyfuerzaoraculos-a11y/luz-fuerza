@@ -810,7 +810,7 @@ h1{letter-spacing:3px;}
   <div class="auth-box" style="text-align:center;">
     <div style="font-size:32px;margin-bottom:1rem;">🔮</div>
     <div class="auth-titulo">Antes de tirar las cartas...</div>
-    <div class="auth-subtitulo">Notamos que tu pregunta busca una respuesta de sí o no, y lo entendemos: cuando algo nos importa, queremos certezas. El tarot te puede dar luz y una guía para que tomes esa decisión con más claridad — no una certeza cerrada, sino una mirada que te ayude a ver mejor el camino. Para acompañarte mejor, contanos un poco más: ¿cómo te sentís con esto? ¿qué camino te trajo hasta acá para preguntarlo? ¿qué es lo que más te moviliza?</div>
+    <div class="auth-subtitulo">Notamos que tu pregunta busca una respuesta de sí o no, y lo entendemos: cuando algo nos importa, queremos certezas. El tarot te puede dar luz y una guía para que tomes esa decisión con más claridad, no una certeza cerrada, sino una mirada que te ayude a ver mejor el camino. Para acompañarte mejor, contanos un poco más: ¿cómo te sentís con esto? ¿qué camino te trajo hasta acá para preguntarlo? ¿qué es lo que más te moviliza?</div>
     <textarea id="contextoExtraInput" rows="3" placeholder="Escribí lo que quieras contarnos (opcional)"></textarea>
     <button class="auth-btn-primary" onclick="cerrarModales();revelar(document.getElementById('contextoExtraInput').value.trim())">Sumar esto y tirar las cartas</button>
     <button class="auth-btn-secondary" onclick="cerrarModales();revelar('')">Tirar las cartas igual</button>
@@ -1045,7 +1045,7 @@ function intentarRevelar(){
       const yaVisto=localStorage.getItem('avisoTarotVisto');
       subDiv.textContent = yaVisto
         ? 'El tarot te puede dar luz y una guía para ver esto con más claridad. Contanos un poco más: ¿cómo te sentís con esto? ¿qué camino te trajo hasta acá para preguntarlo? ¿qué es lo que más te moviliza?'
-        : 'Notamos que tu pregunta busca una respuesta de sí o no, y lo entendemos: cuando algo nos importa, queremos certezas. El tarot te puede dar luz y una guía para que tomes esa decisión con más claridad — no una certeza cerrada, sino una mirada que te ayude a ver mejor el camino. Para acompañarte mejor, contanos un poco más: ¿cómo te sentís con esto? ¿qué camino te trajo hasta acá para preguntarlo? ¿qué es lo que más te moviliza?';
+        : 'Notamos que tu pregunta busca una respuesta de sí o no, y lo entendemos: cuando algo nos importa, queremos certezas. El tarot te puede dar luz y una guía para que tomes esa decisión con más claridad, no una certeza cerrada, sino una mirada que te ayude a ver mejor el camino. Para acompañarte mejor, contanos un poco más: ¿cómo te sentís con esto? ¿qué camino te trajo hasta acá para preguntarlo? ¿qué es lo que más te moviliza?';
       localStorage.setItem('avisoTarotVisto','1');
     }
     abrirModal('modalContextoExtra');

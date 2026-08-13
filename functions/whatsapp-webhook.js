@@ -162,7 +162,7 @@ async function manejarCodigo(env, from, texto) {
 async function iniciarAvisoDePago(env, from, userId) {
   const pendientes = await buscarPagosPendientes(env, userId);
   if (pendientes.length === 0) {
-    return "No tengo ningún pago pendiente registrado a tu nombre. Si todavía no lo avisaste, entrá a tarotluzyfuerza.com.ar, elegí \"Transferencia\" y dejalo anotado — después mandame el comprobante acá.";
+    return "No tengo ningún pago pendiente registrado a tu nombre. Si todavía no lo avisaste, entrá a tarotluzyfuerza.com.ar, elegí \"Transferencia\" y dejalo anotado, después mandame el comprobante acá.";
   }
   if (pendientes.length === 1) {
     await guardarEstado(env, from, "esperando_comprobante", { pago_id: pendientes[0].id, monto: pendientes[0].monto });
