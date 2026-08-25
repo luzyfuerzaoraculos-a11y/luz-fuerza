@@ -62,7 +62,7 @@ main{max-width:700px;margin:0 auto;padding:1rem 1.5rem;background:rgba(10,14,26,
 
 textarea{width:100%;background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:16px;color:#c8d8f0;font-size:15px;resize:none;line-height:1.7;font-family:Georgia,serif;}
 textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4a6fa5;}
-.counter{font-size:14px;color:rgba(180,160,255,0.7);text-align:right;margin-top:6px;}.counter.ok{color:#4a6fa5;}
+.counter{font-size:13.5px;color:rgba(255,175,110,0.9);text-align:center;margin-top:8px;font-weight:600;letter-spacing:0.2px;}.counter.ok{color:#8baad4;font-weight:400;}
 .bprofunda{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-left:2px solid #7bafd4;border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
 .bprofunda p{font-size:14px;color:#8baad4;font-style:italic;line-height:1.7;}
 
@@ -103,7 +103,7 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 .pitems{list-style:none;margin-top:12px;flex:1;}.pitems li{font-size:14px;color:#5a7aaa;padding:5px 0;border-top:0.5px solid #1e2a45;}
 
 .cfrow{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:2rem;}
-.cfcard{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:12px;padding:1.25rem;}
+.cfcard{background:rgba(15,22,40,0.55);border-left:2px solid #2a3a5c;border-radius:6px;padding:1.25rem;}
 .histcard{background:rgba(15,8,30,0.85);border:1px solid rgba(150,100,255,0.3);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem;text-align:left;}
 .histtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
 .histtipo{font-family:'Marcellus',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,rgba(130,70,255,0.9),rgba(80,30,200,0.9));padding:4px 12px;border-radius:20px;}
@@ -114,8 +114,10 @@ textarea::placeholder{color:#2e4060;}textarea:focus{outline:none;border-color:#4
 .cfcard h3{font-size:14px;color:#ffffff;font-weight:400;margin-bottom:8px;}.cfcard p{font-size:15px;color:#5a7aaa;line-height:1.7;}.cfcard .icon{font-size:24px;margin-bottom:10px;}
 .hblock{margin-bottom:2rem;}.hblock h3{font-size:16px;color:#ffffff;font-weight:400;margin-bottom:10px;border-bottom:0.5px solid #1e2a45;padding-bottom:8px;}.hblock p{font-size:14px;color:#5a7aaa;line-height:1.8;margin-bottom:10px;}
 .arcanos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:1rem;}
-.arcano-card{background:rgba(15,22,40,0.8);border:0.5px solid #2a3a5c;border-radius:10px;padding:1rem;display:flex;gap:10px;align-items:flex-start;}
-.arcano-emoji{font-size:20px;flex-shrink:0;}.arcano-info h4{font-size:14px;color:rgba(210,185,255,0.95);margin-bottom:4px;}.arcano-info p{font-size:13px;color:#4a6fa5;line-height:1.5;}
+.arcano-card{background:rgba(15,22,40,0.55);border-left:2px solid #2a3a5c;border-radius:6px;padding:0.85rem 1rem;display:flex;gap:10px;align-items:center;position:relative;}
+.arcano-numero{font-family:'Marcellus',serif;font-size:11px;color:rgba(150,130,200,0.7);position:absolute;top:6px;right:9px;}
+.arcano-img{width:34px;height:auto;border-radius:4px;flex-shrink:0;}
+.arcano-info h4{font-size:14px;color:rgba(210,185,255,0.95);margin-bottom:4px;}.arcano-info p{font-size:13px;color:#4a6fa5;line-height:1.5;}
 .sobre{color:#5a7aaa;font-size:15px;line-height:1.9;}.sobre p{margin-bottom:1.25rem;}.sobre strong{color:rgba(210,185,255,0.95);font-weight:400;}
 
 footer{text-align:center;padding:1.5rem;background:rgba(6,8,16,0.9);border-top:0.5px solid #1e2a45;font-size:13px;color:#1e2a45;letter-spacing:1px;position:relative;z-index:1;}
@@ -362,7 +364,7 @@ h1{letter-spacing:3px;}
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
     <div id="tipPregunta" style="font-size:13.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:8px 0 0;"></div>
-    <div class="counter" id="counter">Mínimo 8 palabras para una lectura precisa</div>
+    <div class="counter" id="counter">✎ Escribí al menos 8 palabras para habilitar el botón de consultar</div>
     <button class="btn" id="btnRevelar" onclick="intentarRevelar()" disabled>🔀 Mezclar las cartas y consultar</button>
   </div>
   <div id="step3" style="display:none;">
@@ -421,28 +423,28 @@ h1{letter-spacing:3px;}
 <div id="tab-historia" class="tab">
   <div class="hblock"><h3>Los 22 arcanos mayores</h3><p>El viaje del Loco al Mundo es el viaje de toda alma humana.</p>
     <div class="arcanos-grid">
-      <div class="arcano-card"><div class="arcano-emoji">🌟</div><div class="arcano-info"><h4>El Loco</h4><p>El inicio, la inocencia, los nuevos comienzos.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🪄</div><div class="arcano-info"><h4>El Mago</h4><p>La voluntad, la manifestación, el poder personal.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">📖</div><div class="arcano-info"><h4>La Sacerdotisa</h4><p>La intuición, el misterio, el conocimiento oculto.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🌸</div><div class="arcano-info"><h4>La Emperatriz</h4><p>La abundancia, la fertilidad, la creatividad.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">👑</div><div class="arcano-info"><h4>El Emperador</h4><p>La autoridad, la estructura, el liderazgo.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🏛️</div><div class="arcano-info"><h4>El Hierofante</h4><p>La tradición, la guía espiritual, la enseñanza.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">💫</div><div class="arcano-info"><h4>Los Enamorados</h4><p>Las elecciones del corazón, la unión, los valores.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🏆</div><div class="arcano-info"><h4>El Carro</h4><p>La determinación, la victoria, el avance.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🦁</div><div class="arcano-info"><h4>La Fuerza</h4><p>El coraje interior, la compasión, la paciencia.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🕯️</div><div class="arcano-info"><h4>El Ermitaño</h4><p>La reflexión, la sabiduría interior, la soledad.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🎡</div><div class="arcano-info"><h4>La Rueda de la Fortuna</h4><p>Los ciclos, el destino, los cambios inevitables.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">⚖️</div><div class="arcano-info"><h4>La Justicia</h4><p>El equilibrio, la verdad, el karma.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🙃</div><div class="arcano-info"><h4>El Colgado</h4><p>La pausa, la entrega, la nueva perspectiva.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🦋</div><div class="arcano-info"><h4>La Muerte</h4><p>La transformación, los finales que liberan.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🌊</div><div class="arcano-info"><h4>La Templanza</h4><p>El equilibrio, la moderación, la paciencia.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">⛓️</div><div class="arcano-info"><h4>El Diablo</h4><p>Los apegos, las sombras, la liberación.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">⚡</div><div class="arcano-info"><h4>La Torre</h4><p>Los cambios profundos, la destrucción creadora.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">✨</div><div class="arcano-info"><h4>La Estrella</h4><p>La esperanza, la guía, la renovación.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🌙</div><div class="arcano-info"><h4>La Luna</h4><p>La intuición, el misterio, lo oculto.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">☀️</div><div class="arcano-info"><h4>El Sol</h4><p>La claridad, la alegría, el éxito.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🎺</div><div class="arcano-info"><h4>El Juicio</h4><p>El despertar, el llamado, la redención.</p></div></div>
-      <div class="arcano-card"><div class="arcano-emoji">🌍</div><div class="arcano-info"><h4>El Mundo</h4><p>La completud, el logro, los ciclos que cierran.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">0</div><img class="arcano-img" src="Imagenes/the-fool.png" alt="El Loco" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Loco</h4><p>El inicio, la inocencia, los nuevos comienzos.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">1</div><img class="arcano-img" src="Imagenes/the-magician.png" alt="El Mago" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Mago</h4><p>La voluntad, la manifestación, el poder personal.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">2</div><img class="arcano-img" src="Imagenes/the-high-priestess.png" alt="La Sacerdotisa" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Sacerdotisa</h4><p>La intuición, el misterio, el conocimiento oculto.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">3</div><img class="arcano-img" src="Imagenes/the-empress.png" alt="La Emperatriz" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Emperatriz</h4><p>La abundancia, la fertilidad, la creatividad.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">4</div><img class="arcano-img" src="Imagenes/the-emperor.png" alt="El Emperador" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Emperador</h4><p>La autoridad, la estructura, el liderazgo.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">5</div><img class="arcano-img" src="Imagenes/the-heirophant.png" alt="El Hierofante" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Hierofante</h4><p>La tradición, la guía espiritual, la enseñanza.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">6</div><img class="arcano-img" src="Imagenes/the-lovers.png" alt="Los Enamorados" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>Los Enamorados</h4><p>Las elecciones del corazón, la unión, los valores.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">7</div><img class="arcano-img" src="Imagenes/the-chariot.png" alt="El Carro" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Carro</h4><p>La determinación, la victoria, el avance.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">8</div><img class="arcano-img" src="Imagenes/strength.png" alt="La Fuerza" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Fuerza</h4><p>El coraje interior, la compasión, la paciencia.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">9</div><img class="arcano-img" src="Imagenes/the-hermit.png" alt="El Ermitaño" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Ermitaño</h4><p>La reflexión, la sabiduría interior, la soledad.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">10</div><img class="arcano-img" src="Imagenes/wheel-of-fortune.png" alt="La Rueda de la Fortuna" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Rueda de la Fortuna</h4><p>Los ciclos, el destino, los cambios inevitables.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">11</div><img class="arcano-img" src="Imagenes/justice.png" alt="La Justicia" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Justicia</h4><p>El equilibrio, la verdad, el karma.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">12</div><img class="arcano-img" src="Imagenes/the-hanged-man.png" alt="El Colgado" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Colgado</h4><p>La pausa, la entrega, la nueva perspectiva.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">13</div><img class="arcano-img" src="Imagenes/death.png" alt="La Muerte" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Muerte</h4><p>La transformación, los finales que liberan.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">14</div><img class="arcano-img" src="Imagenes/temperance.png" alt="La Templanza" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Templanza</h4><p>El equilibrio, la moderación, la paciencia.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">15</div><img class="arcano-img" src="Imagenes/the-devil.png" alt="El Diablo" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Diablo</h4><p>Los apegos, las sombras, la liberación.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">16</div><img class="arcano-img" src="Imagenes/the-tower.png" alt="La Torre" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Torre</h4><p>Los cambios profundos, la destrucción creadora.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">17</div><img class="arcano-img" src="Imagenes/the-star.png" alt="La Estrella" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Estrella</h4><p>La esperanza, la guía, la renovación.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">18</div><img class="arcano-img" src="Imagenes/the-moon.png" alt="La Luna" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>La Luna</h4><p>La intuición, el misterio, lo oculto.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">19</div><img class="arcano-img" src="Imagenes/the-sun.png" alt="El Sol" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Sol</h4><p>La claridad, la alegría, el éxito.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">20</div><img class="arcano-img" src="Imagenes/judgement.png" alt="El Juicio" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Juicio</h4><p>El despertar, el llamado, la redención.</p></div></div>
+      <div class="arcano-card"><div class="arcano-numero">21</div><img class="arcano-img" src="Imagenes/the-world.png" alt="El Mundo" loading="lazy" onerror="this.style.display='none'"><div class="arcano-info"><h4>El Mundo</h4><p>La completud, el logro, los ciclos que cierran.</p></div></div>
     </div>
   </div>
 </div>
@@ -1038,7 +1040,7 @@ document.addEventListener('click', function(e){
   const modal = document.getElementById('modalRegistro');
   if(e.target === modal) modal.classList.remove('active');
 });
-function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés mezclar las cartas y consultar";cnt.classList.add("ok");btn.disabled=false;}else{cnt.textContent=words+"/8 palabras mínimas para una lectura precisa";cnt.classList.remove("ok");btn.disabled=true;}}
+function validar(){const txt=document.getElementById("pregunta").value.trim();const words=txt.split(/\s+/).filter(w=>w.length>0).length;const cnt=document.getElementById("counter");const btn=document.getElementById("btnRevelar");if(words>=8){cnt.textContent="✦ "+words+" palabras — podés mezclar las cartas y consultar";cnt.classList.add("ok");btn.disabled=false;}else{cnt.textContent="✎ Escribí "+(8-words)+" palabra"+(8-words===1?"":"s")+" más para habilitar el botón de consultar";cnt.classList.remove("ok");btn.disabled=true;}}
 
 
 function esPreguntaCerrada(txt){
@@ -1137,7 +1139,7 @@ async function revelar(contextoExtra){
   }
 }
 
-function reset(){document.getElementById("step1").style.display="block";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="none";document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));document.getElementById("pregunta").value="";document.getElementById("counter").textContent="Mínimo 8 palabras para una lectura precisa";document.getElementById("counter").classList.remove("ok");document.getElementById("btnRevelar").disabled=true;area="";consultaEnCurso=false;}
+function reset(){document.getElementById("step1").style.display="block";document.getElementById("step2").style.display="none";document.getElementById("step3").style.display="none";document.querySelectorAll(".chip-card").forEach(c=>c.classList.remove("sel"));document.getElementById("pregunta").value="";document.getElementById("counter").textContent="✎ Escribí al menos 8 palabras para habilitar el botón de consultar";document.getElementById("counter").classList.remove("ok");document.getElementById("btnRevelar").disabled=true;area="";consultaEnCurso=false;}
 </script>
 
 <script>
