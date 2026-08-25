@@ -50,13 +50,18 @@
 
     const prompt = `Tarot Luz & Fuerza. Área: ${area || "vida"}. Pregunta de la consultante: "${pregunta}". Cartas (pasado, presente, futuro): ${cartas}.${contextoPrevio}
 
-Empezá reconociendo puntualmente lo que la persona te contó (no un saludo genérico: algo que muestre que leíste su pregunta real, no una plantilla). A partir de ahí, escribí la interpretación de forma natural y fluida, sin dividirla en bloques fijos ni etiquetas, dejá que la situación actual, el mensaje del tarot y una sugerencia de acción aparezcan como parte de un mismo relato, no como párrafos separados y predecibles.
+Organizá la interpretación en cuatro párrafos separados, cada uno aparte con un salto de línea en blanco entre ellos (no uses títulos ni etiquetas del tipo "Pasado:" al principio, que se entienda por el contenido):
 
-Muy importante: la respuesta tiene que estar anclada a lo que la persona preguntó literalmente. No cambies el sentido de las palabras clave de la pregunta ni te vayas a un mensaje genérico desconectado del tema real (por ejemplo, si pregunta por la libertad de alguien que está preso, hablá de esa situación concreta — no derives "libertad" hacia un consejo de crecimiento personal abstracto). Si el tema es delicado (una situación legal, de salud, una pérdida, una crisis familiar), respondé con más sensibilidad y cuidado, sin minimizar ni banalizar lo que la persona está viviendo.
+1. Primer párrafo (Pasado): arrancá reconociendo puntualmente lo que la persona te contó (no un saludo genérico, algo que muestre que leíste su pregunta real, no una plantilla), y desde ahí desarrollá lo que dice la carta de pasado y cómo se conecta con su situación.
+2. Segundo párrafo (Presente): la carta de presente y el momento actual de la persona en relación a su pregunta.
+3. Tercer párrafo (Futuro): la carta de futuro y hacia dónde se dirige la situación.
+4. Cuarto párrafo (la invitación): aparte de los otros tres, una sugerencia de acción concreta o una invitación a reflexionar, ligada a todo lo anterior.
+
+Muy importante: la respuesta tiene que estar anclada a lo que la persona preguntó literalmente. No cambies el sentido de las palabras clave de la pregunta ni te vayas a un mensaje genérico desconectado del tema real (por ejemplo, si pregunta por la libertad de alguien que está preso, hablá de esa situación concreta, no derives "libertad" hacia un consejo de crecimiento personal abstracto). Si el tema es delicado (una situación legal, de salud, una pérdida, una crisis familiar), respondé con más sensibilidad y cuidado, sin minimizar ni banalizar lo que la persona está viviendo.
 
 ${instrGenero}
 
-Tono cálido, cercano, como alguien que escuchó de verdad antes de responder, no un informe. De vos a vos. Sin markdown. Máximo 150 palabras.`;
+Tono cálido, cercano, como alguien que escuchó de verdad antes de responder, no un informe. De vos a vos. No uses guiones (ni cortos ni largos) para unir ideas dentro de una frase, usá comas en su lugar. Sin markdown. Máximo 150 palabras en total entre los cuatro párrafos.`;
 
     const resultado = await llamarClaudeConReintento(env, prompt, 3);
 
@@ -65,13 +70,15 @@ Tono cálido, cercano, como alguien que escuchó de verdad antes de responder, n
       await registrarErrorConsulta(env, headersAdmin, { pregunta, area, error: resultado.error });
       await alertarErrorConsulta(env, { pregunta, area, error: resultado.error });
       return new Response(JSON.stringify({
-        respuesta: "Estamos teniendo un inconveniente para conectar con el tarot en este momento. Ya estamos al tanto y lo estamos revisando — probá de nuevo en unos minutos.",
+        respuesta: "Estamos teniendo un inconveniente para conectar con el tarot en este momento. Ya estamos al tanto y lo estamos revisando, probá de nuevo en unos minutos.",
         error: true
       }), { headers: { "Content-Type": "application/json" } });
     }
 
     const data = resultado.data;
-    const texto = data.content ? data.content.map(i => i.text || "").join("") : "";
+    // Red de seguridad: si el modelo igual usa guiones para unir ideas, los cambiamos por coma.
+    let texto = data.content ? data.content.map(i => i.text || "").join("") : "";
+    if (texto) texto = texto.replace(/\s+[—–-]\s+/g, ", ");
 
     // Registrar consumo de tokens para poder monitorear el gasto de la API
     if (data.usage && headersAdmin) {
@@ -99,7 +106,7 @@ Tono cálido, cercano, como alguien que escuchó de verdad antes de responder, n
     console.error("Excepcion no atrapada en /consultar:", e.message);
     try { await alertarErrorConsulta(env, { pregunta, area, error: "Excepcion no atrapada: " + e.message }); } catch (e2) { /* no bloquear */ }
     return new Response(JSON.stringify({
-      respuesta: "Estamos teniendo un inconveniente para conectar con el tarot en este momento. Ya estamos al tanto y lo estamos revisando — probá de nuevo en unos minutos.",
+      respuesta: "Estamos teniendo un inconveniente para conectar con el tarot en este momento. Ya estamos al tanto y lo estamos revisando, probá de nuevo en unos minutos.",
       error: true
     }), { headers: { "Content-Type": "application/json" } });
   }
@@ -120,7 +127,7 @@ async function llamarClaudeConReintento(env, prompt, intentos) {
         },
         body: JSON.stringify({
           model: "claude-haiku-4-5-20251001",
-          max_tokens: 400,
+          max_tokens: 500,
           messages: [{ role: "user", content: prompt }]
         })
       });

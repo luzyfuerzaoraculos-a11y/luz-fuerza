@@ -114,7 +114,7 @@ function construirEmailReenganche(nombre) {
       <tr><td style="padding:32px 32px 8px 32px;font-family:Arial,Helvetica,sans-serif;">
         <div style="font-size:20px;color:#ffffff;font-weight:600;margin-bottom:14px;">${saludo}, las cartas te están esperando ✦</div>
         <div style="font-size:15px;line-height:1.7;color:#c8d8f0;">
-          Hace un tiempo que no volvés a consultar. El tarot no tiene apuro, pero si sentís que hay algo dando vueltas en tu cabeza — una decisión, una duda, un cambio — puede ser un buen momento para volver a mirarlo con más claridad.
+          Hace un tiempo que no volvés a consultar. El tarot no tiene apuro, pero si sentís que hay algo dando vueltas en tu cabeza, ya sea una decisión, una duda o un cambio, puede ser un buen momento para volver a mirarlo con más claridad.
         </div>
       </td></tr>
       <tr><td align="center" style="padding:26px 32px 10px 32px;">
