@@ -50,12 +50,14 @@
 
     const prompt = `Tarot Luz & Fuerza. Área: ${area || "vida"}. Pregunta de la consultante: "${pregunta}". Cartas (pasado, presente, futuro): ${cartas}.${contextoPrevio}
 
-Organizá la interpretación en cuatro párrafos separados, cada uno aparte con un salto de línea en blanco entre ellos (no uses títulos ni etiquetas del tipo "Pasado:" al principio, que se entienda por el contenido):
+Organizá la interpretación en cuatro párrafos separados (no uses títulos ni etiquetas del tipo "Pasado:" al principio, que se entienda por el contenido):
 
 1. Primer párrafo (Pasado): arrancá reconociendo puntualmente lo que la persona te contó (no un saludo genérico, algo que muestre que leíste su pregunta real, no una plantilla), y desde ahí desarrollá lo que dice la carta de pasado y cómo se conecta con su situación.
 2. Segundo párrafo (Presente): la carta de presente y el momento actual de la persona en relación a su pregunta.
 3. Tercer párrafo (Futuro): la carta de futuro y hacia dónde se dirige la situación.
 4. Cuarto párrafo (la invitación): aparte de los otros tres, una sugerencia de acción concreta o una invitación a reflexionar, ligada a todo lo anterior.
+
+Muy importante sobre el formato: separá los cuatro párrafos escribiendo exactamente la marca §§§ (así, tres signos de párrafo, sin espacios ni saltos de línea alrededor) entre uno y otro, y en ningún otro lugar del texto. Ejemplo de estructura: párrafo del pasado§§§párrafo del presente§§§párrafo del futuro§§§párrafo de la invitación. No agregues numeración ni ninguna otra marca.
 
 Muy importante: la respuesta tiene que estar anclada a lo que la persona preguntó literalmente. No cambies el sentido de las palabras clave de la pregunta ni te vayas a un mensaje genérico desconectado del tema real (por ejemplo, si pregunta por la libertad de alguien que está preso, hablá de esa situación concreta, no derives "libertad" hacia un consejo de crecimiento personal abstracto). Si el tema es delicado (una situación legal, de salud, una pérdida, una crisis familiar), respondé con más sensibilidad y cuidado, sin minimizar ni banalizar lo que la persona está viviendo.
 
@@ -79,6 +81,9 @@ Tono cálido, cercano, como alguien que escuchó de verdad antes de responder, n
     // Red de seguridad: si el modelo igual usa guiones para unir ideas, los cambiamos por coma.
     let texto = data.content ? data.content.map(i => i.text || "").join("") : "";
     if (texto) texto = texto.replace(/\s+[—–-]\s+/g, ", ");
+    // Convertimos la marca de separación de párrafos en saltos de línea reales.
+    // Si por algún motivo el modelo no la usó, dejamos el texto tal cual (mejor corrido que roto a la mitad).
+    if (texto) texto = texto.split("§§§").map(p => p.trim()).filter(Boolean).join("\n\n");
 
     // Registrar consumo de tokens para poder monitorear el gasto de la API
     if (data.usage && headersAdmin) {
