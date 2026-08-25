@@ -905,6 +905,10 @@ function stepActualConsulta(){
 }
 
 function showTab(t,el,silencioso){
+  if(typeof consultaEnCurso!=='undefined' && consultaEnCurso){
+    alert('Tu consulta se está generando, esperá unos segundos antes de salir de esta pantalla.');
+    return;
+  }
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   document.getElementById("tab-"+t).classList.add("active");
@@ -963,6 +967,13 @@ function volverAPregunta(){
 }
 
 window.addEventListener('popstate', function(e){
+  if(typeof consultaEnCurso!=='undefined' && consultaEnCurso){
+    // Bloqueamos la navegación mientras la consulta se está generando en el servidor,
+    // para no dejar la pantalla en un paso anterior mientras el crédito ya se está por descontar.
+    history.pushState({tab:'consulta', step:3}, '', '#consulta');
+    alert('Tu consulta se está generando, esperá unos segundos antes de salir de esta pantalla.');
+    return;
+  }
   const state = e.state || {tab:null, step:1};
   navegandoPorHistorial = true;
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
