@@ -883,11 +883,11 @@ for(let i=0;i<4;i++)setTimeout(spawnHero,i*800);
 
 const preguntas={amor:"¿Cómo voy a estar en el amor este mes?",trabajo:"¿Cómo voy a estar en el trabajo?",dinero:"¿Cómo va a estar mi economía durante los próximos 3 meses?",personal:"¿Es un buen momento para emprender el viaje a…?",decision:"¿Es momento de cambiar de…? o ¿Cómo me va a ir si decido…?",otro:"Estoy evaluando la posibilidad de… ¿Cómo me va a ir si lo realizo?"};
 const tips={
-  amor:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar a…?" · Ejemplo ok: "¿Voy a continuar mi relación con…?"',
-  trabajo:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar de…?" · Ejemplo ok: "¿Voy a conseguir el puesto de…?"',
-  dinero:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder con…?" · Ejemplo ok: "¿Voy a ganar con…?" o "¿cómo me va a ir con…?"',
-  personal:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿no voy a hacer el viaje?" · Ejemplo ok: "¿Voy a conseguir viajar a…?"',
-  decision:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder si…?" · Ejemplo ok: "¿Va a ser positivo para realizar la…?"',
+  amor:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar a…?" · Ejemplo ok: "¿Cómo va a evolucionar mi relación con…?"',
+  trabajo:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar de…?" · Ejemplo ok: "¿Cómo me va a ir en la búsqueda del puesto de…?"',
+  dinero:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder con…?" · Ejemplo ok: "¿Cómo me va a ir con…?"',
+  personal:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿no voy a hacer el viaje?" · Ejemplo ok: "¿Cómo va a ser mi experiencia si viajo a…?"',
+  decision:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder si…?" · Ejemplo ok: "¿Qué tan conveniente va a ser realizar la…?"',
   otro:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra — el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿me va a ir mal si…?" · Ejemplo ok: "¿Cómo me va a ir si…?"'
 };
 const hints={amor:"Contame sobre tu situación en el amor — ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",personal:"¿Qué querés transformar o entender de vos mismo?",decision:"Describí la situación — ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
@@ -1042,7 +1042,12 @@ function validar(){const txt=document.getElementById("pregunta").value.trim();co
 
 
 function esPreguntaCerrada(txt){
-  const t=(txt||"").toLowerCase();
+  const t=(txt||"").toLowerCase().trim();
+  // Si la pregunta arranca con un interrogativo abierto (cómo, qué, cuál, cuándo, dónde, por qué),
+  // no la tratamos como cerrada aunque más adelante use frases como "voy a" o "va a",
+  // porque gramaticalmente ya no admite una respuesta de sí/no.
+  const abiertaAlInicio=/^¿?\s*(qu[eé]|c[oó]mo|cu[aá]les?|cu[aá]ndo|d[oó]nde|por qu[eé])(?=[\s,.?¡!]|$)/;
+  if(abiertaAlInicio.test(t)) return false;
   const patrones=[/\bva a\b/,/\bvan a\b/,/\bvoy a\b/,/\bvamos a\b/,/\bser[áa]n?\b/,/\bestar[áa]n?\b/,/\bresultar[áa]\b/,/\bsaldr[áa]\b/,/\blogr(ar[ée]|o)\b/,/\bconsegu(ir[ée]|i)\b/,/\bgan(ar[ée]|o)\b/,/\bperd(er[ée]|i)\b/,/\baprob(ar[ée]|o)\b/,/\bquerr[áa]\b/,/\bamar[áa]\b/,/\bme (elige|eligen|acepta|aceptan|dice que si|dice que no)\b/,/\b(si o no|sí o no|bien o mal)\b/];
   return patrones.some(p=>p.test(t));
 }
