@@ -362,8 +362,8 @@ h1{letter-spacing:3px;}
     <button onclick="volverAArea()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:14px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver al área</button>
     <div class="slabel"><div class="snum">2</div>Tu pregunta</div>
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
+    <div id="tipPregunta" style="font-size:13.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:4px 0 12px;"><strong style="color:#c9a5ff;">Importante:</strong> formulá tu pregunta en tono positivo o neutro, el tarot no reconoce frases negativas.<br>Ejemplo no recomendado: "¿Voy a dejar a…?" · Ejemplo recomendado: "¿Cómo voy a estar en/con…?"</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
-    <div id="tipPregunta" style="font-size:13.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:8px 0 0;"></div>
     <div class="counter" id="counter">✎ Escribí al menos 8 palabras para habilitar el botón de consultar</div>
     <button class="btn" id="btnRevelar" onclick="intentarRevelar()" disabled>🔀 Mezclar las cartas y consultar</button>
   </div>
@@ -402,11 +402,12 @@ h1{letter-spacing:3px;}
 </div>
 
 <div id="tab-como" class="tab">
-  <div class="hint" style="margin-bottom:1.5rem;">El tarot de Luz & Fuerza combina la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte una experiencia de consulta disponible cuando la necesites.</div>
-  <div class="cfrow">
-    <div class="cfcard"><div class="icon">🃏</div><h3>Preguntá</h3><p>Realizá tu consulta.</p></div>
-    <div class="cfcard"><div class="icon">✨</div><h3>Recibí tu lectura</h3><p>Obtené una interpretación personalizada basada en el tarot.</p></div>
-    <div class="cfcard"><div class="icon">🔮</div><h3>Continuá explorando</h3><p>Accedé a nuevas consultas y beneficios desde tu cuenta.</p></div>
+  <div class="hint" style="margin-bottom:1.5rem;">El tarot de Luz & Fuerza combina la sabiduría ancestral del tarot con inteligencia artificial para ofrecerte una experiencia de consulta disponible cuando la necesites.<br><br>Podés elegir entre ver tu carta del día o hacer una consulta específica.</div>
+  <div class="hblock" style="margin-bottom:1.5rem;">
+    <p style="margin-bottom:6px;"><strong style="color:#8fb3e0;font-weight:600;">✦ Carta del día</strong></p>
+    <p style="margin-bottom:16px;">Tocá "Mezclar las cartas".<br>Recibí tu mensaje del día.</p>
+    <p style="margin-bottom:6px;"><strong style="color:#8fb3e0;font-weight:600;">✦ Consulta</strong></p>
+    <p>1. Elegí el área de consulta.<br>2. Escribí tu pregunta.<br>3. Tocá "Mezclar las cartas" y recibí tu lectura.</p>
   </div>
   <div class="hblock" style="margin-top:0.5rem;">
     <h3>¿Qué vas a encontrar en tu lectura?</h3>
@@ -450,9 +451,13 @@ h1{letter-spacing:3px;}
 </div>
 
 <div id="tab-planes" class="tab">
-  <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a tu camino.</div>
+  <div class="hint" style="margin-bottom:1.5rem;">Elegí el plan que mejor se adapte a vos y consultá cuando tengas una pregunta.</div>
   <div style="font-family:'Montserrat',sans-serif;font-size:14.5px;color:rgba(210,195,240,0.85);line-height:1.6;background:rgba(120,70,220,0.1);border:1px solid rgba(150,100,255,0.25);border-radius:12px;padding:14px 16px;margin-bottom:1.5rem;">
-    <strong style="color:#fff;">Importante:</strong> esto es tarot exprés, una carta del día y/o preguntas específicas. Si necesitás profundizar, te recomendamos agendar una sesión por videollamada con nuestra tarotista Pato Escobar.
+    Cada consulta está pensada para responder una pregunta concreta. El objetivo es que recibas una respuesta puntual y puedas volver al tarot cuando surja una nueva pregunta.
+    <div style="margin-top:12px;"><strong style="color:#fff;">✦ UNA PREGUNTA, UNA RESPUESTA</strong></div>
+    <div style="margin-top:6px;">Estos planes están pensados para consultas puntuales, una carta del día o situaciones específicas. Para aprovechar mejor cada consulta, evitamos las repreguntas sobre un mismo tema.</div>
+    <div style="margin-top:14px;"><strong style="color:#fff;">¿Querés profundizar?</strong></div>
+    <div style="margin-top:6px;">Si después de la respuesta sentís que necesitás explorar una situación en profundidad, abrir nuevas preguntas o trabajar diferentes aspectos de un tema, podés reservar una sesión individual por videollamada con nuestra tarotista Pato Escobar.</div>
     <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
       <a href="https://patoescobar.com/" target="_blank" style="color:#b28dff;font-weight:600;text-decoration:underline;">Te dejamos su sitio para que conozcas su trayectoria →</a>
       <a href="https://wa.me/5491124525562" target="_blank" style="color:rgba(0,220,100,0.85);font-weight:600;text-decoration:underline;">💬 O escribile directo por WhatsApp →</a>
@@ -884,14 +889,6 @@ function spawnHero(){
 for(let i=0;i<4;i++)setTimeout(spawnHero,i*800);
 
 const preguntas={amor:"¿Cómo voy a estar en el amor este mes?",trabajo:"¿Cómo voy a estar en el trabajo?",dinero:"¿Cómo va a estar mi economía durante los próximos 3 meses?",personal:"¿Es un buen momento para emprender el viaje a…?",decision:"¿Es momento de cambiar de…? o ¿Cómo me va a ir si decido…?",otro:"Estoy evaluando la posibilidad de… ¿Cómo me va a ir si lo realizo?"};
-const tips={
-  amor:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra, el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar a…?" · Ejemplo ok: "¿Cómo va a evolucionar mi relación con…?"',
-  trabajo:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra, el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a dejar de…?" · Ejemplo ok: "¿Cómo me va a ir en la búsqueda del puesto de…?"',
-  dinero:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra, el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder con…?" · Ejemplo ok: "¿Cómo me va a ir con…?"',
-  personal:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra, el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿no voy a hacer el viaje?" · Ejemplo ok: "¿Cómo va a ser mi experiencia si viajo a…?"',
-  decision:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra, el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿voy a perder si…?" · Ejemplo ok: "¿Qué tan conveniente va a ser realizar la…?"',
-  otro:'<strong style="color:#c9a5ff;">Importante:</strong> preguntá siempre de manera positiva o neutra, el tarot no reconoce frases negativas.<br>Ejemplo no ok: "¿me va a ir mal si…?" · Ejemplo ok: "¿Cómo me va a ir si…?"'
-};
 const hints={amor:"Contame sobre tu situación en el amor, ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera?",personal:"¿Qué querés transformar o entender de vos mismo?",decision:"Describí la situación, ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
 const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí, la raíz de tu situación actual."},{nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo, tu momento presente."},{nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía, posibilidades que se abren."}];
 let area="";
@@ -1031,7 +1028,6 @@ async function selArea(el,a){
   document.getElementById("step2").style.display="block";
   document.getElementById("hintPregunta").textContent=hints[a]||hints.otro;
   document.getElementById("pregunta").placeholder=preguntas[a]||preguntas.otro;
-  document.getElementById("tipPregunta").innerHTML=tips[a]||tips.otro;
   if(!navegandoPorHistorial) history.pushState({tab:'consulta', step:2}, '', '#consulta');
 }
 
