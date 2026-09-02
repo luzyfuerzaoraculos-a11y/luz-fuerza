@@ -361,8 +361,8 @@ h1{letter-spacing:3px;}
   <div id="step2" style="display:none;">
     <button onclick="volverAArea()" style="background:none;border:none;color:rgba(180,160,255,0.6);font-family:'Marcellus',serif;font-size:14px;cursor:pointer;margin-bottom:1rem;padding:0;">← Volver al área</button>
     <div class="slabel"><div class="snum">2</div>Tu pregunta</div>
+    <div id="tipPregunta" style="font-size:13.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:4px 0 12px;"><strong style="color:#c9a5ff;">Sugerencia:</strong> hacé tu pregunta en tono positivo o neutro, por ej., "¿Voy a seguir con…?" o "¿Cómo voy a estar con…?". Y evitá frases en tono negativo como: "¿No voy a dejar…?"</div>
     <div class="hint" id="hintPregunta">Escribí tu pregunta con detalle.</div>
-    <div id="tipPregunta" style="font-size:13.5px;color:rgba(180,165,220,0.75);line-height:1.6;margin:4px 0 12px;"><strong style="color:#c9a5ff;">Importante:</strong> formulá tu pregunta en tono positivo o neutro, el tarot no reconoce frases negativas.<br>Ejemplo no recomendado: "¿Voy a dejar a…?" · Ejemplo recomendado: "¿Cómo voy a estar en/con…?"</div>
     <textarea id="pregunta" rows="4" placeholder="¿Qué querés saber hoy?" oninput="validar()"></textarea>
     <div class="counter" id="counter">✎ Escribí al menos 8 palabras para habilitar el botón de consultar</div>
     <button class="btn" id="btnRevelar" onclick="intentarRevelar()" disabled>🔀 Mezclar las cartas y consultar</button>
@@ -460,7 +460,7 @@ h1{letter-spacing:3px;}
     <div style="margin-top:6px;">Si después de la respuesta sentís que necesitás explorar una situación en profundidad, abrir nuevas preguntas o trabajar diferentes aspectos de un tema, podés reservar una sesión individual por videollamada con nuestra tarotista Pato Escobar.</div>
     <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
       <a href="https://patoescobar.com/" target="_blank" style="color:#b28dff;font-weight:600;text-decoration:underline;">Te dejamos su sitio para que conozcas su trayectoria →</a>
-      <a href="https://wa.me/5491124525562" target="_blank" style="color:rgba(0,220,100,0.85);font-weight:600;text-decoration:underline;">💬 O escribile directo por WhatsApp →</a>
+      <a href="https://wa.me/5491124525562?text=Hola%20Pato%2C%20estoy%20usando%20Luz%20%26%20Fuerza%20y%20quisiera%20consultar%20por%20una%20sesi%C3%B3n%20individual%20por%20videollamada." target="_blank" style="color:rgba(0,220,100,0.85);font-weight:600;text-decoration:underline;">💬 O escribile directo por WhatsApp →</a>
     </div>
   </div>
   
@@ -474,7 +474,7 @@ h1{letter-spacing:3px;}
         <li>Interpretación personalizada</li>
         <li>Explicación de cada carta</li>
       </ul>
-      <button onclick="pagar('consulta')" class="btn-mp">Hacé tu pago</button>
+      <button onclick="pagar('consulta')" class="btn-mp">Consultar ahora</button>
     </div>
     <div class="plan pop">
       <div class="pbadge">✦ Más elegido</div>
@@ -484,7 +484,7 @@ h1{letter-spacing:3px;}
         <li>Interpretación personalizada en cada una</li>
         <li>Resumen con la tendencia del mes (por mail)</li>
       </ul>
-      <button onclick="pagar('semanal')" class="btn-mp btn-mp-pop">Hacé tu pago</button>
+      <button onclick="pagar('semanal')" class="btn-mp btn-mp-pop">Elegir este plan</button>
     </div>
     <div class="plan">
       <div class="pbadge">Mensual</div>
@@ -495,7 +495,7 @@ h1{letter-spacing:3px;}
         <li>Interpretación personalizada en cada una</li>
         <li>Resumen con la tendencia del mes (por mail)</li>
       </ul>
-      <button onclick="pagar('mensual')" class="btn-mp">Hacé tu pago</button>
+      <button onclick="pagar('mensual')" class="btn-mp">Elegir este plan</button>
     </div>
   </div>
 
@@ -509,7 +509,7 @@ h1{letter-spacing:3px;}
         <li>Mensaje personalizado</li>
         <li>Qué hacer y qué evitar</li>
       </ul>
-      <button onclick="pagar('consejo')" class="btn-mp">Hacé tu pago</button>
+      <button onclick="pagar('consejo')" class="btn-mp">Recibir mi carta</button>
     </div>
   </div>
 
@@ -523,7 +523,7 @@ h1{letter-spacing:3px;}
         <li>1 carta del día</li>
         <li>Interpretación personalizada de las dos</li>
       </ul>
-      <button onclick="pagar('combo')" class="btn-mp">Hacé tu pago</button>
+      <button onclick="pagar('combo')" class="btn-mp">Elegir esta promo</button>
     </div>
   </div>
 
@@ -536,46 +536,47 @@ h1{letter-spacing:3px;}
         <div class="pbadge">Consulta (prueba)</div>
         <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>1 consulta de tarot completa</li></ul>
-        <button onclick="pagar('consulta_test')" class="btn-mp">Hacé tu pago</button>
+        <button onclick="pagar('consulta_test')" class="btn-mp">Consultar ahora</button>
       </div>
       <div class="plan">
         <div class="pbadge">Semanal (prueba)</div>
         <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>4 consultas específicas, 1 por semana</li></ul>
-        <button onclick="pagar('semanal_test')" class="btn-mp">Hacé tu pago</button>
+        <button onclick="pagar('semanal_test')" class="btn-mp">Elegir este plan</button>
       </div>
       <div class="plan">
         <div class="pbadge">Mensual (prueba)</div>
         <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>8 consultas específicas (2 por semana) + carta del día</li></ul>
-        <button onclick="pagar('mensual_test')" class="btn-mp">Hacé tu pago</button>
+        <button onclick="pagar('mensual_test')" class="btn-mp">Elegir este plan</button>
       </div>
       <div class="plan">
         <div class="pbadge">Carta del día (prueba)</div>
         <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>1 carta del día</li></ul>
-        <button onclick="pagar('consejo_test')" class="btn-mp">Hacé tu pago</button>
+        <button onclick="pagar('consejo_test')" class="btn-mp">Recibir mi carta</button>
       </div>
       <div class="plan">
         <div class="pbadge">Combo (prueba)</div>
         <div class="pprecio">$100 <span>ARS</span></div>
         <ul class="pitems"><li>1 consulta completa + 1 carta del día</li></ul>
-        <button onclick="pagar('combo_test')" class="btn-mp">Hacé tu pago</button>
+        <button onclick="pagar('combo_test')" class="btn-mp">Elegir esta promo</button>
       </div>
     </div>
   </div>
 
   <div id="bloqueTransferencia" style="margin-top:2.5rem;padding:1.4rem;border:1px solid rgba(150,120,255,0.25);border-radius:14px;background:rgba(20,10,40,0.4);">
-    <div class="slabel" style="margin-bottom:0.5rem;"><div class="snum">✦</div>¿No tenés MercadoPago?</div>
-    <div class="hint" style="margin-bottom:12px;">También podés pagar por transferencia al alias <b>tarotluzyfuerza</b> (CVU 0000003100001441491187). Elegí el plan, transferí el monto exacto y avisanos acá abajo, te acreditamos apenas confirmamos el pago.</div>
+    <div class="slabel" style="margin-bottom:0.5rem;"><div class="snum">✦</div>Pagá por transferencia y obtené 10% de descuento</div>
+    <div class="hint" style="margin-bottom:12px;">Transferí el monto correspondiente a tu plan al alias <b>tarotluzyfuerza</b> (CVU 0000003100001441491187). Elegí el plan, transferí el monto exacto y avisanos acá abajo, te acreditamos el plan apenas confirmamos el pago. Una vez realizada la transferencia, avisanos y te enviaremos un mail para que puedas adjuntar el comprobante y completar la acreditación.</div>
+    <div class="hint" style="margin-bottom:6px;">Seleccioná tu plan:</div>
     <select id="selectPlanTransferencia" class="auth-select" style="margin-bottom:12px;">
-      <option value="consulta">Consulta Individual, $2.500</option>
-      <option value="semanal">Pack Semanal, $6.000</option>
-      <option value="mensual">Plan Mensual, $9.000</option>
-      <option value="consejo">Carta del día, $2.000</option>
-      <option value="combo">Combo Consulta + Carta del día, $3.000</option>
+      <option value="consulta">Consulta Individual, $2.250 (precio habitual $2.500, 10% OFF)</option>
+      <option value="semanal">Pack Semanal, $5.400 (precio habitual $6.000, 10% OFF)</option>
+      <option value="mensual">Plan Mensual, $8.100 (precio habitual $9.000, 10% OFF)</option>
+      <option value="consejo">Carta del día, $1.800 (precio habitual $2.000, 10% OFF)</option>
+      <option value="combo">Combo Consulta + Carta del día, $2.700 (precio habitual $3.000, 10% OFF)</option>
     </select>
-    <button onclick="avisarPagoTransferencia(this)" class="btn-mp">Ya transferí, avisar</button>
+    <button onclick="avisarPagoTransferencia(this)" class="btn-mp">Ya transferí, avisar pago</button>
     <div class="hint" id="transferenciaMsg" style="margin-top:10px;"></div>
   </div>
 </div>
@@ -888,8 +889,8 @@ function spawnHero(){
 }
 for(let i=0;i<4;i++)setTimeout(spawnHero,i*800);
 
-const preguntas={amor:"¿Cómo puedo fortalecer mi vínculo actual?",trabajo:"¿Cómo voy a estar en el trabajo?",dinero:"Escribí tu pregunta aquí",personal:"Escribí aquí sobre tu crecimiento personal",decision:"¿Qué aspectos debería considerar para tomar esta decisión?",otro:"Escribí tu pregunta aquí"};
-const hints={amor:"Contame sobre tu situación en el amor, ¿hay una persona o relación que estás procesando?",trabajo:"¿Qué está pasando en tu trabajo? ¿Hay una decisión pendiente?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera? Contame tu consulta con respecto al dinero y abundancia.",personal:"¿Qué querés transformar o entender de vos?",decision:"Describí la situación, ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
+const preguntas={amor:"¿Cómo puedo fortalecer mi vínculo actual…?",trabajo:"¿Cómo voy a estar en el trabajo?",dinero:"Escribí tu pregunta aquí",personal:"Escribí aquí sobre tu crecimiento personal",decision:"¿Qué aspectos debería considerar para tomar esta decisión?",otro:"Escribí tu pregunta aquí"};
+const hints={amor:"Ahora sí, contame sobre tu situación amorosa.",trabajo:"¿Qué está pasando en tu trabajo?",dinero:"¿Atravesás un momento económico difícil o buscás orientación financiera? Contame tu consulta con respecto al dinero y abundancia.",personal:"¿Qué querés transformar o entender de vos?",decision:"Describí la situación, ¿qué decisión enfrentás?",otro:"Contame libremente qué te trajo aquí hoy."};
 const posiciones=[{nombre:"Pasado",clave:"pasado",desc:"Lo que te trajo hasta aquí, la raíz de tu situación actual."},{nombre:"Presente",clave:"presente",desc:"La energía que te rodea ahora mismo, tu momento presente."},{nombre:"Futuro",clave:"futuro",desc:"La dirección hacia donde se mueve tu energía, posibilidades que se abren."}];
 let area="";
 let consultaEnCurso=false;
@@ -2122,7 +2123,7 @@ window.pagar = async function(plan){
 window.avisarPagoTransferencia = async function(btn){
   if(!usuaria){ window.abrirModal('modalRegistro'); return; }
   const plan = document.getElementById('selectPlanTransferencia').value;
-  const montos = {consulta:2500, semanal:6000, mensual:9000, consejo:2000, combo:3000};
+  const montos = {consulta:2250, semanal:5400, mensual:8100, consejo:1800, combo:2700};
   if(btn) btn.disabled = true;
   const { error } = await supa.from('pagos_manuales').insert({
     user_id: usuaria.id,
@@ -2135,7 +2136,7 @@ window.avisarPagoTransferencia = async function(btn){
   if(error){
     if(msgEl) msgEl.textContent = 'No pudimos registrar el aviso. Escribinos por WhatsApp con el comprobante y listo.';
   } else {
-    if(msgEl) msgEl.textContent = 'Listo, quedó registrado. Tu pago está pendiente de confirmación, te avisamos apenas se acredite (podés ver el estado en "Mis Planes"). Si querés agilizarlo, mandanos el comprobante por WhatsApp.';
+    if(msgEl) msgEl.textContent = '¡Listo! Registramos tu aviso. Te enviaremos un mail para que puedas adjuntar el comprobante de transferencia. Una vez que lo recibamos y confirmemos el pago, activaremos tu plan. Podés consultar el estado desde "Mis Planes".';
     if(window.cargarMisPlanes) window.cargarMisPlanes();
   }
   if(btn) btn.disabled = false;
